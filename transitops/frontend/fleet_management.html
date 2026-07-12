@@ -593,37 +593,35 @@
             ? window.location.origin 
             : 'http://localhost:3000';
 
-        // Fetch drivers and filter out already-assigned ones
+        // Fetch drivers and show drivers that can actually be assigned to a new vehicle
         async function loadDriversDropdown() {
             try {
-                // Fetch drivers
                 const driversRes = await fetch(`${API_BASE}/api/drivers`);
                 const driversData = await driversRes.json();
-                
-                // Fetch vehicles
-                const vehiclesRes = await fetch(`${API_BASE}/api/vehicles`);
-                const vehiclesData = await vehiclesRes.json();
 
-                if (driversData.success && vehiclesData.success) {
-                    const assignedDrivers = new Set();
-                    vehiclesData.vehicles.forEach(v => {
-                        if (v.assigned_driver) {
-                            assignedDrivers.add(v.assigned_driver.trim());
-                        }
+                if (driversData.success) {
+                    const assignableDrivers = driversData.drivers.filter(d => {
+                        const status = (d.status || '').trim();
+                        return status === 'Available' || status === 'Active';
                     });
 
                     const driverSelect = document.getElementById('newAssignedDriver');
                     driverSelect.innerHTML = '<option value="">— Unassigned / Select Driver —</option>';
 
-                    driversData.drivers.forEach(d => {
-                        const isAssigned = assignedDrivers.has(d.name.trim());
-                        if (!isAssigned) {
-                            const option = document.createElement('option');
-                            option.value = d.name;
-                            option.textContent = `${d.name} (Score: ${d.safety_score})`;
-                            driverSelect.appendChild(option);
-                        }
+                    assignableDrivers.forEach(d => {
+                        const option = document.createElement('option');
+                        option.value = d.name;
+                        option.textContent = `${d.name} (${d.status}) - Score: ${d.safety_score}`;
+                        driverSelect.appendChild(option);
                     });
+
+                    if (assignableDrivers.length === 0) {
+                        const option = document.createElement('option');
+                        option.value = '';
+                        option.disabled = true;
+                        option.textContent = 'No available drivers found';
+                        driverSelect.appendChild(option);
+                    }
                 }
             } catch (err) {
                 console.error('Error loading drivers for dropdown:', err);
