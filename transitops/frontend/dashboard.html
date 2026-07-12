@@ -210,7 +210,7 @@
 <span class="font-label-md text-green-600 flex items-center gap-1">+4% <span class="material-symbols-outlined text-sm">trending_up</span></span>
 </div>
 <span class="font-label-md text-on-surface-variant uppercase tracking-wider">Active Vehicles</span>
-<span class="font-headline-lg text-headline-lg font-bold">142<span class="text-on-surface-variant font-normal text-body-sm">/150</span></span>
+<span class="font-headline-lg text-headline-lg font-bold" id="kpiActiveVehicles">--<span class="text-on-surface-variant font-normal text-body-sm">/--</span></span>
 </div>
 <div class="glass-card p-6 rounded-xl flex flex-col gap-2">
 <div class="flex justify-between items-start">
@@ -244,36 +244,13 @@
 <div class="p-6 border-b border-outline-variant flex justify-between items-center bg-white/50">
 <div>
 <h2 class="font-headline-lg text-xl font-bold">Active Trips</h2>
-<p class="font-body-sm text-on-surface-variant">Real-time GPS tracking for 12 current routes</p>
-</div>
-<div class="flex gap-2">
-<button class="px-4 py-2 bg-primary-container text-on-primary-fixed rounded-lg font-label-md">Map View</button>
-<button class="px-4 py-2 border border-outline-variant rounded-lg font-label-md hover:bg-surface-variant">List View</button>
+<p class="font-body-sm text-on-surface-variant">Live view of current and planned trips</p>
 </div>
 </div>
-<div class="flex-1 relative bg-surface-container-high">
-<!-- Simulated Map with dynamic logic -->
-<div class="absolute inset-0 w-full h-full" data-alt="A clean, minimalist vector-style digital map of a city's road network, featuring subtle shades of blue and gray. Glowing tertiary blue lines indicate active routes, and safety orange dots signify current vehicle positions. The map has a modern enterprise UI feel with high-contrast data visualization overlays." style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuDO65Oja8ZE9awqTowjJfb2CBoRzKeVBRhqsoIz6F45G7o-9AtuV9r_GNKsBZt5OR98Ux7qRHb5ok0CcdzgSo71NNYFL1dqbpVOc9R5uEYzDY54kLu4kw-Gv1WlDhU-t6vtOXdhhx8QfHHW8EykmvhFrUYU0WJvfxHd-GG0tJixj3fOY-jJP8ySxYwtcplfvEIxtasd0pgk4OLxXGYIwkd7Uc7kqH30yR30r_hoITrtshNUBU1HKhtA7wivYqRJAfXZ2Z0s7_e2QVk')">
-<div class="absolute inset-0 bg-primary-container/5"></div>
-<!-- Markers -->
-<div class="absolute top-1/3 left-1/4 p-2 bg-white rounded shadow-lg flex items-center gap-2 border border-secondary">
-<span class="w-2 h-2 rounded-full bg-secondary animate-ping"></span>
-<span class="font-label-md text-[10px] font-bold">TRK-402 | 45mph</span>
-</div>
-<div class="absolute bottom-1/4 right-1/3 p-2 bg-white rounded shadow-lg flex items-center gap-2 border border-blue-600">
-<span class="w-2 h-2 rounded-full bg-blue-600"></span>
-<span class="font-label-md text-[10px] font-bold">TRK-118 | Stopped</span>
-</div>
-</div>
-<!-- Floating Controls -->
-<div class="absolute bottom-6 right-6 flex flex-col gap-2">
-<button class="p-2 bg-white rounded shadow-md border border-outline-variant hover:bg-surface-container-low transition-all">
-<span class="material-symbols-outlined">add</span>
-</button>
-<button class="p-2 bg-white rounded shadow-md border border-outline-variant hover:bg-surface-container-low transition-all">
-<span class="material-symbols-outlined">remove</span>
-</button>
-</div>
+<div class="flex-1 relative bg-surface-container-high overflow-y-auto p-4 custom-scrollbar">
+    <div id="dashboardTripsList" class="flex flex-col gap-3">
+        <!-- Dynamic trips will be populated here -->
+    </div>
 </div>
 </div>
 <!-- Recent Alerts -->
@@ -430,4 +407,58 @@
             });
         });
     </script>
-</body></html>
+<script>
+document.addEventListener('DOMContentLoaded', () => {
+    fetchDashboardData();
+    // Refresh every 30 seconds
+    setInterval(fetchDashboardData, 30000);
+});
+
+async function fetchDashboardData() {
+    try {
+        const [vehiclesRes, tripsRes] = await Promise.all([
+            fetch('http://localhost:3000/api/vehicles'),
+            fetch('http://localhost:3000/api/trips')
+        ]);
+        const vData = await vehiclesRes.json();
+        const tData = await tripsRes.json();
+
+        // Update KPI
+        const totalVehicles = vData.vehicles.length;
+        const activeVehicles = vData.vehicles.filter(v => v.status === 'On Trip' || v.status === 'Available').length;
+        document.getElementById('kpiActiveVehicles').innerHTML = `${activeVehicles}<span class="text-on-surface-variant font-normal text-body-sm">/${totalVehicles}</span>`;
+
+        // Update Trips List
+        const tripsContainer = document.getElementById('dashboardTripsList');
+        tripsContainer.innerHTML = '';
+        
+        tData.trips.forEach(trip => {
+            let statusBadge = 'bg-slate-200 text-slate-800';
+            if (trip.status === 'Dispatched') statusBadge = 'bg-blue-200 text-blue-900';
+            if (trip.status === 'Completed') statusBadge = 'bg-green-200 text-green-900';
+            
+            tripsContainer.innerHTML += `
+                <div class="bg-white rounded-lg shadow-sm border border-slate-200 p-4 flex justify-between items-center hover:shadow-md transition-shadow cursor-pointer">
+                    <div class="flex items-center gap-4">
+                        <div class="w-10 h-10 rounded-full bg-surface-variant flex items-center justify-center text-primary">
+                            <span class="material-symbols-outlined">route</span>
+                        </div>
+                        <div class="flex flex-col">
+                            <span class="font-bold text-slate-900">${trip.trip_number} - ${trip.vehicle_name || 'Unassigned'}</span>
+                            <span class="text-sm text-slate-500">${trip.source} &rarr; ${trip.destination}</span>
+                        </div>
+                    </div>
+                    <div class="flex flex-col items-end gap-1">
+                        <span class="px-2 py-1 rounded text-xs font-bold uppercase tracking-wider ${statusBadge}">${trip.status}</span>
+                        <span class="text-xs text-slate-400">Driver: ${trip.driver_name || 'Unassigned'}</span>
+                    </div>
+                </div>
+            `;
+        });
+    } catch (err) {
+        console.error('Error fetching dashboard data:', err);
+    }
+}
+</script>
+</body>
+</html>
