@@ -32,6 +32,14 @@ app.post('/api/login', async (req, res) => {
         console.log("Query returned:", rows.length, "rows");
 
         if (rows.length > 0) {
+            const normalizeRole = value => (value || '').toString().trim().toLowerCase().replace(/\s+/g, '_');
+            const selectedRole = normalizeRole(role);
+            const userRole = normalizeRole(rows[0].role);
+
+            if (selectedRole && selectedRole !== userRole) {
+                return res.status(403).json({ success: false, message: 'Selected role does not match this account.' });
+            }
+
             res.json({ success: true, message: 'Authentication successful', user: rows[0] });
         } else {
             res.status(401).json({ success: false, message: 'Invalid credentials' });

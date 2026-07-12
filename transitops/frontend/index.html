@@ -98,6 +98,7 @@
         },
       }
     </script>
+<script src="auth.js"></script>
 <style>
         .material-symbols-outlined {
             font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
@@ -224,7 +225,7 @@
                 
                 const email = document.getElementById('email').value;
                 const password = document.getElementById('password').value;
-                const role = document.getElementById('role').options[document.getElementById('role').selectedIndex].text;
+                const role = document.getElementById('role').value;
 
                 try {
                     const response = await fetch('http://localhost:3000/api/login', {
@@ -236,11 +237,8 @@
                     const data = await response.json();
                     
                     if (data.success) {
-                        if (data.user && data.user.role === 'Dispatcher') {
-                            window.location.href = 'dispatcher.html';
-                        } else {
-                            window.location.href = 'dashboard.html';
-                        }
+                        const storedUser = window.TransitOpsAuth.storeSession(data.user);
+                        window.location.href = window.TransitOpsAuth.homeForRole(storedUser.role);
                     } else {
                         alert(data.message || 'Login failed. Please check your credentials.');
                         submitBtn.innerHTML = `Sign In <span class="material-symbols-outlined text-[18px]">arrow_forward</span>`;
