@@ -42,10 +42,18 @@ app.post('/api/login', async (req, res) => {
     }
 });
 
-// API: Fetch Vehicles
+// API: Fetch Vehicles (supports search query)
 app.get('/api/vehicles', async (req, res) => {
+    const { search } = req.query;
     try {
-        const [rows] = await pool.query('SELECT * FROM vehicles ORDER BY id ASC');
+        let query = 'SELECT * FROM vehicles';
+        let params = [];
+        if (search) {
+            query += ' WHERE vehicle_id LIKE ? OR name LIKE ? OR assigned_driver LIKE ?';
+            params = [`%${search}%`, `%${search}%`, `%${search}%`];
+        }
+        query += ' ORDER BY id DESC';
+        const [rows] = await pool.query(query, params);
         res.json({ success: true, vehicles: rows });
     } catch (err) {
         console.error('Error fetching vehicles:', err);
@@ -60,6 +68,33 @@ app.get('/api/drivers', async (req, res) => {
         res.json({ success: true, drivers: rows });
     } catch (err) {
         console.error('Error fetching drivers:', err);
+        res.status(500).json({ success: false, message: 'Server error' });
+    }
+});
+
+// API: Add Vehicle
+app.post('/api/vehicles', async (req, res) => {
+    const { vehicle_id, name, type, status, assigned_driver, next_maintenance } = req.body;
+    try {
+        const [result] = await pool.query(
+            'INSERT INTO vehicles (vehicle_id, name, type, status, assigned_driver, next_maintenance) VALUES (?, ?, ?, ?, ?, ?)',
+            [vehicle_id, name, type, status || 'Available', assigned_driver || null, next_maintenance || null]
+        );
+        res.json({ success: true, message: 'Vehicle added successfully', insertId: result.insertId });
+    } catch (err) {
+        console.error('Error adding vehicle:', err);
+        res.status(500).json({ success: false, message: 'Server error' });
+    }
+});
+
+// API: Delete Vehicle
+app.delete('/api/vehicles/:id', async (req, res) => {
+    const { id } = req.params;
+    try {
+        await pool.query('DELETE FROM vehicles WHERE id = ?', [id]);
+        res.json({ success: true, message: 'Vehicle deleted successfully' });
+    } catch (err) {
+        console.error('Error deleting vehicle:', err);
         res.status(500).json({ success: false, message: 'Server error' });
     }
 });
