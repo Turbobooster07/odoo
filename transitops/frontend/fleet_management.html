@@ -325,6 +325,9 @@
                                     Type</th>
                                 <th
                                     class="p-4 font-label-md text-on-surface-variant font-bold uppercase tracking-wider">
+                                    Weight Capacity</th>
+                                <th
+                                    class="p-4 font-label-md text-on-surface-variant font-bold uppercase tracking-wider">
                                     Status</th>
                                 <th
                                     class="p-4 font-label-md text-on-surface-variant font-bold uppercase tracking-wider">
@@ -536,6 +539,15 @@
                             required />
                     </div>
                 </div>
+                <div class="grid grid-cols-1 gap-4">
+                    <div class="flex flex-col gap-1">
+                        <label class="font-label-md text-[12px] uppercase text-on-surface-variant font-bold"
+                            for="newWeightCapacity">Weight Capacity (kg)</label>
+                        <input type="number" id="newWeightCapacity"
+                            class="w-full bg-surface-container-low border-none rounded-lg px-3 py-2 text-body-sm focus:ring-2 focus:ring-secondary-container"
+                            placeholder="e.g. 25000" min="0" required />
+                    </div>
+                </div>
                 <div class="flex justify-end gap-3 pt-3 border-t border-outline-variant">
                     <button type="button" onclick="closeVehicleModal()"
                         class="px-4 py-2 border border-outline-variant rounded-lg font-bold text-on-surface-variant hover:bg-surface-container-low transition-colors">Cancel</button>
@@ -636,7 +648,7 @@
             if (paginatedVehicles.length === 0) {
                 tbody.innerHTML = `
                 <tr>
-                    <td colspan="6" class="p-8 text-center text-on-surface-variant italic">
+                    <td colspan="7" class="p-8 text-center text-on-surface-variant italic">
                         No vehicles found matching the criteria.
                     </td>
                 </tr>
@@ -684,6 +696,9 @@
                             <span class="material-symbols-outlined text-[18px] text-on-surface-variant">${icon}</span>
                             <span class="text-body-sm">${vehicle.type}</span>
                         </div>
+                    </td>
+                    <td class="p-4 border-b border-outline-variant">
+                        <span class="font-data-mono text-body-sm">${Number(vehicle.weight_capacity || 0).toLocaleString()} kg</span>
                     </td>
                     <td class="p-4 border-b border-outline-variant">
                         <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-bold ${statusColor}">
@@ -793,12 +808,13 @@
             const status = document.getElementById('newVehicleStatus').value;
             const assigned_driver = document.getElementById('newAssignedDriver').value || null;
             const next_maintenance = document.getElementById('newMaintenanceDate').value;
+            const weight_capacity = parseInt(document.getElementById('newWeightCapacity').value) || 0;
 
             try {
                 const response = await fetch('http://localhost:3000/api/vehicles', {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ vehicle_id, name, type, status, assigned_driver, next_maintenance })
+                    body: JSON.stringify({ vehicle_id, name, type, status, assigned_driver, next_maintenance, weight_capacity })
                 });
                 const data = await response.json();
                 if (data.success) {

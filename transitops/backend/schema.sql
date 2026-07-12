@@ -14,7 +14,8 @@ CREATE TABLE IF NOT EXISTS vehicles (
     type VARCHAR(50) NOT NULL,
     status ENUM('Active', 'In Shop', 'Available') NOT NULL DEFAULT 'Available',
     assigned_driver VARCHAR(100),
-    next_maintenance DATE
+    next_maintenance DATE,
+    weight_capacity INT NOT NULL DEFAULT 5000
 );
 
 -- Insert a mock user (using plain text passwords for simplicity in this prototype)

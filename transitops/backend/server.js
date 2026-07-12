@@ -74,11 +74,11 @@ app.get('/api/drivers', async (req, res) => {
 
 // API: Add Vehicle
 app.post('/api/vehicles', async (req, res) => {
-    const { vehicle_id, name, type, status, assigned_driver, next_maintenance } = req.body;
+    const { vehicle_id, name, type, status, assigned_driver, next_maintenance, weight_capacity } = req.body;
     try {
         const [result] = await pool.query(
-            'INSERT INTO vehicles (vehicle_id, name, type, status, assigned_driver, next_maintenance) VALUES (?, ?, ?, ?, ?, ?)',
-            [vehicle_id, name, type, status || 'Available', assigned_driver || null, next_maintenance || null]
+            'INSERT INTO vehicles (vehicle_id, name, type, status, assigned_driver, next_maintenance, weight_capacity) VALUES (?, ?, ?, ?, ?, ?, ?)',
+            [vehicle_id, name, type, status || 'Available', assigned_driver || null, next_maintenance || null, weight_capacity || 5000]
         );
         res.json({ success: true, message: 'Vehicle added successfully', insertId: result.insertId });
     } catch (err) {
