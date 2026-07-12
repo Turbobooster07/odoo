@@ -13,10 +13,10 @@ app.use(express.static(__dirname));
 
 // MySQL connection pool
 const pool = mysql.createPool({
-    host: process.env.DB_HOST || 'localhost',
-    user: process.env.DB_USER || 'root',
-    password: process.env.DB_PASSWORD || '',
-    database: process.env.DB_NAME || 'transit_ops',
+    host: 'sql12.freesqldatabase.com',
+    user: 'sql12832833',
+    password: 'm1a2j7GnfJGUm2P3a4m5a6',
+    database: 'sql12832833',
     waitForConnections: true,
     connectionLimit: 10,
     queueLimit: 0
@@ -30,7 +30,7 @@ app.post('/api/login', async (req, res) => {
             'SELECT * FROM users WHERE username = ? AND password_hash = ? AND role = ?',
             [username, password, role]
         );
-        
+
         if (rows.length > 0) {
             res.json({ success: true, message: 'Authentication successful', user: rows[0] });
         } else {
