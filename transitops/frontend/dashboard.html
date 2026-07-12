@@ -239,10 +239,10 @@
 <span class="font-headline-lg text-headline-lg font-bold" id="kpiTotalTrips">--</span>
 </div>
 </section>
-<!-- Main Grid: Map & Alerts -->
-<div class="grid grid-cols-1 lg:grid-cols-3 gap-gutter">
+<!-- Main Grid: Active Trips -->
+<div class="grid grid-cols-1 gap-gutter">
 <!-- Active Trips Map/List -->
-<div class="lg:col-span-2 glass-card rounded-xl overflow-hidden flex flex-col h-[500px]">
+<div class="glass-card rounded-xl overflow-hidden flex flex-col h-[500px]">
 <div class="p-6 border-b border-outline-variant flex justify-between items-center bg-white/50">
 <div>
 <h2 class="font-headline-lg text-xl font-bold">Active Trips</h2>
@@ -253,139 +253,6 @@
     <div id="dashboardTripsList" class="flex flex-col gap-3">
         <!-- Dynamic trips will be populated here -->
     </div>
-</div>
-</div>
-<!-- Recent Alerts -->
-<div class="glass-card rounded-xl flex flex-col h-[500px]">
-<div class="p-6 border-b border-outline-variant">
-<h2 class="font-headline-lg text-xl font-bold">Recent Alerts</h2>
-</div>
-<div class="flex-1 overflow-y-auto custom-scrollbar p-gutter space-y-4">
-<!-- Critical Alert -->
-<div class="p-4 bg-error-container border border-error/20 rounded-lg flex gap-4">
-<span class="material-symbols-outlined text-error" style="font-variation-settings: 'FILL' 1;">warning</span>
-<div class="flex flex-col">
-<span class="font-label-md font-bold text-on-error-container">Engine Malfunction</span>
-<span class="font-body-sm text-on-error-container opacity-80">Vehicle #402 reported critical oil pressure drop.</span>
-<span class="font-label-md text-[10px] mt-2 opacity-60">2 minutes ago</span>
-</div>
-</div>
-<!-- Warning -->
-<div class="p-4 bg-secondary-fixed/30 border border-secondary/20 rounded-lg flex gap-4">
-<span class="material-symbols-outlined text-secondary">timer</span>
-<div class="flex flex-col">
-<span class="font-label-md font-bold text-on-secondary-fixed-variant">Delay Warning</span>
-<span class="font-body-sm text-on-surface-variant">Route #TR-12 is 15 minutes behind schedule due to traffic.</span>
-<span class="font-label-md text-[10px] mt-2 opacity-60">14 minutes ago</span>
-</div>
-</div>
-<!-- Info -->
-<div class="p-4 bg-surface-container-low border border-outline-variant rounded-lg flex gap-4">
-<span class="material-symbols-outlined text-primary-fixed-dim">build</span>
-<div class="flex flex-col">
-<span class="font-label-md font-bold text-on-surface">Scheduled Service</span>
-<span class="font-body-sm text-on-surface-variant">Vehicle #215 due for routine maintenance in 24 hours.</span>
-<span class="font-label-md text-[10px] mt-2 opacity-60">1 hour ago</span>
-</div>
-</div>
-<div class="p-4 bg-surface-container-low border border-outline-variant rounded-lg flex gap-4">
-<span class="material-symbols-outlined text-primary-fixed-dim">speed</span>
-<div class="flex flex-col">
-<span class="font-label-md font-bold text-on-surface">Speeding Alert</span>
-<span class="font-body-sm text-on-surface-variant">Vehicle #308 exceeded 75mph on I-95 corridor.</span>
-<span class="font-label-md text-[10px] mt-2 opacity-60">3 hours ago</span>
-</div>
-</div>
-</div>
-<button class="m-6 py-3 border border-outline-variant rounded-lg font-label-md hover:bg-surface-variant transition-colors">View All Alerts</button>
-</div>
-</div>
-<!-- Fleet Utilization & Activity Feed -->
-<div class="grid grid-cols-1 lg:grid-cols-2 gap-gutter">
-<!-- Fleet Utilization Chart -->
-<div class="glass-card rounded-xl p-6 flex flex-col gap-6">
-<div class="flex justify-between items-center">
-<div>
-<h2 class="font-headline-lg text-xl font-bold">Fleet Utilization</h2>
-<p class="font-body-sm text-on-surface-variant">Hourly vehicle usage over the last 24h</p>
-</div>
-<select class="border border-outline-variant rounded-lg text-label-md p-2 bg-white">
-<option>Last 24 Hours</option>
-<option>Last 7 Days</option>
-</select>
-</div>
-<div class="h-64 w-full flex items-end gap-2 px-2">
-<!-- Dynamic Bar Graph Mockup -->
-<div class="flex-1 bg-surface-container-highest rounded-t-sm h-[30%] relative group">
-<div class="absolute bottom-full left-1/2 -translate-x-1/2 mb-2 px-2 py-1 bg-primary-container text-on-primary-fixed text-[10px] rounded opacity-0 group-hover:opacity-100 transition-opacity">12:00</div>
-</div>
-<div class="flex-1 bg-surface-container-highest rounded-t-sm h-[45%]"></div>
-<div class="flex-1 bg-surface-container-highest rounded-t-sm h-[60%]"></div>
-<div class="flex-1 bg-secondary-container rounded-t-sm h-[85%] relative group">
-<div class="absolute bottom-full left-1/2 -translate-x-1/2 mb-2 px-2 py-1 bg-primary-container text-on-primary-fixed text-[10px] rounded opacity-0 group-hover:opacity-100 transition-opacity">Peak</div>
-</div>
-<div class="flex-1 bg-secondary-container rounded-t-sm h-[90%]"></div>
-<div class="flex-1 bg-secondary-container rounded-t-sm h-[80%]"></div>
-<div class="flex-1 bg-surface-container-highest rounded-t-sm h-[65%]"></div>
-<div class="flex-1 bg-surface-container-highest rounded-t-sm h-[50%]"></div>
-<div class="flex-1 bg-surface-container-highest rounded-t-sm h-[40%]"></div>
-<div class="flex-1 bg-surface-container-highest rounded-t-sm h-[35%]"></div>
-<div class="flex-1 bg-surface-container-highest rounded-t-sm h-[45%]"></div>
-<div class="flex-1 bg-surface-container-highest rounded-t-sm h-[60%]"></div>
-</div>
-<div class="flex justify-between font-label-md text-[10px] text-on-surface-variant border-t border-outline-variant pt-2">
-<span>00:00</span>
-<span>04:00</span>
-<span>08:00</span>
-<span>12:00</span>
-<span>16:00</span>
-<span>20:00</span>
-<span>23:59</span>
-</div>
-</div>
-<!-- Recent Activity Feed -->
-<div class="glass-card rounded-xl p-6 flex flex-col">
-<h2 class="font-headline-lg text-xl font-bold mb-6">Recent Activity</h2>
-<div class="space-y-6">
-<div class="flex gap-4 relative">
-<div class="absolute left-3 top-8 bottom-[-24px] w-[1px] bg-outline-variant"></div>
-<div class="w-6 h-6 rounded-full bg-primary-fixed flex items-center justify-center z-10">
-<span class="material-symbols-outlined text-xs">check</span>
-</div>
-<div class="flex flex-col">
-<p class="font-body-sm text-on-surface"><span class="font-bold">Trip Complete:</span> #TR-992 arrived at Downtown Hub.</p>
-<span class="font-label-md text-[10px] text-on-surface-variant">John Doe (Driver) • 5 mins ago</span>
-</div>
-</div>
-<div class="flex gap-4 relative">
-<div class="absolute left-3 top-8 bottom-[-24px] w-[1px] bg-outline-variant"></div>
-<div class="w-6 h-6 rounded-full bg-secondary-fixed flex items-center justify-center z-10">
-<span class="material-symbols-outlined text-xs text-secondary">near_me</span>
-</div>
-<div class="flex flex-col">
-<p class="font-body-sm text-on-surface"><span class="font-bold">Trip Started:</span> #TR-1004 dispatched to East Port.</p>
-<span class="font-label-md text-[10px] text-on-surface-variant">Sara M. (Dispatcher) • 18 mins ago</span>
-</div>
-</div>
-<div class="flex gap-4 relative">
-<div class="absolute left-3 top-8 bottom-[-24px] w-[1px] bg-outline-variant"></div>
-<div class="w-6 h-6 rounded-full bg-surface-variant flex items-center justify-center z-10">
-<span class="material-symbols-outlined text-xs">local_gas_station</span>
-</div>
-<div class="flex flex-col">
-<p class="font-body-sm text-on-surface"><span class="font-bold">Refuel Logged:</span> Vehicle #215 - ₹145.20</p>
-<span class="font-label-md text-[10px] text-on-surface-variant">Auto-System • 42 mins ago</span>
-</div>
-</div>
-<div class="flex gap-4">
-<div class="w-6 h-6 rounded-full bg-blue-100 flex items-center justify-center z-10">
-<span class="material-symbols-outlined text-xs text-blue-600">person_add</span>
-</div>
-<div class="flex flex-col">
-<p class="font-body-sm text-on-surface"><span class="font-bold">New Driver Onboarded:</span> Marco Russo</p>
-<span class="font-label-md text-[10px] text-on-surface-variant">HR Portal • 1 hour ago</span>
-</div>
-</div>
 </div>
 </div>
 </div>
