@@ -15,7 +15,7 @@ app.use(express.static(__dirname));
 const pool = mysql.createPool({
     host: 'sql12.freesqldatabase.com',
     user: 'sql12832833',
-    password: 'm1a2j7GnfJGUm2P3a4m5a6',
+    password: '7GnfJGUm2P',
     database: 'sql12832833',
     waitForConnections: true,
     connectionLimit: 10,
