@@ -1,0 +1,751 @@
+<!DOCTYPE html>
+<html class="light" lang="en">
+
+<head>
+    <meta charset="utf-8" />
+    <meta content="width=device-width, initial-scale=1.0" name="viewport" />
+    <title>TransitOps | Drivers & Safety Profiles</title>
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;600;700;800;900&family=Titillium+Web:wght@300;400;600;700&display=swap"
+        rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap"
+        rel="stylesheet" />
+    <script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "inverse-surface": "#213145",
+                        "surface": "#f8f9ff",
+                        "tertiary-fixed": "#c4e7ff",
+                        "secondary": "#9d4300",
+                        "outline-variant": "#c6c6cd",
+                        "on-secondary-container": "#5c2400",
+                        "primary-container": "#131b2e",
+                        "outline": "#76777d",
+                        "on-tertiary": "#ffffff",
+                        "primary-fixed": "#dae2fd",
+                        "on-tertiary-fixed": "#001e2c",
+                        "surface-bright": "#f8f9ff",
+                        "on-tertiary-fixed-variant": "#004c69",
+                        "error": "#ba1a1a",
+                        "on-error": "#ffffff",
+                        "surface-container-lowest": "#ffffff",
+                        "on-primary-container": "#7c839b",
+                        "secondary-fixed": "#ffdbca",
+                        "on-primary": "#ffffff",
+                        "surface-container-high": "#dce9ff",
+                        "on-primary-fixed-variant": "#3f465c",
+                        "tertiary-fixed-dim": "#7bd0ff",
+                        "surface-dim": "#cbdbf5",
+                        "surface-container-low": "#eff4ff",
+                        "surface-container-highest": "#d3e4fe",
+                        "secondary-container": "#fd761a",
+                        "primary-fixed-dim": "#bec6e0",
+                        "on-secondary-fixed-variant": "#783200",
+                        "background": "#f8f9ff",
+                        "on-surface-variant": "#45464d",
+                        "on-background": "#0b1c30",
+                        "on-error-container": "#93000a",
+                        "surface-tint": "#565e74",
+                        "on-surface": "#0b1c30",
+                        "primary": "#000000",
+                        "on-tertiary-container": "#008ebf",
+                        "surface-variant": "#d3e4fe",
+                        "on-primary-fixed": "#131b2e",
+                        "inverse-on-surface": "#eaf1ff",
+                        "surface-container": "#e5eeff",
+                        "tertiary": "#000000",
+                        "secondary-fixed-dim": "#ffb690",
+                        "on-secondary": "#ffffff",
+                        "tertiary-container": "#001e2c",
+                        "inverse-primary": "#bec6e0",
+                        "error-container": "#ffdad6",
+                        "on-secondary-fixed": "#341100"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.125rem",
+                        "lg": "0.25rem",
+                        "xl": "0.5rem",
+                        "full": "0.75rem"
+                    },
+                    "spacing": {
+                        "stack-md": "16px",
+                        "margin-mobile": "16px",
+                        "stack-sm": "8px",
+                        "base": "4px",
+                        "margin-desktop": "40px",
+                        "stack-lg": "32px",
+                        "gutter": "24px"
+                    },
+                    "fontFamily": {
+                        "label-md": ["Titillium Web"],
+                        "body-md": ["Titillium Web"],
+                        "headline-xl": ["Orbitron"],
+                        "data-mono": ["Titillium Web"],
+                        "body-sm": ["Titillium Web"],
+                        "headline-lg-mobile": ["Orbitron"],
+                        "headline-lg": ["Orbitron"]
+                    },
+                    "fontSize": {
+                        "label-md": ["12px", { "lineHeight": "16px", "letterSpacing": "0.05em", "fontWeight": "400" }],
+                        "body-md": ["16px", { "lineHeight": "24px", "fontWeight": "400" }],
+                        "headline-xl": ["48px", { "lineHeight": "56px", "letterSpacing": "-0.02em", "fontWeight": "600" }],
+                        "data-mono": ["14px", { "lineHeight": "20px", "fontWeight": "400" }],
+                        "body-sm": ["14px", { "lineHeight": "20px", "fontWeight": "400" }],
+                        "headline-lg-mobile": ["24px", { "lineHeight": "32px", "fontWeight": "500" }],
+                        "headline-lg": ["32px", { "lineHeight": "40px", "letterSpacing": "-0.01em", "fontWeight": "500" }]
+                    }
+                },
+            },
+        }
+    </script>
+    <style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+
+        body {
+            background-color: #f8f9ff;
+            color: #0b1c30;
+        }
+
+        .custom-scrollbar::-webkit-scrollbar {
+            width: 4px;
+        }
+
+        .custom-scrollbar::-webkit-scrollbar-track {
+            background: transparent;
+        }
+
+        .custom-scrollbar::-webkit-scrollbar-thumb {
+            background: #c6c6cd;
+            border-radius: 10px;
+        }
+
+        .glass-card {
+            background: rgba(255, 255, 255, 1);
+            border: 1px solid rgba(226, 232, 240, 1);
+        }
+
+        .active-sidebar-item {
+            color: #ffffff;
+            font-weight: 700;
+            background-color: #fd761a;
+        }
+    </style>
+</head>
+
+<body class="font-body-md text-body-md overflow-hidden">
+
+    <!-- SideNavBar (Dark Navy consistent with Dashboard) -->
+        <aside
+            class="fixed left-0 top-0 h-screen w-[280px] bg-primary-container flex flex-col py-stack-lg border-r border-outline-variant z-50">
+            <div class="px-6 mb-10">
+                <h1 class="font-headline-lg text-headline-lg font-bold text-on-primary-container">TransitOps</h1>
+                <p class="font-label-md text-label-md text-on-primary-container opacity-60">Fleet Management</p>
+            </div>
+            <nav class="flex-1 space-y-1 px-4 overflow-y-auto custom-scrollbar">
+                <a class="flex items-center gap-3 px-4 py-3 rounded-lg text-on-primary-container hover:text-white hover:bg-white/10 transition-colors duration-200"
+                    href="dashboard.html">
+                    <span class="material-symbols-outlined">dashboard</span>
+                    <span class="font-label-md text-label-md">Dashboard</span>
+                </a>
+                <a class="flex items-center gap-3 px-4 py-3 rounded-lg text-on-primary-container hover:text-white hover:bg-white/10 transition-colors duration-200"
+                    href="fleet_management.html">
+                    <span class="material-symbols-outlined">local_shipping</span>
+                    <span class="font-label-md text-label-md">Fleet</span>
+                </a>
+                <a class="flex items-center gap-3 px-4 py-3 rounded-lg text-on-secondary-fixed-variant font-bold border-l-4 border-secondary-container bg-secondary-fixed/10 transition-colors duration-200"
+                    href="drivers_safety.html">
+                    <span class="material-symbols-outlined">person</span>
+                    <span class="font-label-md text-label-md">Drivers</span>
+                </a>
+                <a class="flex items-center gap-3 px-4 py-3 rounded-lg text-on-primary-container hover:text-white hover:bg-white/10 transition-colors duration-200"
+                    href="#">
+                    <span class="material-symbols-outlined">route</span>
+                    <span class="font-label-md text-label-md">Trips</span>
+                </a>
+                <a class="flex items-center gap-3 px-4 py-3 rounded-lg text-on-primary-container hover:text-white hover:bg-white/10 transition-colors duration-200"
+                    href="#">
+                    <span class="material-symbols-outlined">build</span>
+                    <span class="font-label-md text-label-md">Maintenance</span>
+                </a>
+                <a class="flex items-center gap-3 px-4 py-3 rounded-lg text-on-primary-container hover:text-white hover:bg-white/10 transition-colors duration-200 mt-auto"
+                    href="#">
+                    <span class="material-symbols-outlined">settings</span>
+                    <span class="font-label-md text-label-md">Settings</span>
+                </a>
+            </nav>
+            <div class="mt-auto px-6 py-4 flex items-center gap-3 border-t border-on-primary-container/10">
+                <div
+                    class="w-10 h-10 rounded-full overflow-hidden bg-surface-variant flex items-center justify-center font-bold text-white bg-orange-600">
+                    AR
+                </div>
+                <div class="flex flex-col">
+                    <span class="font-label-md text-label-md text-white font-bold">Alex Rivera</span>
+                    <span class="font-label-md text-[10px] text-on-primary-container opacity-60">Fleet Manager</span>
+                </div>
+                <a href="index.html" class="ml-auto text-on-primary-container hover:text-white transition-colors"
+                    title="Log Out">
+                    <span class="material-symbols-outlined">logout</span>
+                </a>
+            </div>
+        </aside>
+
+        <!-- Main Content Area -->
+        <main class="ml-[280px] h-screen flex flex-col relative overflow-hidden">
+            <!-- TopNavBar -->
+            <header
+                class="h-16 flex justify-between items-center px-margin-desktop bg-surface-container-lowest shadow-sm border-b border-outline-variant z-40 flex-shrink-0">
+                <div class="flex items-center gap-4 w-1/2">
+                    <div class="relative w-full max-w-md group">
+                        <span
+                            class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-on-surface-variant">search</span>
+                        <input id="searchInput"
+                            class="w-full pl-10 pr-4 py-2 bg-surface-container-low border-none rounded-full font-body-sm text-body-sm focus:ring-2 focus:ring-secondary-container transition-all"
+                            placeholder="Search drivers, license no..." type="text" />
+                    </div>
+                </div>
+                <div class="flex items-center gap-6">
+                    <button class="relative p-2 rounded-full hover:bg-surface-container-low transition-all">
+                        <span class="material-symbols-outlined text-on-surface-variant">notifications</span>
+                        <span class="absolute top-2 right-2 w-2 h-2 bg-secondary rounded-full"></span>
+                    </button>
+                    <button class="p-2 rounded-full hover:bg-surface-container-low transition-all">
+                        <span class="material-symbols-outlined text-on-surface-variant">help</span>
+                    </button>
+                    <div class="h-8 w-[1px] bg-outline-variant"></div>
+                    <div
+                        class="flex items-center gap-3 cursor-pointer hover:bg-surface-container-low p-2 rounded-lg transition-all">
+                        <span class="font-label-md text-label-md font-bold text-primary">Alex Rivera</span>
+                        <div
+                            class="w-8 h-8 rounded-full bg-secondary-fixed flex items-center justify-center text-on-secondary-fixed font-bold text-xs">
+                            AR</div>
+                    </div>
+                </div>
+            </header>
+
+            <!-- Scrollable Drivers Content -->
+            <div class="flex-1 overflow-y-auto p-gutter custom-scrollbar space-y-6">
+                <!-- Breadcrumbs and Title -->
+                <div class="flex justify-between items-center">
+                    <div>
+                        <nav class="flex text-on-surface-variant text-[12px] uppercase tracking-wider mb-1 font-label-md"
+                            aria-label="Breadcrumb">
+                            <ol class="inline-flex items-center space-x-1 md:space-x-2">
+                                <li class="inline-flex items-center">
+                                    <a href="#" class="inline-flex items-center hover:text-primary">Drivers</a>
+                                </li>
+                                <li>
+                                    <div class="flex items-center">
+                                        <span class="material-symbols-outlined text-[14px] mx-1">chevron_right</span>
+                                        <span class="text-primary font-bold">Profiles & Safety</span>
+                                    </div>
+                                </li>
+                            </ol>
+                        </nav>
+                        <h2 class="font-headline-xl text-3xl font-black text-primary tracking-tight">Drivers & Safety
+                            Profiles</h2>
+                    </div>
+                    <button id="addDriverBtn"
+                        class="flex items-center gap-2 px-5 py-3 bg-secondary-container text-white font-bold rounded-lg shadow-md hover:bg-secondary-container/90 active:scale-95 transition-all">
+                        <span class="material-symbols-outlined text-[20px]">add</span>
+                        <span class="font-label-md text-[14px]">Add Driver</span>
+                    </button>
+                </div>
+
+                <!-- Metric Overview (High-level Cards) -->
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-gutter">
+                    <div class="glass-card p-6 rounded-xl flex flex-col gap-2 shadow-sm bg-white">
+                        <div class="flex justify-between items-start">
+                            <span
+                                class="material-symbols-outlined text-primary bg-primary-fixed p-2 rounded-lg">group</span>
+                            <span class="font-label-md text-green-600 flex items-center gap-1">+8% <span
+                                    class="material-symbols-outlined text-sm">trending_up</span></span>
+                        </div>
+                        <span class="font-label-md text-on-surface-variant uppercase tracking-wider text-[11px]">Total
+                            Drivers</span>
+                        <span class="font-headline-lg text-[24px] font-bold text-primary">124</span>
+                    </div>
+                    <div class="glass-card p-6 rounded-xl flex flex-col gap-2 shadow-sm bg-white">
+                        <div class="flex justify-between items-start">
+                            <span class="material-symbols-outlined text-green-600 bg-green-100 p-2 rounded-lg"
+                                style="font-variation-settings: 'FILL' 1;">check_circle</span>
+                            <span class="font-label-md text-green-600 flex items-center gap-1">82% <span
+                                    class="material-symbols-outlined text-sm">trending_up</span></span>
+                        </div>
+                        <span
+                            class="font-label-md text-on-surface-variant uppercase tracking-wider text-[11px]">Available</span>
+                        <span class="font-headline-lg text-[24px] font-bold text-primary">86<span
+                                class="text-on-surface-variant font-normal text-sm">/124</span></span>
+                    </div>
+                    <div class="glass-card p-6 rounded-xl flex flex-col gap-2 shadow-sm bg-white">
+                        <div class="flex justify-between items-start">
+                            <span class="material-symbols-outlined text-blue-600 bg-blue-100 p-2 rounded-lg"
+                                style="font-variation-settings: 'FILL' 1;">schedule</span>
+                            <span class="font-label-md text-blue-600 flex items-center gap-1">On Trip</span>
+                        </div>
+                        <span class="font-label-md text-on-surface-variant uppercase tracking-wider text-[11px]">Active
+                            Assignments</span>
+                        <span class="font-headline-lg text-[24px] font-bold text-primary">24</span>
+                    </div>
+                    <div class="glass-card p-6 rounded-xl flex flex-col gap-2 shadow-sm bg-white">
+                        <div class="flex justify-between items-start">
+                            <span class="material-symbols-outlined text-orange-600 bg-orange-100 p-2 rounded-lg"
+                                style="font-variation-settings: 'FILL' 1;">warning</span>
+                            <span class="font-label-md text-red-600 flex items-center gap-1">11.2% <span
+                                    class="material-symbols-outlined text-sm">warning</span></span>
+                        </div>
+                        <span
+                            class="font-label-md text-on-surface-variant uppercase tracking-wider text-[11px]">Suspended</span>
+                        <span class="font-headline-lg text-[24px] font-bold text-primary">14</span>
+                    </div>
+                </div>
+
+                <!-- Drivers Table Card Container -->
+                <div class="glass-card rounded-xl overflow-hidden shadow-sm bg-white">
+                    <div class="overflow-x-auto">
+                        <table class="min-w-full divide-y divide-outline-variant">
+                            <thead class="bg-surface-container-low">
+                                <tr>
+                                    <th
+                                        class="px-6 py-4 text-left font-label-md text-[11px] text-on-surface-variant uppercase tracking-wider">
+                                        Driver</th>
+                                    <th
+                                        class="px-6 py-4 text-left font-label-md text-[11px] text-on-surface-variant uppercase tracking-wider">
+                                        License No</th>
+                                    <th
+                                        class="px-6 py-4 text-left font-label-md text-[11px] text-on-surface-variant uppercase tracking-wider">
+                                        Category</th>
+                                    <th
+                                        class="px-6 py-4 text-left font-label-md text-[11px] text-on-surface-variant uppercase tracking-wider">
+                                        Expiry</th>
+                                    <th
+                                        class="px-6 py-4 text-left font-label-md text-[11px] text-on-surface-variant uppercase tracking-wider">
+                                        Contact</th>
+                                    <th
+                                        class="px-6 py-4 text-left font-label-md text-[11px] text-on-surface-variant uppercase tracking-wider">
+                                        Trip Compl.</th>
+                                    <th
+                                        class="px-6 py-4 text-left font-label-md text-[11px] text-on-surface-variant uppercase tracking-wider">
+                                        Safety</th>
+                                    <th
+                                        class="px-6 py-4 text-left font-label-md text-[11px] text-on-surface-variant uppercase tracking-wider">
+                                        Status</th>
+                                    <th
+                                        class="px-6 py-4 text-center font-label-md text-[11px] text-on-surface-variant uppercase tracking-wider">
+                                        Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody id="driverTableBody" class="bg-white divide-y divide-outline-variant">
+                                <!-- Rows will be injected dynamically -->
+                            </tbody>
+                        </table>
+                    </div>
+                    <!-- Pagination Footer -->
+                    <div class="px-6 py-4 border-t border-outline-variant flex justify-between items-center bg-white">
+                        <span id="showingText" class="text-on-surface-variant text-[14px] font-body-sm">Showing 1-4 of 4
+                            drivers</span>
+                        <div class="inline-flex gap-1" id="paginationContainer">
+                            <button onclick="changePage('prev')"
+                                class="px-3 py-1.5 border border-outline-variant rounded-md text-[13px] font-bold text-on-surface-variant hover:bg-surface-container-low transition-colors">Previous</button>
+                            <button onclick="setPage(1)"
+                                class="px-3 py-1.5 bg-primary-container text-white font-bold rounded-md text-[13px]">1</button>
+                            <button onclick="setPage(2)"
+                                class="px-3 py-1.5 border border-outline-variant rounded-md text-[13px] font-bold text-on-surface-variant hover:bg-surface-container-low transition-colors">2</button>
+                            <button onclick="setPage(3)"
+                                class="px-3 py-1.5 border border-outline-variant rounded-md text-[13px] font-bold text-on-surface-variant hover:bg-surface-container-low transition-colors">3</button>
+                            <button onclick="changePage('next')"
+                                class="px-3 py-1.5 border border-outline-variant rounded-md text-[13px] font-bold text-on-surface-variant hover:bg-surface-container-low transition-colors">Next</button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Toggle Stats / Legend Section -->
+                <div class="space-y-3">
+                    <h3 class="font-label-md text-[12px] uppercase text-on-surface-variant tracking-wider font-bold">
+                        Toggle Stats / Legend</h3>
+                    <div class="flex flex-wrap gap-3" id="filterBadges">
+                        <button onclick="toggleFilter('Available')" id="filter-Available"
+                            class="px-4 py-2 rounded-lg bg-green-50 text-green-700 font-bold border border-green-200 hover:bg-green-100 transition-colors flex items-center gap-2">
+                            <span class="w-2.5 h-2.5 rounded-full bg-green-500"></span>
+                            Available
+                        </button>
+                        <button onclick="toggleFilter('On Trip')" id="filter-On-Trip"
+                            class="px-4 py-2 rounded-lg bg-blue-50 text-blue-700 font-bold border border-blue-200 hover:bg-blue-100 transition-colors flex items-center gap-2">
+                            <span class="w-2.5 h-2.5 rounded-full bg-blue-500"></span>
+                            On Trip
+                        </button>
+                        <button onclick="toggleFilter('Off Duty')" id="filter-Off-Duty"
+                            class="px-4 py-2 rounded-lg bg-gray-50 text-gray-700 font-bold border border-gray-200 hover:bg-gray-100 transition-colors flex items-center gap-2">
+                            <span class="w-2.5 h-2.5 rounded-full bg-gray-500"></span>
+                            Off Duty
+                        </button>
+                        <button onclick="toggleFilter('Suspended')" id="filter-Suspended"
+                            class="px-4 py-2 rounded-lg bg-orange-50 text-orange-700 font-bold border border-orange-200 hover:bg-orange-100 transition-colors flex items-center gap-2">
+                            <span class="w-2.5 h-2.5 rounded-full bg-orange-500"></span>
+                            Suspended
+                        </button>
+                    </div>
+                </div>
+
+                <!-- System Rules Alert Panel -->
+                <div
+                    class="border-l-4 border-secondary-container bg-orange-50/50 p-5 rounded-r-xl flex items-start gap-4">
+                    <span class="material-symbols-outlined text-secondary-container text-[24px]">warning</span>
+                    <div>
+                        <h4 class="font-bold text-[15px] text-on-surface">System Rule Assignment Block</h4>
+                        <p class="text-[13px] text-on-surface-variant mt-0.5">Expired license or Suspended status <span
+                                class="font-bold text-secondary-container">&rarr;</span> blocked from trip assignment
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </main>
+
+    <!-- Add Driver Modal Overlay -->
+    <div id="addDriverModal"
+        class="fixed inset-0 bg-black/50 backdrop-blur-sm z-50 flex items-center justify-center hidden">
+        <div
+            class="bg-white rounded-xl shadow-xl w-full max-w-lg p-6 overflow-hidden flex flex-col gap-5 border border-outline-variant">
+            <div class="flex justify-between items-center border-b border-outline-variant pb-3">
+                <h3 class="font-headline-lg text-lg font-bold">Add New Fleet Driver</h3>
+                <button onclick="closeModal()" class="text-on-surface-variant hover:text-primary transition-colors">
+                    <span class="material-symbols-outlined">close</span>
+                </button>
+            </div>
+            <form id="driverForm" class="space-y-4">
+                <div class="grid grid-cols-2 gap-4">
+                    <div class="flex flex-col gap-1">
+                        <label class="font-label-md text-[12px] uppercase text-on-surface-variant font-bold"
+                            for="driverName">Driver Name</label>
+                        <input type="text" id="driverName"
+                            class="w-full bg-surface-container-low border-none rounded-lg px-3 py-2 text-body-sm focus:ring-2 focus:ring-secondary-container"
+                            placeholder="e.g. Marcus Vane" required />
+                    </div>
+                    <div class="flex flex-col gap-1">
+                        <label class="font-label-md text-[12px] uppercase text-on-surface-variant font-bold"
+                            for="licenseNo">License No</label>
+                        <input type="text" id="licenseNo"
+                            class="w-full bg-surface-container-low border-none rounded-lg px-3 py-2 text-body-sm focus:ring-2 focus:ring-secondary-container"
+                            placeholder="e.g. DL-44120" required />
+                    </div>
+                </div>
+                <div class="grid grid-cols-2 gap-4">
+                    <div class="flex flex-col gap-1">
+                        <label class="font-label-md text-[12px] uppercase text-on-surface-variant font-bold"
+                            for="category">Category</label>
+                        <select id="category"
+                            class="w-full bg-surface-container-low border-none rounded-lg px-3 py-2 text-body-sm focus:ring-2 focus:ring-secondary-container">
+                            <option value="LMV">LMV (Light Motor Vehicle)</option>
+                            <option value="HMV">HMV (Heavy Motor Vehicle)</option>
+                        </select>
+                    </div>
+                    <div class="flex flex-col gap-1">
+                        <label class="font-label-md text-[12px] uppercase text-on-surface-variant font-bold"
+                            for="expiry">Expiry Date</label>
+                        <input type="text" id="expiry"
+                            class="w-full bg-surface-container-low border-none rounded-lg px-3 py-2 text-body-sm focus:ring-2 focus:ring-secondary-container"
+                            placeholder="MM/YYYY or MM/YYYY EXPIRE" required />
+                    </div>
+                </div>
+                <div class="grid grid-cols-2 gap-4">
+                    <div class="flex flex-col gap-1">
+                        <label class="font-label-md text-[12px] uppercase text-on-surface-variant font-bold"
+                            for="contact">Contact No</label>
+                        <input type="text" id="contact"
+                            class="w-full bg-surface-container-low border-none rounded-lg px-3 py-2 text-body-sm focus:ring-2 focus:ring-secondary-container"
+                            placeholder="e.g. 98220xxxxx" required />
+                    </div>
+                    <div class="flex flex-col gap-1">
+                        <label class="font-label-md text-[12px] uppercase text-on-surface-variant font-bold"
+                            for="tripCompl">Trip Completion %</label>
+                        <input type="text" id="tripCompl"
+                            class="w-full bg-surface-container-low border-none rounded-lg px-3 py-2 text-body-sm focus:ring-2 focus:ring-secondary-container"
+                            placeholder="e.g. 94%" required />
+                    </div>
+                </div>
+                <div class="grid grid-cols-2 gap-4">
+                    <div class="flex flex-col gap-1">
+                        <label class="font-label-md text-[12px] uppercase text-on-surface-variant font-bold"
+                            for="safety">Safety rating (initial)</label>
+                        <select id="safety"
+                            class="w-full bg-surface-container-low border-none rounded-lg px-3 py-2 text-body-sm focus:ring-2 focus:ring-secondary-container">
+                            <option value="Available">Available</option>
+                            <option value="On Trip">On Trip</option>
+                            <option value="Suspended">Suspended</option>
+                            <option value="Off Duty">Off Duty</option>
+                        </select>
+                    </div>
+                    <div class="flex flex-col gap-1">
+                        <label class="font-label-md text-[12px] uppercase text-on-surface-variant font-bold"
+                            for="status">Initial Status</label>
+                        <select id="status"
+                            class="w-full bg-surface-container-low border-none rounded-lg px-3 py-2 text-body-sm focus:ring-2 focus:ring-secondary-container">
+                            <option value="Available">Available</option>
+                            <option value="On Trip">On Trip</option>
+                            <option value="Off Duty">Off Duty</option>
+                            <option value="Suspended">Suspended</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="flex justify-end gap-3 pt-3 border-t border-outline-variant">
+                    <button type="button" onclick="closeModal()"
+                        class="px-4 py-2 border border-outline-variant rounded-lg font-bold text-on-surface-variant hover:bg-surface-container-low transition-colors">Cancel</button>
+                    <button type="submit"
+                        class="px-5 py-2 bg-secondary-container text-white font-bold rounded-lg hover:bg-secondary-container/90 active:scale-95 transition-colors">Save
+                        Driver</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        // Initial mock drivers data replicating the uploaded design state
+        let drivers = [
+            { id: 1, initials: 'AL', name: 'Alex', license: 'DL-88213', category: 'LMV', expiry: '12/2028', contact: '98765xxxxx', tripCompl: '96%', safety: 'Available', status: 'Available' },
+            { id: 2, initials: 'JO', name: 'John', license: 'DL-44120', category: 'HMV', expiry: '03/2025 EXPIRE', contact: '98220xxxxx', tripCompl: '81%', safety: 'Suspended', status: 'Suspended', expired: true },
+            { id: 3, initials: 'PR', name: 'Priya', license: 'DL-77031', category: 'LMV', expiry: '08/2027', contact: '99110xxxxx', tripCompl: '99%', safety: 'On Trip', status: 'On Trip' },
+            { id: 4, initials: 'SU', name: 'Suresh', license: 'DL-90045', category: 'HMV', expiry: '01/2027', contact: '97440xxxxx', tripCompl: '88%', safety: 'Available', status: 'Off Duty' },
+            { id: 5, initials: 'MV', name: 'Marcus Vane', license: 'DL-30214', category: 'HMV', expiry: '09/2028', contact: '98114xxxxx', tripCompl: '94%', safety: 'On Trip', status: 'On Trip' },
+            { id: 6, initials: 'SC', name: 'Sarah Chen', license: 'DL-55210', category: 'LMV', expiry: '11/2029', contact: '99203xxxxx', tripCompl: '95%', safety: 'Available', status: 'Available' },
+            { id: 7, initials: 'DK', name: 'David King', license: 'DL-10928', category: 'LMV', expiry: '02/2025 EXPIRE', contact: '97834xxxxx', tripCompl: '76%', safety: 'Suspended', status: 'Suspended', expired: true },
+            { id: 8, initials: 'RL', name: 'Robert Lee', license: 'DL-88049', category: 'HMV', expiry: '10/2027', contact: '98543xxxxx', tripCompl: '90%', safety: 'Available', status: 'Off Duty' }
+        ];
+
+        let currentPage = 1;
+        const itemsPerPage = 4;
+        let searchQuery = '';
+        let activeFilters = [];
+
+        // Initialize display
+        document.addEventListener('DOMContentLoaded', () => {
+            renderTable();
+            setupEventListeners();
+        });
+
+        function setupEventListeners() {
+            // Search filter listener
+            const searchInput = document.getElementById('searchInput');
+            searchInput.addEventListener('input', (e) => {
+                searchQuery = e.target.value.toLowerCase();
+                currentPage = 1;
+                renderTable();
+            });
+
+            // Add Driver Modal triggering
+            const addDriverBtn = document.getElementById('addDriverBtn');
+            addDriverBtn.addEventListener('click', () => {
+                document.getElementById('addDriverModal').classList.remove('hidden');
+            });
+
+            // Form submission
+            const form = document.getElementById('driverForm');
+            form.addEventListener('submit', (e) => {
+                e.preventDefault();
+                const name = document.getElementById('driverName').value;
+                const initials = name.split(' ').map(n => n[0]).join('').toUpperCase().substring(0, 2);
+                const license = document.getElementById('licenseNo').value;
+                const category = document.getElementById('category').value;
+                const expiry = document.getElementById('expiry').value;
+                const contact = document.getElementById('contact').value;
+                const tripCompl = document.getElementById('tripCompl').value;
+                const safety = document.getElementById('safety').value;
+                const status = document.getElementById('status').value;
+
+                const isExpired = expiry.toLowerCase().includes('expire');
+
+                const newDriver = {
+                    id: drivers.length + 1,
+                    initials,
+                    name,
+                    license,
+                    category,
+                    expiry,
+                    contact,
+                    tripCompl,
+                    safety,
+                    status,
+                    expired: isExpired
+                };
+
+                drivers.unshift(newDriver); // add to top
+                closeModal();
+                form.reset();
+                renderTable();
+            });
+        }
+
+        function closeModal() {
+            document.getElementById('addDriverModal').classList.add('hidden');
+        }
+
+        // Toggle filter logic
+        function toggleFilter(status) {
+            const idx = activeFilters.indexOf(status);
+            const btn = document.getElementById(`filter-${status.replace(' ', '-')}`);
+
+            if (idx > -1) {
+                activeFilters.splice(idx, 1);
+                btn.classList.remove('ring-2', 'ring-secondary-container', 'border-secondary-container');
+            } else {
+                activeFilters.push(status);
+                btn.classList.add('ring-2', 'ring-secondary-container', 'border-secondary-container');
+            }
+            currentPage = 1;
+            renderTable();
+        }
+
+        // Pagination helper functions
+        function setPage(page) {
+            currentPage = page;
+            renderTable();
+        }
+
+        function changePage(direction) {
+            const filtered = getFilteredDrivers();
+            const totalPages = Math.ceil(filtered.length / itemsPerPage);
+            if (direction === 'prev' && currentPage > 1) {
+                currentPage--;
+            } else if (direction === 'next' && currentPage < totalPages) {
+                currentPage++;
+            }
+            renderTable();
+        }
+
+        // Get list of filtered drivers
+        function getFilteredDrivers() {
+            return drivers.filter(driver => {
+                const matchesSearch = driver.name.toLowerCase().includes(searchQuery) ||
+                    driver.license.toLowerCase().includes(searchQuery);
+                const matchesFilter = activeFilters.length === 0 || activeFilters.includes(driver.status);
+                return matchesSearch && matchesFilter;
+            });
+        }
+
+        // Main rendering logic
+        function renderTable() {
+            const tableBody = document.getElementById('driverTableBody');
+            tableBody.innerHTML = '';
+
+            const filtered = getFilteredDrivers();
+            const totalItems = filtered.length;
+            const totalPages = Math.ceil(totalItems / itemsPerPage) || 1;
+
+            if (currentPage > totalPages) {
+                currentPage = totalPages;
+            }
+
+            const startIndex = (currentPage - 1) * itemsPerPage;
+            const endIndex = Math.min(startIndex + itemsPerPage, totalItems);
+            const pageItems = filtered.slice(startIndex, endIndex);
+
+            if (pageItems.length === 0) {
+                tableBody.innerHTML = `
+                <tr>
+                    <td colspan="9" class="px-6 py-8 text-center text-on-surface-variant text-[14px]">
+                        No matching drivers found.
+                    </td>
+                </tr>
+            `;
+                document.getElementById('showingText').textContent = 'Showing 0-0 of 0 drivers';
+                renderPaginationButtons(totalPages);
+                return;
+            }
+
+            pageItems.forEach(driver => {
+                const tr = document.createElement('tr');
+                tr.className = "hover:bg-surface-container-low/50 transition-colors duration-150";
+
+                // Status tag classes
+                let statusClass = "bg-gray-100 text-gray-800";
+                if (driver.status === 'Available') statusClass = "bg-green-100 text-green-800";
+                else if (driver.status === 'Suspended') statusClass = "bg-orange-100 text-orange-800";
+                else if (driver.status === 'On Trip') statusClass = "bg-blue-100 text-blue-800";
+
+                // Safety tag classes
+                let safetyClass = "bg-gray-100 text-gray-800";
+                if (driver.safety === 'Available') safetyClass = "bg-green-100 text-green-800";
+                else if (driver.safety === 'Suspended') safetyClass = "bg-orange-100 text-orange-800";
+                else if (driver.safety === 'On Trip') safetyClass = "bg-blue-100 text-blue-800";
+
+                // Expiry styling
+                const expiryHTML = driver.expired
+                    ? `<span class="text-red-600 font-bold">${driver.expiry}</span>`
+                    : `<span class="text-on-surface">${driver.expiry}</span>`;
+
+                tr.innerHTML = `
+                <td class="px-6 py-4 whitespace-nowrap">
+                    <div class="flex items-center gap-3">
+                        <div class="w-8 h-8 rounded-full bg-slate-200 flex items-center justify-center text-slate-700 font-bold text-[12px]">
+                            ${driver.initials}
+                        </div>
+                        <span class="font-bold text-on-surface text-[14px]">${driver.name}</span>
+                    </div>
+                </td>
+                <td class="px-6 py-4 whitespace-nowrap text-on-surface-variant text-[14px]">${driver.license}</td>
+                <td class="px-6 py-4 whitespace-nowrap text-on-surface-variant text-[14px]">${driver.category}</td>
+                <td class="px-6 py-4 whitespace-nowrap text-[14px]">${expiryHTML}</td>
+                <td class="px-6 py-4 whitespace-nowrap text-on-surface-variant text-[14px]">${driver.contact}</td>
+                <td class="px-6 py-4 whitespace-nowrap text-on-surface font-bold text-[14px]">${driver.tripCompl}</td>
+                <td class="px-6 py-4 whitespace-nowrap">
+                    <span class="px-2.5 py-1 rounded-full text-[12px] font-bold ${safetyClass}">
+                        ${driver.safety}
+                    </span>
+                </td>
+                <td class="px-6 py-4 whitespace-nowrap">
+                    <span class="px-2.5 py-1 rounded-full text-[12px] font-bold ${statusClass}">
+                        ${driver.status}
+                    </span>
+                </td>
+                <td class="px-6 py-4 whitespace-nowrap text-center text-on-surface-variant">
+                    <button class="hover:text-primary transition-colors">
+                        <span class="material-symbols-outlined">more_vert</span>
+                    </button>
+                </td>
+            `;
+                tableBody.appendChild(tr);
+            });
+
+            document.getElementById('showingText').textContent = `Showing ${startIndex + 1}-${endIndex} of ${totalItems} drivers`;
+            renderPaginationButtons(totalPages);
+        }
+
+        function renderPaginationButtons(totalPages) {
+            const container = document.getElementById('paginationContainer');
+            container.innerHTML = '';
+
+            // Previous button
+            const prevBtn = document.createElement('button');
+            prevBtn.onclick = () => changePage('prev');
+            prevBtn.className = `px-3 py-1.5 border border-outline-variant rounded-md text-[13px] font-bold text-on-surface-variant hover:bg-surface-container-low transition-colors ${currentPage === 1 ? 'opacity-50 cursor-not-allowed' : ''}`;
+            prevBtn.textContent = 'Previous';
+            container.appendChild(prevBtn);
+
+            // Page buttons
+            for (let i = 1; i <= totalPages; i++) {
+                const pageBtn = document.createElement('button');
+                pageBtn.onclick = () => setPage(i);
+                if (i === currentPage) {
+                    pageBtn.className = "px-3 py-1.5 bg-primary-container text-white font-bold rounded-md text-[13px]";
+                } else {
+                    pageBtn.className = "px-3 py-1.5 border border-outline-variant rounded-md text-[13px] font-bold text-on-surface-variant hover:bg-surface-container-low transition-colors";
+                }
+                pageBtn.textContent = i;
+                container.appendChild(pageBtn);
+            }
+
+            // Next button
+            const nextBtn = document.createElement('button');
+            nextBtn.onclick = () => changePage('next');
+            nextBtn.className = `px-3 py-1.5 border border-outline-variant rounded-md text-[13px] font-bold text-on-surface-variant hover:bg-surface-container-low transition-colors ${currentPage === totalPages ? 'opacity-50 cursor-not-allowed' : ''}`;
+            nextBtn.textContent = 'Next';
+            container.appendChild(nextBtn);
+        }
+    </script>
+</body>
+
+</html>

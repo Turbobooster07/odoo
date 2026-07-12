@@ -113,48 +113,57 @@
         .custom-scrollbar::-webkit-scrollbar { width: 6px; height: 6px; }
         .custom-scrollbar::-webkit-scrollbar-track { background: transparent; }
         .custom-scrollbar::-webkit-scrollbar-thumb { background: #c6c6cd; border-radius: 10px; }
+        .glass-card {
+            background: rgba(255, 255, 255, 1);
+            border: 1px solid rgba(226, 232, 240, 1);
+        }
     </style>
 </head>
 <body class="bg-background text-on-background min-h-screen">
 <!-- SideNavBar Anchor -->
-<aside class="fixed left-0 top-0 h-full w-[280px] bg-surface-container-lowest border-r border-outline-variant flex flex-col p-stack-md z-50">
-<div class="mb-stack-lg flex items-center gap-3">
-<div class="w-10 h-10 bg-primary rounded-lg flex items-center justify-center">
-<span class="material-symbols-outlined text-on-primary" style="font-variation-settings: 'FILL' 1;">local_shipping</span>
-</div>
-<div>
-<h1 class="font-headline-lg text-[20px] font-black text-primary leading-tight">TransitOps</h1>
-<p class="font-label-md text-on-surface-variant uppercase tracking-wider text-[10px]">Fleet Management</p>
-</div>
-</div>
-<nav class="flex-1 space-y-1">
-<a class="flex items-center gap-3 px-4 py-3 text-on-surface-variant hover:bg-surface-container-low transition-all duration-200 rounded-lg group" href="#">
-<span class="material-symbols-outlined group-hover:text-primary">dashboard</span>
-<span class="font-label-md">Dashboard</span>
-</a>
-<a class="flex items-center gap-3 px-4 py-3 bg-secondary-container text-on-secondary-container rounded-lg font-bold" href="#">
-<span class="material-symbols-outlined">local_shipping</span>
-<span class="font-label-md">Fleet</span>
-</a>
-<a class="flex items-center gap-3 px-4 py-3 text-on-surface-variant hover:bg-surface-container-low transition-all duration-200 rounded-lg group" href="#">
-<span class="material-symbols-outlined group-hover:text-primary">build</span>
-<span class="font-label-md">Maintenance</span>
-</a>
-</nav>
-<div class="mt-auto space-y-1 border-t border-outline-variant pt-stack-md">
-<button class="w-full flex items-center gap-3 px-4 py-3 mb-4 bg-primary text-on-primary rounded-lg font-bold hover:opacity-90 active:scale-95 transition-all">
-<span class="material-symbols-outlined">add_box</span>
-<span class="font-label-md">New Shipment</span>
-</button>
-<a class="flex items-center gap-3 px-4 py-3 text-on-surface-variant hover:bg-surface-container-low transition-all duration-200 rounded-lg group" href="#">
-<span class="material-symbols-outlined group-hover:text-primary">settings</span>
-<span class="font-label-md">Settings</span>
-</a>
-<a class="flex items-center gap-3 px-4 py-3 text-on-surface-variant hover:bg-surface-container-low transition-all duration-200 rounded-lg group" href="#">
-<span class="material-symbols-outlined group-hover:text-primary">contact_support</span>
-<span class="font-label-md">Support</span>
-</a>
-</div>
+<aside class="fixed left-0 top-0 h-screen w-[280px] bg-primary-container flex flex-col py-stack-lg border-r border-outline-variant z-50">
+    <div class="px-6 mb-10">
+        <h1 class="font-headline-lg text-headline-lg font-bold text-on-primary-container">TransitOps</h1>
+        <p class="font-label-md text-label-md text-on-primary-container opacity-60">Fleet Management</p>
+    </div>
+    <nav class="flex-1 space-y-1 px-4 overflow-y-auto custom-scrollbar">
+        <a class="flex items-center gap-3 px-4 py-3 rounded-lg text-on-primary-container hover:text-white hover:bg-white/10 transition-colors duration-200" href="dashboard.html">
+            <span class="material-symbols-outlined">dashboard</span>
+            <span class="font-label-md text-label-md">Dashboard</span>
+        </a>
+        <a class="flex items-center gap-3 px-4 py-3 rounded-lg text-on-secondary-fixed-variant font-bold border-l-4 border-secondary-container bg-secondary-fixed/10 transition-colors duration-200" href="fleet_management.html">
+            <span class="material-symbols-outlined">local_shipping</span>
+            <span class="font-label-md text-label-md">Fleet</span>
+        </a>
+        <a class="flex items-center gap-3 px-4 py-3 rounded-lg text-on-primary-container hover:text-white hover:bg-white/10 transition-colors duration-200" href="drivers_safety.html">
+            <span class="material-symbols-outlined">person</span>
+            <span class="font-label-md text-label-md">Drivers</span>
+        </a>
+        <a class="flex items-center gap-3 px-4 py-3 rounded-lg text-on-primary-container hover:text-white hover:bg-white/10 transition-colors duration-200" href="#">
+            <span class="material-symbols-outlined">route</span>
+            <span class="font-label-md text-label-md">Trips</span>
+        </a>
+        <a class="flex items-center gap-3 px-4 py-3 rounded-lg text-on-primary-container hover:text-white hover:bg-white/10 transition-colors duration-200" href="#">
+            <span class="material-symbols-outlined">build</span>
+            <span class="font-label-md text-label-md">Maintenance</span>
+        </a>
+        <a class="flex items-center gap-3 px-4 py-3 rounded-lg text-on-primary-container hover:text-white hover:bg-white/10 transition-colors duration-200 mt-auto" href="#">
+            <span class="material-symbols-outlined">settings</span>
+            <span class="font-label-md text-label-md">Settings</span>
+        </a>
+    </nav>
+    <div class="mt-auto px-6 py-4 flex items-center gap-3 border-t border-on-primary-container/10">
+        <div class="w-10 h-10 rounded-full overflow-hidden bg-surface-variant flex items-center justify-center font-bold text-white bg-orange-600">
+            AR
+        </div>
+        <div class="flex flex-col">
+            <span class="font-label-md text-label-md text-white font-bold">Alex Rivera</span>
+            <span class="font-label-md text-[10px] text-on-primary-container opacity-60">Fleet Manager</span>
+        </div>
+        <a href="index.html" class="ml-auto text-on-primary-container hover:text-white transition-colors" title="Log Out">
+            <span class="material-symbols-outlined">logout</span>
+        </a>
+    </div>
 </aside>
 <!-- Main Content Area -->
 <main class="ml-[280px] min-h-screen flex flex-col">
@@ -204,42 +213,38 @@
 </div>
 <!-- Dashboard Briefing Stats (Visual Interest) -->
 <div class="grid grid-cols-1 md:grid-cols-4 gap-gutter mb-stack-lg">
-<div class="bg-surface-container-lowest p-stack-md rounded-xl border border-outline-variant shadow-sm flex items-center gap-4">
-<div class="w-12 h-12 bg-surface-container rounded-lg flex items-center justify-center text-primary">
-<span class="material-symbols-outlined">local_shipping</span>
-</div>
-<div>
-<p class="text-on-surface-variant font-label-md">Total Assets</p>
-<p class="font-headline-lg text-primary text-[24px]">124</p>
-</div>
-</div>
-<div class="bg-surface-container-lowest p-stack-md rounded-xl border border-outline-variant shadow-sm flex items-center gap-4">
-<div class="w-12 h-12 bg-green-50 rounded-lg flex items-center justify-center text-green-600">
-<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">check_circle</span>
-</div>
-<div>
-<p class="text-on-surface-variant font-label-md">Active</p>
-<p class="font-headline-lg text-primary text-[24px]">108</p>
-</div>
-</div>
-<div class="bg-surface-container-lowest p-stack-md rounded-xl border border-outline-variant shadow-sm flex items-center gap-4">
-<div class="w-12 h-12 bg-secondary-fixed rounded-lg flex items-center justify-center text-secondary">
-<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">build</span>
-</div>
-<div>
-<p class="text-on-surface-variant font-label-md">In Shop</p>
-<p class="font-headline-lg text-primary text-[24px]">9</p>
-</div>
-</div>
-<div class="bg-surface-container-lowest p-stack-md rounded-xl border border-outline-variant shadow-sm flex items-center gap-4">
-<div class="w-12 h-12 bg-tertiary-fixed rounded-lg flex items-center justify-center text-on-tertiary-container">
-<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">event_available</span>
-</div>
-<div>
-<p class="text-on-surface-variant font-label-md">Available</p>
-<p class="font-headline-lg text-primary text-[24px]">7</p>
-</div>
-</div>
+    <div class="glass-card p-6 rounded-xl flex flex-col gap-2 shadow-sm bg-white">
+        <div class="flex justify-between items-start">
+            <span class="material-symbols-outlined text-primary bg-primary-fixed p-2 rounded-lg">local_shipping</span>
+            <span class="font-label-md text-green-600 flex items-center gap-1">+4% <span class="material-symbols-outlined text-sm">trending_up</span></span>
+        </div>
+        <span class="font-label-md text-on-surface-variant uppercase tracking-wider text-[11px]">Total Assets</span>
+        <span class="font-headline-lg text-[24px] font-bold text-primary">124</span>
+    </div>
+    <div class="glass-card p-6 rounded-xl flex flex-col gap-2 shadow-sm bg-white">
+        <div class="flex justify-between items-start">
+            <span class="material-symbols-outlined text-green-600 bg-green-100 p-2 rounded-lg" style="font-variation-settings: 'FILL' 1;">check_circle</span>
+            <span class="font-label-md text-green-600 flex items-center gap-1">Active</span>
+        </div>
+        <span class="font-label-md text-on-surface-variant uppercase tracking-wider text-[11px]">Active Assets</span>
+        <span class="font-headline-lg text-[24px] font-bold text-primary">108<span class="text-on-surface-variant font-normal text-sm">/124</span></span>
+    </div>
+    <div class="glass-card p-6 rounded-xl flex flex-col gap-2 shadow-sm bg-white">
+        <div class="flex justify-between items-start">
+            <span class="material-symbols-outlined text-secondary bg-secondary-fixed p-2 rounded-lg" style="font-variation-settings: 'FILL' 1;">build</span>
+            <span class="font-label-md text-red-600 flex items-center gap-1">In Shop</span>
+        </div>
+        <span class="font-label-md text-on-surface-variant uppercase tracking-wider text-[11px]">Maintenance</span>
+        <span class="font-headline-lg text-[24px] font-bold text-primary">9</span>
+    </div>
+    <div class="glass-card p-6 rounded-xl flex flex-col gap-2 shadow-sm bg-white">
+        <div class="flex justify-between items-start">
+            <span class="material-symbols-outlined text-on-tertiary-container bg-tertiary-fixed p-2 rounded-lg" style="font-variation-settings: 'FILL' 1;">event_available</span>
+            <span class="font-label-md text-green-600 flex items-center gap-1">Available</span>
+        </div>
+        <span class="font-label-md text-on-surface-variant uppercase tracking-wider text-[11px]">Available Assets</span>
+        <span class="font-headline-lg text-[24px] font-bold text-primary">7</span>
+    </div>
 </div>
 <!-- Filters & Table -->
 <div class="bg-surface-container-lowest rounded-xl border border-outline-variant shadow-sm overflow-hidden flex flex-col">
