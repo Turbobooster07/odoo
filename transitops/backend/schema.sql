@@ -1,9 +1,8 @@
-CREATE DATABASE IF NOT EXISTS odoo;
-USE odoo;
+-- Using remote database from .env
 
 CREATE TABLE IF NOT EXISTS users (
     id INT AUTO_INCREMENT PRIMARY KEY,
-    username VARCHAR(50) NOT NULL UNIQUE,
+    email VARCHAR(100) NOT NULL UNIQUE,
     password_hash VARCHAR(255) NOT NULL,
     role VARCHAR(20) DEFAULT 'Dispatcher'
 );
@@ -19,8 +18,11 @@ CREATE TABLE IF NOT EXISTS vehicles (
 );
 
 -- Insert a mock user (using plain text passwords for simplicity in this prototype)
-INSERT IGNORE INTO users (username, password_hash, role) VALUES ('admin', 'password123', 'Administrator');
-INSERT IGNORE INTO users (username, password_hash, role) VALUES ('dispatcher1', 'dispatch123', 'Dispatcher');
+INSERT IGNORE INTO users (email, password_hash, role) VALUES ('fleet@transitops.com', 'fleet123', 'Fleet Manager');
+INSERT IGNORE INTO users (email, password_hash, role) VALUES ('admin@transitops.com', 'admin123', 'Administrator');
+INSERT IGNORE INTO users (email, password_hash, role) VALUES ('safety@transitops.com', 'safety123', 'Safety Officer');
+INSERT IGNORE INTO users (email, password_hash, role) VALUES ('finance@transitops.com', 'finance123', 'Financial Analyst');
+INSERT IGNORE INTO users (email, password_hash, role) VALUES ('dispatcher@transitops.com', 'dispatch123', 'Dispatcher');
 
 -- Insert mock vehicles
 INSERT IGNORE INTO vehicles (vehicle_id, name, type, status, assigned_driver, next_maintenance) VALUES 

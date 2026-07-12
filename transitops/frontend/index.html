@@ -162,9 +162,10 @@
 <div class="relative group">
 <select class="w-full h-12 bg-surface-container-lowest bg-none border border-outline-variant rounded-lg px-4 text-body-md appearance-none focus:ring-2 focus:ring-tertiary-container focus:border-tertiary-container outline-none transition-all cursor-pointer" id="role" name="role">
 <option value="fleet_manager">Fleet Manager</option>
-<option value="dispatcher">Dispatcher</option>
-<option value="driver">Driver</option>
 <option value="administrator">Administrator</option>
+<option value="safety_officer">Safety Officer</option>
+<option value="financial_analyst">Financial Analyst</option>
+<option value="dispatcher">Dispatcher</option>
 </select>
 <span class="material-symbols-outlined absolute right-4 top-1/2 -translate-y-1/2 pointer-events-none text-on-surface-variant group-hover:text-primary transition-colors">expand_more</span>
 </div>
@@ -229,13 +230,17 @@
                     const response = await fetch('http://localhost:3000/api/login', {
                         method: 'POST',
                         headers: { 'Content-Type': 'application/json' },
-                        body: JSON.stringify({ username: email, password, role })
+                        body: JSON.stringify({ email: email, password, role })
                     });
                     
                     const data = await response.json();
                     
                     if (data.success) {
-                        window.location.href = 'dashboard.html';
+                        if (data.user && data.user.role === 'Dispatcher') {
+                            window.location.href = 'dispatcher.html';
+                        } else {
+                            window.location.href = 'dashboard.html';
+                        }
                     } else {
                         alert(data.message || 'Login failed. Please check your credentials.');
                         submitBtn.innerHTML = `Sign In <span class="material-symbols-outlined text-[18px]">arrow_forward</span>`;
