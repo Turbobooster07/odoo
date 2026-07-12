@@ -188,7 +188,12 @@
                     <span class="material-symbols-outlined">settings</span>
                     <span class="font-label-md text-label-md">Settings</span>
                 </a>
-            </nav>
+            
+<a class="flex items-center gap-3 px-4 py-3 rounded-lg text-error hover:text-white hover:bg-error/80 transition-colors duration-200" href="index.html">
+<span class="material-symbols-outlined">logout</span>
+<span class="font-label-md text-label-md">Log out</span>
+</a>
+</nav>
             <div class="mt-auto px-6 py-4 flex items-center gap-3 border-t border-on-primary-container/10">
                 <div
                     class="w-10 h-10 rounded-full overflow-hidden bg-surface-variant flex items-center justify-center font-bold text-white bg-orange-600">
@@ -316,8 +321,8 @@
                 </div>
 
                 <!-- Drivers Table Card Container -->
-                <div class="glass-card rounded-xl overflow-hidden shadow-sm bg-white">
-                    <div class="overflow-x-auto">
+                <div class="glass-card rounded-xl shadow-sm bg-white">
+                    <div class="overflow-visible">
                         <table class="min-w-full divide-y divide-outline-variant">
                             <thead class="bg-surface-container-low">
                                 <tr>
@@ -422,7 +427,7 @@
         <div
             class="bg-white rounded-xl shadow-xl w-full max-w-lg p-6 overflow-hidden flex flex-col gap-5 border border-outline-variant">
             <div class="flex justify-between items-center border-b border-outline-variant pb-3">
-                <h3 class="font-headline-lg text-lg font-bold">Add New Fleet Driver</h3>
+                <h3 id="modalTitle" class="font-headline-lg text-lg font-bold">Add New Fleet Driver</h3>
                 <button onclick="closeModal()" class="text-on-surface-variant hover:text-primary transition-colors">
                     <span class="material-symbols-outlined">close</span>
                 </button>
@@ -546,7 +551,8 @@
                             tripCompl: d.trip_compl,
                             safety: d.safety_score,
                             status: d.status,
-                            expired: isExpired
+                            expired: isExpired,
+                            rawExpiry: d.license_expiry_date
                         };
                     });
                     updateKPIs();
@@ -583,6 +589,9 @@
             // Add Driver Modal triggering
             const addDriverBtn = document.getElementById('addDriverBtn');
             addDriverBtn.addEventListener('click', () => {
+                editingDriverId = null;
+                document.getElementById('driverForm').reset();
+                document.getElementById('modalTitle').textContent = 'Add New Driver';
                 document.getElementById('addDriverModal').classList.remove('hidden');
             });
 
@@ -601,8 +610,15 @@
                 };
 
                 try {
-                    const res = await fetch('http://localhost:3000/api/drivers', {
-                        method: 'POST',
+                    let url = 'http://localhost:3000/api/drivers';
+                    let method = 'POST';
+                    if (editingDriverId) {
+                        url = `http://localhost:3000/api/drivers/${editingDriverId}`;
+                        method = 'PUT';
+                    }
+
+                    const res = await fetch(url, {
+                        method: method,
                         headers: { 'Content-Type': 'application/json' },
                         body: JSON.stringify(payload)
                     });
@@ -619,6 +635,69 @@
                 }
             });
         }
+
+        let editingDriverId = null;
+
+        function editDriver(id) {
+            const driver = drivers.find(d => d.id === id);
+            if (!driver) return;
+            
+            editingDriverId = id;
+            document.getElementById('modalTitle').textContent = 'Edit Driver';
+            
+            document.getElementById('driverName').value = driver.name;
+            document.getElementById('licenseNo').value = driver.license;
+            document.getElementById('category').value = driver.category;
+            
+            // Format date correctly for input type="date"
+            if (driver.rawExpiry) {
+                // If it is ISO string, split by 'T' to get YYYY-MM-DD
+                document.getElementById('expiry').value = driver.rawExpiry.split('T')[0];
+            } else {
+                document.getElementById('expiry').value = '';
+            }
+            
+            document.getElementById('contact').value = driver.contact;
+            document.getElementById('safety').value = driver.safety;
+            document.getElementById('status').value = driver.status;
+            
+            document.getElementById('addDriverModal').classList.remove('hidden');
+        }
+
+        async function deleteDriver(id) {
+            if (!confirm('Are you sure you want to delete this driver?')) return;
+            try {
+                const res = await fetch(`http://localhost:3000/api/drivers/${id}`, {
+                    method: 'DELETE'
+                });
+                if (res.ok) {
+                    fetchDrivers();
+                } else {
+                    console.error('Failed to delete driver');
+                }
+            } catch (err) {
+                console.error('Error deleting driver:', err);
+            }
+        }
+
+        function toggleDropdown(id) {
+            const dropdown = document.getElementById(`dropdown-${id}`);
+            const isHidden = dropdown.classList.contains('hidden');
+            
+            // Close all other dropdowns first
+            document.querySelectorAll('[id^="dropdown-"]').forEach(el => el.classList.add('hidden'));
+            
+            if (isHidden) {
+                dropdown.classList.remove('hidden');
+            }
+        }
+
+        // Close dropdown when clicking outside
+        document.addEventListener('click', (e) => {
+            if (!e.target.closest('.dropdown-container')) {
+                document.querySelectorAll('[id^="dropdown-"]').forEach(el => el.classList.add('hidden'));
+            }
+        });
 
         function closeModal() {
             document.getElementById('addDriverModal').classList.add('hidden');
@@ -742,10 +821,14 @@
                         ${driver.status}
                     </span>
                 </td>
-                <td class="px-6 py-4 whitespace-nowrap text-center text-on-surface-variant">
-                    <button class="hover:text-primary transition-colors">
-                        <span class="material-symbols-outlined">more_vert</span>
+                <td class="px-6 py-4 whitespace-nowrap text-center text-on-surface-variant relative dropdown-container">
+                    <button onclick="toggleDropdown(${driver.id})" class="hover:text-primary transition-colors focus:outline-none p-1">
+                        <span class="material-symbols-outlined pointer-events-none">more_vert</span>
                     </button>
+                    <div id="dropdown-${driver.id}" class="hidden absolute right-8 top-4 bg-white border border-slate-200 shadow-lg rounded-md z-50 w-32 overflow-hidden text-left">
+                        <button onclick="editDriver(${driver.id})" class="w-full text-left px-4 py-2 text-sm hover:bg-slate-50 text-slate-700 font-medium">Edit</button>
+                        <button onclick="deleteDriver(${driver.id})" class="w-full text-left px-4 py-2 text-sm hover:bg-red-50 text-red-600 font-medium border-t border-slate-100">Delete</button>
+                    </div>
                 </td>
             `;
                 tableBody.appendChild(tr);

@@ -87,6 +87,34 @@ app.post('/api/drivers', async (req, res) => {
     }
 });
 
+// API: Update Driver
+app.put('/api/drivers/:id', async (req, res) => {
+    const { id } = req.params;
+    const { name, license_number, license_category, license_expiry_date, contact_no, safety_score, status } = req.body;
+    try {
+        await pool.query(
+            'UPDATE drivers SET name = ?, license_number = ?, license_category = ?, license_expiry_date = ?, contact_no = ?, safety_score = ?, status = ? WHERE id = ?',
+            [name, license_number, license_category, license_expiry_date, contact_no, safety_score, status, id]
+        );
+        res.json({ success: true, message: 'Driver updated successfully' });
+    } catch (err) {
+        console.error('Error updating driver:', err);
+        res.status(500).json({ success: false, message: 'Server error' });
+    }
+});
+
+// API: Delete Driver
+app.delete('/api/drivers/:id', async (req, res) => {
+    const { id } = req.params;
+    try {
+        await pool.query('DELETE FROM drivers WHERE id = ?', [id]);
+        res.json({ success: true, message: 'Driver deleted successfully' });
+    } catch (err) {
+        console.error('Error deleting driver:', err);
+        res.status(500).json({ success: false, message: 'Server error' });
+    }
+});
+
 // API: Add Vehicle
 app.post('/api/vehicles', async (req, res) => {
     const { vehicle_id, name, type, status, assigned_driver, next_maintenance, weight_capacity } = req.body;
@@ -137,6 +165,21 @@ app.post('/api/trips', async (req, res) => {
         res.json({ success: true, message: 'Trip created successfully', trip: { id: result.insertId, trip_number } });
     } catch (err) {
         console.error('Error creating trip:', err);
+        res.status(500).json({ success: false, message: 'Server error' });
+    }
+});
+// API: Update Trip (Draft)
+app.put('/api/trips/:id', async (req, res) => {
+    const { id } = req.params;
+    const { source, destination, vehicle_id, vehicle_name, driver_id, driver_name, cargo_weight, planned_distance } = req.body;
+    try {
+        await pool.query(
+            'UPDATE trips SET source = ?, destination = ?, vehicle_id = ?, vehicle_name = ?, driver_id = ?, driver_name = ?, cargo_weight = ?, planned_distance = ? WHERE id = ? AND status = ?',
+            [source, destination, vehicle_id, vehicle_name, driver_id, driver_name, cargo_weight, planned_distance, id, 'Draft']
+        );
+        res.json({ success: true, message: 'Trip updated successfully' });
+    } catch (err) {
+        console.error('Error updating trip:', err);
         res.status(500).json({ success: false, message: 'Server error' });
     }
 });

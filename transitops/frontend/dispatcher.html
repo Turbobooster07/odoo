@@ -9,230 +9,273 @@
 <link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
 <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;600;700;800;900&family=Titillium+Web:wght@300;400;600;700&display=swap" rel="stylesheet">
 <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0" rel="stylesheet" />
-<script>
-    tailwind.config = {
-      theme: {
-        extend: {
-          fontFamily: {
-            sans: ['Titillium Web', 'sans-serif'],
-            heading: ['Orbitron', 'sans-serif'],
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;600;700;800;900&family=Titillium+Web:wght@300;400;600;700&display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            "colors": {
+                    "inverse-surface": "#213145",
+                    "surface": "#f8f9ff",
+                    "tertiary-fixed": "#c4e7ff",
+                    "secondary": "#9d4300",
+                    "outline-variant": "#c6c6cd",
+                    "on-secondary-container": "#5c2400",
+                    "primary-container": "#131b2e",
+                    "outline": "#76777d",
+                    "on-tertiary": "#ffffff",
+                    "primary-fixed": "#dae2fd",
+                    "on-tertiary-fixed": "#001e2c",
+                    "surface-bright": "#f8f9ff",
+                    "on-tertiary-fixed-variant": "#004c69",
+                    "error": "#ba1a1a",
+                    "on-error": "#ffffff",
+                    "surface-container-lowest": "#ffffff",
+                    "on-primary-container": "#7c839b",
+                    "secondary-fixed": "#ffdbca",
+                    "on-primary": "#ffffff",
+                    "surface-container-high": "#dce9ff",
+                    "on-primary-fixed-variant": "#3f465c",
+                    "tertiary-fixed-dim": "#7bd0ff",
+                    "surface-dim": "#cbdbf5",
+                    "surface-container-low": "#eff4ff",
+                    "surface-container-highest": "#d3e4fe",
+                    "secondary-container": "#fd761a",
+                    "primary-fixed-dim": "#bec6e0",
+                    "on-secondary-fixed-variant": "#783200",
+                    "background": "#f8f9ff",
+                    "on-surface-variant": "#45464d",
+                    "on-background": "#0b1c30",
+                    "on-error-container": "#93000a",
+                    "surface-tint": "#565e74",
+                    "on-surface": "#0b1c30",
+                    "primary": "#000000",
+                    "on-tertiary-container": "#008ebf",
+                    "surface-variant": "#d3e4fe",
+                    "on-primary-fixed": "#131b2e",
+                    "inverse-on-surface": "#eaf1ff",
+                    "surface-container": "#e5eeff",
+                    "tertiary": "#000000",
+                    "secondary-fixed-dim": "#ffb690",
+                    "on-secondary": "#ffffff",
+                    "tertiary-container": "#001e2c",
+                    "inverse-primary": "#bec6e0",
+                    "error-container": "#ffdad6",
+                    "on-secondary-fixed": "#341100"
+            },
+            "borderRadius": {
+                    "DEFAULT": "0.125rem",
+                    "lg": "0.25rem",
+                    "xl": "0.5rem",
+                    "full": "0.75rem"
+            },
+            "spacing": {
+                    "stack-md": "16px",
+                    "margin-mobile": "16px",
+                    "stack-sm": "8px",
+                    "base": "4px",
+                    "margin-desktop": "40px",
+                    "stack-lg": "32px",
+                    "gutter": "24px"
+            },
+            "fontFamily": {
+                    "label-md": ["Titillium Web"],
+                    "body-md": ["Titillium Web"],
+                    "headline-xl": ["Orbitron"],
+                    "data-mono": ["Titillium Web"],
+                    "body-sm": ["Titillium Web"],
+                    "headline-lg-mobile": ["Orbitron"],
+                    "headline-lg": ["Orbitron"]
+            },
+            "fontSize": {
+                    "label-md": ["12px", {"lineHeight": "16px", "letterSpacing": "0.05em", "fontWeight": "400"}],
+                    "body-md": ["16px", {"lineHeight": "24px", "fontWeight": "400"}],
+                    "headline-xl": ["48px", {"lineHeight": "56px", "letterSpacing": "-0.02em", "fontWeight": "600"}],
+                    "data-mono": ["14px", {"lineHeight": "20px", "fontWeight": "400"}],
+                    "body-sm": ["14px", {"lineHeight": "20px", "fontWeight": "400"}],
+                    "headline-lg-mobile": ["24px", {"lineHeight": "32px", "fontWeight": "500"}],
+                    "headline-lg": ["32px", {"lineHeight": "40px", "letterSpacing": "-0.01em", "fontWeight": "500"}]
+            }
           },
-          colors: {
-            surface: '#f8f9ff',
-            'surface-container-lowest': '#ffffff',
-            primary: '#0f172a',
-            'primary-text': '#f8fafc',
-            outline: '#cbd5e1',
-            'outline-variant': '#e2e8f0',
-            error: '#ef4444',
-            'error-container': '#fef2f2',
-            success: '#22c55e',
-            'success-container': '#f0fdf4',
-            warning: '#f59e0b',
-            'warning-container': '#fffbeb',
-          },
-          borderRadius: {
-            '4xl': '1rem',
-          }
-        }
+        },
       }
-    }
-  </script>
-<style data-purpose="custom-styles">
-    body {
-      background-color: theme('colors.surface');
-      color: theme('colors.primary');
-    }
-    .custom-scrollbar::-webkit-scrollbar {
-      width: 6px;
-    }
-    .custom-scrollbar::-webkit-scrollbar-track {
-      background: transparent;
-    }
-    .custom-scrollbar::-webkit-scrollbar-thumb {
-      background-color: theme('colors.outline');
-      border-radius: 10px;
-    }
-  </style>
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        body {
+            background-color: #f8f9ff;
+            color: #0b1c30;
+        }
+        .custom-scrollbar::-webkit-scrollbar {
+            width: 4px;
+        }
+        .custom-scrollbar::-webkit-scrollbar-track {
+            background: transparent;
+        }
+        .custom-scrollbar::-webkit-scrollbar-thumb {
+            background: #c6c6cd;
+            border-radius: 10px;
+        }
+        .glass-card {
+            background: rgba(255, 255, 255, 0.7);
+            backdrop-filter: blur(8px);
+            border: 1px solid rgba(226, 232, 240, 0.8);
+        }
+    </style>
 </head>
-<body class="flex h-screen overflow-hidden font-sans antialiased text-slate-900">
-<!-- BEGIN: Sidebar -->
-<aside class="w-64 bg-slate-900 text-slate-300 flex flex-col flex-shrink-0 transition-all duration-300">
-<div class="h-16 flex items-center px-6 border-b border-slate-800">
-<h1 class="text-2xl font-bold text-white tracking-tight">TransitOps</h1>
+<body class="font-body-md text-body-md overflow-hidden">
+<!-- SideNavBar -->
+<aside class="fixed left-0 top-0 h-screen w-[280px] bg-primary-container flex flex-col py-stack-lg border-r border-outline-variant z-50">
+<div class="px-6 mb-10">
+<h1 class="font-headline-lg text-headline-lg font-bold text-on-primary-container">TransitOps</h1>
+<p class="font-label-md text-label-md text-on-primary-container opacity-60">Fleet Management</p>
 </div>
-<div class="px-6 py-2">
-<span class="text-xs font-medium text-slate-500 uppercase tracking-wider">Fleet Management</span>
-</div>
-<nav class="flex-1 overflow-y-auto custom-scrollbar py-4 px-3 space-y-1">
-<a class="flex items-center px-3 py-2 text-sm font-medium rounded-md hover:bg-slate-800 hover:text-white group" href="dashboard.html">
-<svg class="mr-3 h-5 w-5 text-slate-400 group-hover:text-white" fill="none" stroke="currentColor" viewbox="0 0 24 24">
-<path d="M4 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2V6zM14 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V6zM4 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2v-2zM14 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path>
-</svg>
-        Dashboard
-      </a>
-<a class="flex items-center px-3 py-2 text-sm font-medium rounded-md hover:bg-slate-800 hover:text-white group" href="fleet_management.html">
-<svg class="mr-3 h-5 w-5 text-slate-400 group-hover:text-white" fill="none" stroke="currentColor" viewbox="0 0 24 24">
-<path d="M9 17a2 2 0 11-4 0 2 2 0 014 0zM19 17a2 2 0 11-4 0 2 2 0 014 0z"></path>
-<path d="M13 16V6a1 1 0 00-1-1H4a1 1 0 00-1 1v10a1 1 0 001 1h1m8-1a1 1 0 01-1 1H9m4-1V8a1 1 0 011-1h2.586a1 1 0 01.707.293l3.414 3.414a1 1 0 01.293.707V16a1 1 0 01-1 1h-1m-6-1a1 1 0 001 1h1M5 17a2 2 0 104 0m-4 0a2 2 0 114 0m6 0a2 2 0 104 0m-4 0a2 2 0 114 0" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path>
-</svg>
-        Fleet
-      </a>
-<a class="flex items-center px-3 py-2 text-sm font-medium rounded-md hover:bg-slate-800 hover:text-white group" href="drivers_safety.html">
-<svg class="mr-3 h-5 w-5 text-slate-400 group-hover:text-white" fill="none" stroke="currentColor" viewbox="0 0 24 24">
-<path d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path>
-</svg>
-        Drivers
-      </a>
-<a class="flex items-center px-3 py-2 text-sm font-medium rounded-md bg-slate-800 text-white group relative" href="#">
-<div class="absolute left-0 top-0 bottom-0 w-1 bg-orange-500 rounded-r-md"></div>
-<svg class="mr-3 h-5 w-5 text-white" fill="none" stroke="currentColor" viewbox="0 0 24 24">
-<path d="M9 20l-5.447-2.724A1 1 0 013 16.382V5.618a1 1 0 011.447-.894L9 7m0 13l6-3m-6 3V7m6 10l4.553 2.276A1 1 0 0021 18.382V7.618a1 1 0 00-.553-.894L15 4m0 13V4m0 0L9 7" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path>
-</svg>
-        Trips
-      </a>
-<a class="flex items-center px-3 py-2 text-sm font-medium rounded-md hover:bg-slate-800 hover:text-white group" href="maintenance.html">
-<svg class="mr-3 h-5 w-5 text-slate-400 group-hover:text-white" fill="none" stroke="currentColor" viewbox="0 0 24 24">
-<path d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path>
-<path d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path>
-</svg>
-        Maintenance
-      </a>
-<a class="flex items-center px-3 py-2 text-sm font-medium rounded-md hover:bg-slate-800 hover:text-white group" href="fuel_expenses.html">
-<svg class="mr-3 h-5 w-5 text-slate-400 group-hover:text-white" fill="none" stroke="currentColor" viewbox="0 0 24 24">
-<path d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path>
-</svg>
-        Fuel &amp; Expenses
-      </a>
-<a class="flex items-center px-3 py-2 text-sm font-medium rounded-md hover:bg-slate-800 hover:text-white group" href="#">
-<svg class="mr-3 h-5 w-5 text-slate-400 group-hover:text-white" fill="none" stroke="currentColor" viewbox="0 0 24 24">
-<path d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path>
-</svg>
-        Analytics
-      </a>
-<a class="flex items-center px-3 py-2 text-sm font-medium rounded-md hover:bg-slate-800 hover:text-white group" href="#">
-<svg class="mr-3 h-5 w-5 text-slate-400 group-hover:text-white" fill="none" stroke="currentColor" viewbox="0 0 24 24">
-<path d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path>
-<path d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path>
-</svg>
-        Settings
-      </a>
+<nav class="flex-1 space-y-1 px-4 overflow-y-auto custom-scrollbar">
+<!-- Dashboard Active -->
+<a class="flex items-center gap-3 px-4 py-3 rounded-lg text-on-primary-container hover:text-on-primary hover:bg-surface-container-lowest/10 transition-colors duration-200" href="dashboard.html">
+<span class="material-symbols-outlined">dashboard</span>
+<span class="font-label-md text-label-md">Dashboard</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-3 rounded-lg text-on-primary-container hover:text-on-primary hover:bg-surface-container-lowest/10 transition-colors duration-200" href="fleet_management.html">
+<span class="material-symbols-outlined">local_shipping</span>
+<span class="font-label-md text-label-md">Fleet</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-3 rounded-lg text-on-primary-container hover:text-on-primary hover:bg-surface-container-lowest/10 transition-colors duration-200" href="drivers_safety.html">
+<span class="material-symbols-outlined">person</span>
+<span class="font-label-md text-label-md">Drivers</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-3 rounded-lg text-on-secondary-fixed-variant font-bold border-l-4 border-secondary-container bg-secondary-fixed/10 transition-colors duration-200" href="dispatcher.html">
+<span class="material-symbols-outlined">route</span>
+<span class="font-label-md text-label-md">Trips</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-3 rounded-lg text-on-primary-container hover:text-on-primary hover:bg-surface-container-lowest/10 transition-colors duration-200" href="maintenance.html">
+<span class="material-symbols-outlined">build</span>
+<span class="font-label-md text-label-md">Maintenance</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-3 rounded-lg text-on-primary-container hover:text-on-primary hover:bg-surface-container-lowest/10 transition-colors duration-200" href="fuel_expenses.html">
+<span class="material-symbols-outlined">payments</span>
+<span class="font-label-md text-label-md">Fuel & Expenses</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-3 rounded-lg text-on-primary-container hover:text-on-primary hover:bg-surface-container-lowest/10 transition-colors duration-200" href="#">
+<span class="material-symbols-outlined">analytics</span>
+<span class="font-label-md text-label-md">Analytics</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-3 rounded-lg text-on-primary-container hover:text-on-primary hover:bg-surface-container-lowest/10 transition-colors duration-200 mt-auto" href="settings.html">
+<span class="material-symbols-outlined">settings</span>
+<span class="font-label-md text-label-md">Settings</span>
+</a>
+
+<a class="flex items-center gap-3 px-4 py-3 rounded-lg text-error hover:text-white hover:bg-error/80 transition-colors duration-200" href="index.html">
+<span class="material-symbols-outlined">logout</span>
+<span class="font-label-md text-label-md">Log out</span>
+</a>
 </nav>
-<div class="p-4 border-t border-slate-800">
-<div class="flex items-center">
-<img alt="User Avatar" class="inline-block h-9 w-9 rounded-full" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDkAuY0yZc3rHZaqnx2DuLwT9-L-m4b3BJzHQMYkWRzItvZ9E9KiCNZSCD6vdQKq8kE6lrzIE-jvv0dOUzrW8C1ZuVLgeyk1Tc0mEf6KD6ScNKiVFE9qHQ6aQoNmKJ9kmp7VoPdJvfS0kvRkHFM8h2vgddeFVsGZP8H4LmThlh80udDpvy_HWhLWFhf07dNDOfRiHRJY1_miDFfoPgLRE56Z76GLBv1xgCYD-gh8-3n9pV4t49tjpdp06ZtFB8O2F2MXqfNvNjGCsw"/>
-<div class="ml-3">
-<p class="text-sm font-medium text-white">Raven K.</p>
-<p class="text-xs font-medium text-slate-400 group-hover:text-slate-300">System Admin</p>
+<div class="mt-auto px-6 py-4 flex items-center gap-3 border-t border-on-primary-container/10">
+<div class="w-10 h-10 rounded-full overflow-hidden bg-surface-variant">
+<img class="w-full h-full object-cover" data-alt="A professional headshot of a fleet operations manager, middle-aged, wearing a modern corporate headset, with a blurred background of a high-tech control room with digital screens showing transit maps. The lighting is crisp and cool-toned, maintaining a sophisticated professional aesthetic." src="https://lh3.googleusercontent.com/aida-public/AB6AXuD2JbeRjsYZ9VJsqmsocBPWF6aQ28FoJp_1c-6MTcyKZ0Tr4EJz5zsuCgIFYBe25D5GX4YxOhWCtJutX0OBsOwXIRiAFTE5w4RStqhRXSrpDPZ4LSVPIHake-GJWs6xvszBksVD-Xr2W4LGHMxPzei1p-3Blc-j8HmkaFqezC9Wv9wnrjxm0svwOjgguSB4H8AzuOWg0czlnV8h4i3x0b-nrK70qGS3Ar3WFH43JGNFyBegtARa8eQ-p5oSExLE6N35jsqBZaE-B6o"/>
 </div>
+<div class="flex flex-col">
+<span class="font-label-md text-label-md text-on-primary-container font-bold">Raven K.</span>
+<span class="font-label-md text-[10px] text-on-primary-container opacity-60">System Admin</span>
 </div>
 </div>
 </aside>
-<!-- END: Sidebar -->
-<div class="flex-1 flex flex-col overflow-hidden">
-<!-- BEGIN: Topbar -->
-<header class="h-16 bg-white border-b border-slate-200 flex items-center justify-between px-6 z-10">
-<div class="flex-1 flex">
-<form action="#" class="w-full max-w-lg flex md:ml-0" method="GET">
-<label class="sr-only" for="search-field">Search</label>
-<div class="relative w-full text-slate-400 focus-within:text-slate-600">
-<div class="absolute inset-y-0 left-0 flex items-center pointer-events-none">
-<svg class="h-5 w-5" fill="currentColor" viewbox="0 0 20 20">
-<path clip-rule="evenodd" d="M8 4a4 4 0 100 8 4 4 0 000-8zM2 8a6 6 0 1110.89 3.476l4.817 4.817a1 1 0 01-1.414 1.414l-4.816-4.816A6 6 0 012 8z" fill-rule="evenodd"></path>
-</svg>
+<!-- Main Content -->
+<main class="ml-[280px] h-screen flex flex-col relative overflow-hidden">
+<!-- TopNavBar -->
+<header class="h-16 flex justify-between items-center px-margin-desktop sticky top-0 bg-surface-container-lowest shadow-sm border-b border-outline-variant z-40">
+<div class="flex items-center gap-4 w-1/2">
+<div class="relative w-full max-w-md group">
+<span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-on-surface-variant">search</span>
+<input class="w-full pl-10 pr-4 py-2 bg-surface-container-low border-none rounded-full font-body-sm text-body-sm focus:ring-2 focus:ring-secondary-container transition-all" placeholder="Search trips, drivers, or vehicles..." type="text"/>
 </div>
-<input class="block w-full h-full pl-8 pr-3 py-2 border-transparent text-slate-900 placeholder-slate-500 focus:outline-none focus:placeholder-slate-400 focus:ring-0 focus:border-transparent sm:text-sm bg-slate-50 rounded-md" id="search-field" name="search" placeholder="Search trips, drivers, or vehicles..." type="search"/>
 </div>
-</form>
-</div>
-<div class="ml-4 flex items-center md:ml-6 space-x-4">
-<button class="bg-white p-1 rounded-full text-slate-400 hover:text-slate-500 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-slate-500" type="button">
-<span class="sr-only">View notifications</span>
-<svg class="h-6 w-6" fill="none" stroke="currentColor" viewbox="0 0 24 24">
-<path d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path>
-</svg>
+<div class="flex items-center gap-6">
+<button class="relative p-2 rounded-full hover:bg-surface-container-low transition-all">
+<span class="material-symbols-outlined text-on-surface-variant">notifications</span>
+<span class="absolute top-2 right-2 w-2 h-2 bg-secondary rounded-full"></span>
 </button>
-<button class="bg-white p-1 rounded-full text-slate-400 hover:text-slate-500 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-slate-500" type="button">
-<span class="sr-only">Help</span>
-<svg class="h-6 w-6" fill="none" stroke="currentColor" viewbox="0 0 24 24">
-<path d="M8.228 9c.549-1.165 2.03-2 3.772-2 2.21 0 4 1.343 4 3 0 1.4-1.278 2.575-3.006 2.907-.542.104-.994.54-.994 1.093m0 3h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path>
-</svg>
+<button class="p-2 rounded-full hover:bg-surface-container-low transition-all">
+<span class="material-symbols-outlined text-on-surface-variant">help</span>
 </button>
-<div class="flex items-center gap-2">
-<span class="text-sm font-medium text-slate-700">Raven K.</span>
-<div class="h-8 w-8 rounded-full bg-orange-200 text-orange-700 flex items-center justify-center text-sm font-bold">
-                RK
-            </div>
+<div class="h-8 w-[1px] bg-outline-variant"></div>
+<div class="flex items-center gap-3 cursor-pointer hover:bg-surface-container-low p-2 rounded-lg transition-all">
+<span class="font-label-md text-label-md font-bold text-primary">Raven K.</span>
+<div class="w-8 h-8 rounded-full bg-secondary-fixed flex items-center justify-center text-on-secondary-fixed font-bold text-xs">RK</div>
 </div>
 </div>
 </header>
-<!-- END: Topbar -->
-<!-- BEGIN: Main Content Area -->
-<main class="flex-1 overflow-y-auto bg-surface p-6 custom-scrollbar">
+<!-- Scrollable Dashboard Content -->
+<div class="flex-1 overflow-y-auto p-gutter custom-scrollbar space-y-gutter">
 <!-- Trip Lifecycle Progress -->
 <div class="mb-8">
-<h2 class="text-xs font-semibold text-slate-500 uppercase tracking-wider mb-4">Trip Lifecycle</h2>
+<h2 class="text-xs font-semibold text-on-surface-variant uppercase tracking-wider mb-4">Trip Lifecycle</h2>
 <div class="flex items-center max-w-2xl">
 <!-- Draft (Active) -->
 <div class="flex flex-col items-center relative">
-<div class="w-4 h-4 rounded-full bg-success ring-4 ring-success/20 z-10"></div>
-<span class="text-sm font-medium text-success mt-2">Draft</span>
+<div class="w-4 h-4 rounded-full bg-tertiary ring-4 ring-tertiary/20 z-10"></div>
+<span class="text-sm font-medium text-tertiary mt-2">Draft</span>
 </div>
-<div class="flex-1 h-0.5 bg-slate-200 -mt-6 mx-2"></div>
+<div class="flex-1 h-0.5 bg-outline-variant -mt-6 mx-2"></div>
 <!-- Dispatched -->
 <div class="flex flex-col items-center relative">
-<div class="w-4 h-4 rounded-full bg-blue-500 z-10"></div>
+<div class="w-4 h-4 rounded-full bg-secondary z-10"></div>
 <span class="text-sm font-medium text-blue-500 mt-2">Dispatched</span>
 </div>
-<div class="flex-1 h-0.5 bg-slate-200 -mt-6 mx-2"></div>
+<div class="flex-1 h-0.5 bg-outline-variant -mt-6 mx-2"></div>
 <!-- Completed -->
 <div class="flex flex-col items-center relative">
-<div class="w-4 h-4 rounded-full bg-slate-300 z-10"></div>
-<span class="text-sm font-medium text-slate-400 mt-2">Completed</span>
+<div class="w-4 h-4 rounded-full bg-surface-variant z-10"></div>
+<span class="text-sm font-medium text-on-surface-variant opacity-70 mt-2">Completed</span>
 </div>
-<div class="flex-1 h-0.5 bg-slate-200 -mt-6 mx-2"></div>
+<div class="flex-1 h-0.5 bg-outline-variant -mt-6 mx-2"></div>
 <!-- Cancelled -->
 <div class="flex flex-col items-center relative">
-<div class="w-4 h-4 rounded-full bg-slate-300 z-10"></div>
-<span class="text-sm font-medium text-slate-400 mt-2">Cancelled</span>
+<div class="w-4 h-4 rounded-full bg-surface-variant z-10"></div>
+<span class="text-sm font-medium text-on-surface-variant opacity-70 mt-2">Cancelled</span>
 </div>
 </div>
 </div>
 <div class="flex flex-col lg:flex-row gap-8">
 <!-- BEGIN: Create Trip Form (Left Column) -->
 <div class="w-full lg:w-1/2 max-w-lg">
-<h2 class="text-lg font-bold text-slate-900 mb-6 uppercase tracking-wide">Create Trip</h2>
+<h2 class="text-lg font-bold text-on-surface mb-6 uppercase tracking-wide">Create Trip</h2>
 <form class="space-y-5" id="createTripForm">
 <div>
-<label class="block text-xs font-medium text-slate-500 uppercase" for="source">Source</label>
-<input class="mt-1 block w-full rounded-md border-slate-300 shadow-sm focus:border-slate-500 focus:ring-slate-500 sm:text-sm bg-white" id="source" name="source" type="text" required placeholder="Enter source location"/>
+<label class="block text-xs font-medium text-on-surface-variant uppercase" for="source">Source</label>
+<input class="mt-1 block w-full rounded-md border-outline-variant shadow-sm focus:border-slate-500 focus:ring-primary-container sm:text-sm bg-surface-container-lowest" id="source" name="source" type="text" required placeholder="Enter source location"/>
 </div>
 <div>
-<label class="block text-xs font-medium text-slate-500 uppercase" for="destination">Destination</label>
-<input class="mt-1 block w-full rounded-md border-slate-300 shadow-sm focus:border-slate-500 focus:ring-slate-500 sm:text-sm bg-white" id="destination" name="destination" type="text" required placeholder="Enter destination"/>
+<label class="block text-xs font-medium text-on-surface-variant uppercase" for="destination">Destination</label>
+<input class="mt-1 block w-full rounded-md border-outline-variant shadow-sm focus:border-slate-500 focus:ring-primary-container sm:text-sm bg-surface-container-lowest" id="destination" name="destination" type="text" required placeholder="Enter destination"/>
 </div>
 <div>
-<label class="block text-xs font-medium text-slate-500 uppercase" for="vehicle">Vehicle (Available Only)</label>
-<select class="mt-1 block w-full rounded-md border-slate-300 shadow-sm focus:border-slate-500 focus:ring-slate-500 sm:text-sm bg-white" id="vehicle" name="vehicle">
+<label class="block text-xs font-medium text-on-surface-variant uppercase" for="vehicle">Vehicle (Available Only)</label>
+<select class="mt-1 block w-full rounded-md border-outline-variant shadow-sm focus:border-slate-500 focus:ring-primary-container sm:text-sm bg-surface-container-lowest" id="vehicle" name="vehicle">
 <option>VAN-05 - 500 kg capacity</option>
 </select>
 </div>
 <div>
-<label class="block text-xs font-medium text-slate-500 uppercase" for="driver">Driver (Available Only)</label>
-<select class="mt-1 block w-full rounded-md border-slate-300 shadow-sm focus:border-slate-500 focus:ring-slate-500 sm:text-sm bg-white" id="driver" name="driver">
+<label class="block text-xs font-medium text-on-surface-variant uppercase" for="driver">Driver (Available Only)</label>
+<select class="mt-1 block w-full rounded-md border-outline-variant shadow-sm focus:border-slate-500 focus:ring-primary-container sm:text-sm bg-surface-container-lowest" id="driver" name="driver">
 <option>Alex</option>
 </select>
 </div>
 <div>
-<label class="block text-xs font-medium text-slate-500 uppercase" for="weight">Cargo Weight (kg)</label>
-<input class="mt-1 block w-full rounded-md border-slate-300 shadow-sm focus:border-slate-500 focus:ring-slate-500 sm:text-sm bg-white" id="weight" name="weight" type="number" required />
+<label class="block text-xs font-medium text-on-surface-variant uppercase" for="weight">Cargo Weight (kg)</label>
+<input class="mt-1 block w-full rounded-md border-outline-variant shadow-sm focus:border-slate-500 focus:ring-primary-container sm:text-sm bg-surface-container-lowest" id="weight" name="weight" type="number" required />
 </div>
 <div>
-<label class="block text-xs font-medium text-slate-500 uppercase" for="distance">Planned Distance (km)</label>
-<input class="mt-1 block w-full rounded-md border-slate-300 shadow-sm focus:border-slate-500 focus:ring-slate-500 sm:text-sm bg-white" id="distance" name="distance" type="number" required />
+<label class="block text-xs font-medium text-on-surface-variant uppercase" for="distance">Planned Distance (km)</label>
+<input class="mt-1 block w-full rounded-md border-outline-variant shadow-sm focus:border-slate-500 focus:ring-primary-container sm:text-sm bg-surface-container-lowest" id="distance" name="distance" type="number" required />
 </div>
 <!-- Validation Message -->
-<div id="capacityError" class="hidden rounded-md bg-error-container p-4 border border-error/20">
+<div id="capacityError" class="hidden rounded-md bg-error-container p-4 border border-error">
 <div class="flex">
 <div class="ml-3">
 <h3 class="text-sm font-medium text-error" id="capacityErrorText">Capacity exceeded — dispatch blocked</h3>
@@ -240,10 +283,10 @@
 </div>
 </div>
 <div class="flex gap-4 pt-4">
-<button class="flex-1 flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-slate-900 hover:bg-slate-800 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-slate-900" type="submit">
+<button id="saveDraftBtn" class="flex-1 flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-on-primary bg-primary hover:bg-primary opacity-90 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary" type="submit">
                 Save Draft
               </button>
-<button class="flex-1 flex justify-center py-2 px-4 border border-slate-300 rounded-md shadow-sm text-sm font-medium text-slate-700 bg-white hover:bg-slate-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-slate-500" type="button" onclick="document.getElementById('createTripForm').reset()">
+<button class="flex-1 flex justify-center py-2 px-4 border border-outline-variant rounded-md shadow-sm text-sm font-medium text-on-surface bg-surface-container-lowest hover:bg-surface focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary-container" type="button" onclick="document.getElementById('createTripForm').reset()">
                 Cancel
               </button>
 </div>
@@ -252,23 +295,34 @@
 <!-- END: Create Trip Form -->
 <!-- BEGIN: Live Board (Right Column) -->
 <div class="w-full lg:w-1/2">
-<h2 class="text-lg font-bold text-slate-900 mb-6 uppercase tracking-wide">Live Board</h2>
+<h2 class="text-lg font-bold text-on-surface mb-6 uppercase tracking-wide">Live Board</h2>
 <div class="space-y-4" id="liveBoardContainer">
 <!-- Cards will be populated dynamically -->
 </div>
-<div class="mt-8 text-xs text-slate-400">
+<div class="mt-8 text-xs text-on-surface-variant opacity-70">
             On Complete: odometer → fuel log → expenses → Vehicle &amp; Driver Available
           </div>
 </div>
 <!-- END: Live Board -->
 </div>
-</main>
-<!-- END: Main Content Area -->
 </div>
+</main>
 <script>
 document.addEventListener('DOMContentLoaded', () => {
     fetchFormData();
     fetchLiveBoard();
+    
+    document.getElementById('vehicle').addEventListener('change', validateCapacity);
+    document.getElementById('weight').addEventListener('input', validateCapacity);
+
+    let editingTripId = null;
+
+    document.getElementById('createTripForm').addEventListener('reset', () => {
+        editingTripId = null;
+        document.getElementById('capacityError').classList.add('hidden');
+        document.getElementById('saveDraftBtn').disabled = false;
+        document.getElementById('saveDraftBtn').classList.remove('opacity-50', 'cursor-not-allowed');
+    });
 
     document.getElementById('createTripForm').addEventListener('submit', async (e) => {
         e.preventDefault();
@@ -278,17 +332,24 @@ document.addEventListener('DOMContentLoaded', () => {
         const payload = {
             source: document.getElementById('source').value,
             destination: document.getElementById('destination').value,
-            vehicle_id: vehicleSelect.value,
-            vehicle_name: vehicleSelect.options[vehicleSelect.selectedIndex]?.text,
-            driver_id: driverSelect.value,
-            driver_name: driverSelect.options[driverSelect.selectedIndex]?.text,
+            vehicle_id: vehicleSelect.value || null,
+            vehicle_name: vehicleSelect.options[vehicleSelect.selectedIndex]?.value ? vehicleSelect.options[vehicleSelect.selectedIndex].text.split(' (')[0] : null,
+            driver_id: driverSelect.value || null,
+            driver_name: driverSelect.options[driverSelect.selectedIndex]?.value ? driverSelect.options[driverSelect.selectedIndex].text : null,
             cargo_weight: document.getElementById('weight').value,
             planned_distance: document.getElementById('distance').value
         };
 
         try {
-            const res = await fetch('http://localhost:3000/api/trips', {
-                method: 'POST',
+            let url = 'http://localhost:3000/api/trips';
+            let method = 'POST';
+            if (editingTripId) {
+                url = `http://localhost:3000/api/trips/${editingTripId}`;
+                method = 'PUT';
+            }
+
+            const res = await fetch(url, {
+                method: method,
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify(payload)
             });
@@ -302,6 +363,68 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 });
 
+function validateCapacity() {
+    const vSelect = document.getElementById('vehicle');
+    const wInput = document.getElementById('weight');
+    const submitBtn = document.getElementById('saveDraftBtn');
+    const errorDiv = document.getElementById('capacityError');
+    const errorText = document.getElementById('capacityErrorText');
+    
+    if (vSelect.selectedIndex > 0 && wInput.value) {
+        const option = vSelect.options[vSelect.selectedIndex];
+        const capacity = parseFloat(option.dataset.capacity) || 0;
+        const weight = parseFloat(wInput.value) || 0;
+        
+        if (weight > capacity) {
+            errorDiv.classList.remove('hidden');
+            errorText.textContent = `Capacity exceeded \u2014 ${weight}kg is greater than vehicle limit of ${capacity}kg`;
+            submitBtn.disabled = true;
+            submitBtn.classList.add('opacity-50', 'cursor-not-allowed');
+        } else {
+            errorDiv.classList.add('hidden');
+            submitBtn.disabled = false;
+            submitBtn.classList.remove('opacity-50', 'cursor-not-allowed');
+        }
+    } else {
+        errorDiv.classList.add('hidden');
+        submitBtn.disabled = false;
+        submitBtn.classList.remove('opacity-50', 'cursor-not-allowed');
+    }
+}
+
+let allTrips = [];
+
+function editDraft(id) {
+    const trip = allTrips.find(t => t.id === id);
+    if (!trip) return;
+
+    editingTripId = id;
+    document.getElementById('source').value = trip.source;
+    document.getElementById('destination').value = trip.destination;
+    
+    const vSelect = document.getElementById('vehicle');
+    // If the vehicle was already assigned, select it. If it's not in the dropdown (maybe unavailable now), we might need to append it, but for simplicity we just try to select it.
+    if(trip.vehicle_id) {
+        const option = Array.from(vSelect.options).find(o => o.value == trip.vehicle_id);
+        if(option) vSelect.value = trip.vehicle_id;
+    } else {
+        vSelect.value = '';
+    }
+
+    const dSelect = document.getElementById('driver');
+    if(trip.driver_id) {
+        const option = Array.from(dSelect.options).find(o => o.value == trip.driver_id);
+        if(option) dSelect.value = trip.driver_id;
+    } else {
+        dSelect.value = '';
+    }
+
+    document.getElementById('weight').value = trip.cargo_weight;
+    document.getElementById('distance').value = trip.planned_distance;
+
+    validateCapacity();
+}
+
 async function fetchFormData() {
     try {
         const [vehiclesRes, driversRes] = await Promise.all([
@@ -314,7 +437,8 @@ async function fetchFormData() {
         const vSelect = document.getElementById('vehicle');
         vSelect.innerHTML = '<option value="">Select a vehicle</option>';
         vData.vehicles.filter(v => v.status === 'Available').forEach(v => {
-            vSelect.innerHTML += `<option value="${v.id}">${v.name} (${v.type})</option>`;
+            const capacity = v.weight_capacity || 5000;
+            vSelect.innerHTML += `<option value="${v.id}" data-capacity="${capacity}">${v.name} (${v.type}) - ${capacity}kg cap.</option>`;
         });
 
         const dSelect = document.getElementById('driver');
@@ -332,31 +456,38 @@ async function fetchLiveBoard() {
         const res = await fetch('http://localhost:3000/api/trips');
         const data = await res.json();
         
+        if (data.success) {
+            allTrips = data.trips;
+        }
+        
         const container = document.getElementById('liveBoardContainer');
         container.innerHTML = '';
 
         data.trips.forEach(trip => {
-            let statusColor = 'bg-slate-100 text-slate-800'; // Draft
-            if (trip.status === 'Dispatched') statusColor = 'bg-blue-100 text-blue-800';
-            if (trip.status === 'Completed') statusColor = 'bg-green-100 text-green-800';
-            if (trip.status === 'Cancelled') statusColor = 'bg-red-100 text-red-800';
+            let statusColor = 'bg-surface-container-high text-slate-800'; // Draft
+            if (trip.status === 'Dispatched') statusColor = 'bg-secondary-fixed text-on-secondary-fixed-variant';
+            if (trip.status === 'Completed') statusColor = 'bg-tertiary-fixed text-on-tertiary-fixed-variant';
+            if (trip.status === 'Cancelled') statusColor = 'bg-error-container text-on-error-container';
 
-            const dispatchBtn = trip.status === 'Draft' 
-                ? `<button onclick="dispatchTrip(${trip.id})" class="text-xs font-semibold text-white bg-slate-900 px-3 py-1 rounded hover:bg-slate-800">Dispatch</button>`
+            const actionBtns = trip.status === 'Draft' 
+                ? `<div class="flex gap-2">
+                     <button onclick="editDraft(${trip.id})" class="text-xs font-semibold text-on-surface bg-surface-container-lowest border border-outline-variant px-3 py-1 rounded hover:bg-surface">Edit</button>
+                     <button onclick="dispatchTrip(${trip.id})" class="text-xs font-semibold text-on-primary bg-primary px-3 py-1 rounded hover:bg-primary opacity-90">Dispatch</button>
+                   </div>`
                 : '';
 
             container.innerHTML += `
-                <div class="bg-white rounded-lg shadow-sm border border-slate-200 p-5 flex flex-col justify-between">
+                <div class="bg-surface-container-lowest rounded-lg shadow-sm border border-outline-variant p-5 flex flex-col justify-between">
                     <div class="flex justify-between items-start mb-2">
-                        <div class="text-sm font-semibold text-slate-700">${trip.trip_number}</div>
-                        <div class="text-xs text-slate-500">${trip.vehicle_name || 'Unassigned'} / ${trip.driver_name || 'Unassigned'}</div>
+                        <div class="text-sm font-semibold text-on-surface">${trip.trip_number}</div>
+                        <div class="text-xs text-on-surface-variant">${trip.vehicle_name || 'Unassigned'} / ${trip.driver_name || 'Unassigned'}</div>
                     </div>
-                    <div class="text-base text-slate-900 mb-4">${trip.source} &rarr; ${trip.destination}</div>
+                    <div class="text-base text-on-surface mb-4">${trip.source} &rarr; ${trip.destination}</div>
                     <div class="flex justify-between items-end">
                         <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${statusColor}">
                             ${trip.status}
                         </span>
-                        ${dispatchBtn}
+                        ${actionBtns}
                     </div>
                 </div>
             `;
