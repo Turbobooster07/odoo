@@ -536,9 +536,10 @@
                     <div class="flex flex-col gap-1">
                         <label class="font-label-md text-[12px] uppercase text-on-surface-variant font-bold"
                             for="newAssignedDriver">Assigned Driver</label>
-                        <input type="text" id="newAssignedDriver"
-                            class="w-full bg-surface-container-low border-none rounded-lg px-3 py-2 text-body-sm focus:ring-2 focus:ring-secondary-container"
-                            placeholder="e.g. John Doe (optional)" />
+                        <select id="newAssignedDriver"
+                            class="w-full bg-surface-container-low border-none rounded-lg px-3 py-2 text-body-sm focus:ring-2 focus:ring-secondary-container">
+                            <option value="">— Unassigned / Select Driver —</option>
+                        </select>
                     </div>
                     <div class="flex flex-col gap-1">
                         <label class="font-label-md text-[12px] uppercase text-on-surface-variant font-bold"
@@ -588,8 +589,50 @@
         let currentPage = 1;
         const itemsPerPage = 5;
 
+        const API_BASE = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1' 
+            ? window.location.origin 
+            : 'http://localhost:3000';
+
+        // Fetch drivers and filter out already-assigned ones
+        async function loadDriversDropdown() {
+            try {
+                // Fetch drivers
+                const driversRes = await fetch(`${API_BASE}/api/drivers`);
+                const driversData = await driversRes.json();
+                
+                // Fetch vehicles
+                const vehiclesRes = await fetch(`${API_BASE}/api/vehicles`);
+                const vehiclesData = await vehiclesRes.json();
+
+                if (driversData.success && vehiclesData.success) {
+                    const assignedDrivers = new Set();
+                    vehiclesData.vehicles.forEach(v => {
+                        if (v.assigned_driver) {
+                            assignedDrivers.add(v.assigned_driver.trim());
+                        }
+                    });
+
+                    const driverSelect = document.getElementById('newAssignedDriver');
+                    driverSelect.innerHTML = '<option value="">— Unassigned / Select Driver —</option>';
+
+                    driversData.drivers.forEach(d => {
+                        const isAssigned = assignedDrivers.has(d.name.trim());
+                        if (!isAssigned) {
+                            const option = document.createElement('option');
+                            option.value = d.name;
+                            option.textContent = `${d.name} (Score: ${d.safety_score})`;
+                            driverSelect.appendChild(option);
+                        }
+                    });
+                }
+            } catch (err) {
+                console.error('Error loading drivers for dropdown:', err);
+            }
+        }
+
         // Modal Controls
         function openVehicleModal() {
+            loadDriversDropdown();
             document.getElementById('addVehicleModal').classList.remove('hidden');
         }
 
@@ -602,7 +645,7 @@
         async function loadVehicles() {
             const searchVal = document.getElementById('searchInput').value;
             try {
-                const response = await fetch(`http://localhost:3000/api/vehicles?search=${encodeURIComponent(searchVal)}`);
+                const response = await fetch(`${API_BASE}/api/vehicles?search=${encodeURIComponent(searchVal)}`);
                 const data = await response.json();
 
                 if (data.success) {
@@ -794,7 +837,7 @@
             if (!confirm('Are you sure you want to delete this vehicle from the fleet?')) return;
 
             try {
-                const response = await fetch(`http://localhost:3000/api/vehicles/${id}`, {
+                const response = await fetch(`${API_BASE}/api/vehicles/${id}`, {
                     method: 'DELETE'
                 });
                 const data = await response.json();
@@ -820,7 +863,7 @@
             const weight_capacity = parseInt(document.getElementById('newWeightCapacity').value) || 0;
 
             try {
-                const response = await fetch('http://localhost:3000/api/vehicles', {
+                const response = await fetch(`${API_BASE}/api/vehicles`, {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({ vehicle_id, name, type, status, assigned_driver, next_maintenance, weight_capacity })

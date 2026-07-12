@@ -246,6 +246,82 @@ app.post('/api/maintenance', async (req, res) => {
     }
 });
 
+// API: Fetch Fuel Logs
+app.get('/api/fuel_logs', async (req, res) => {
+    try {
+        const [rows] = await pool.query('SELECT * FROM fuel_logs ORDER BY id DESC');
+        res.json({ success: true, logs: rows });
+    } catch (err) {
+        console.error('Error fetching fuel logs:', err);
+        res.status(500).json({ success: false, message: 'Server error' });
+    }
+});
+
+// API: Add Fuel Log
+app.post('/api/fuel_logs', async (req, res) => {
+    const { vehicle, date, liters, cost } = req.body;
+    try {
+        const [result] = await pool.query(
+            'INSERT INTO fuel_logs (vehicle, date, liters, cost) VALUES (?, ?, ?, ?)',
+            [vehicle, date, liters || 0, cost || 0]
+        );
+        res.json({ success: true, message: 'Fuel log added successfully', insertId: result.insertId });
+    } catch (err) {
+        console.error('Error adding fuel log:', err);
+        res.status(500).json({ success: false, message: 'Server error' });
+    }
+});
+
+// API: Delete Fuel Log
+app.delete('/api/fuel_logs/:id', async (req, res) => {
+    const { id } = req.params;
+    try {
+        await pool.query('DELETE FROM fuel_logs WHERE id = ?', [id]);
+        res.json({ success: true, message: 'Fuel log deleted successfully' });
+    } catch (err) {
+        console.error('Error deleting fuel log:', err);
+        res.status(500).json({ success: false, message: 'Server error' });
+    }
+});
+
+// API: Fetch Expenses
+app.get('/api/expenses', async (req, res) => {
+    try {
+        const [rows] = await pool.query('SELECT * FROM expenses ORDER BY id DESC');
+        res.json({ success: true, expenses: rows });
+    } catch (err) {
+        console.error('Error fetching expenses:', err);
+        res.status(500).json({ success: false, message: 'Server error' });
+    }
+});
+
+// API: Add Expense
+app.post('/api/expenses', async (req, res) => {
+    const { trip, vehicle, toll, other, maint, status } = req.body;
+    try {
+        const [result] = await pool.query(
+            'INSERT INTO expenses (trip, vehicle, toll, other, maint, status) VALUES (?, ?, ?, ?, ?, ?)',
+            [trip, vehicle, toll || 0, other || 0, maint || 0, status || 'Available']
+        );
+        res.json({ success: true, message: 'Expense added successfully', insertId: result.insertId });
+    } catch (err) {
+        console.error('Error adding expense:', err);
+        res.status(500).json({ success: false, message: 'Server error' });
+    }
+});
+
+// API: Delete Expense
+app.delete('/api/expenses/:id', async (req, res) => {
+    const { id } = req.params;
+    try {
+        await pool.query('DELETE FROM expenses WHERE id = ?', [id]);
+        res.json({ success: true, message: 'Expense deleted successfully' });
+    } catch (err) {
+        console.error('Error deleting expense:', err);
+        res.status(500).json({ success: false, message: 'Server error' });
+    }
+});
+
 // Serve static files from the frontend directory
 app.use(express.static(path.join(__dirname, '../frontend')));
 

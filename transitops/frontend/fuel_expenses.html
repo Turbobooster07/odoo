@@ -349,11 +349,13 @@
             <form id="fuelForm" class="space-y-4">
                 <div class="flex flex-col gap-1">
                     <label class="font-label-md text-[12px] uppercase text-on-surface-variant font-bold" for="fuelVehicle">Vehicle ID</label>
-                    <input type="text" id="fuelVehicle" class="w-full bg-surface-container-low border-none rounded-lg px-3 py-2 text-body-sm focus:ring-2 focus:ring-secondary-container" placeholder="e.g. VAN-05" required />
+                    <select id="fuelVehicle" class="w-full bg-surface-container-low border-none rounded-lg px-3 py-2 text-body-sm focus:ring-2 focus:ring-secondary-container" required>
+                        <option value="" disabled selected>Select a vehicle</option>
+                    </select>
                 </div>
                 <div class="flex flex-col gap-1">
                     <label class="font-label-md text-[12px] uppercase text-on-surface-variant font-bold" for="fuelDate">Date</label>
-                    <input type="text" id="fuelDate" class="w-full bg-surface-container-low border-none rounded-lg px-3 py-2 text-body-sm focus:ring-2 focus:ring-secondary-container" placeholder="e.g. 05 Jul 2024" required />
+                    <input type="date" id="fuelDate" class="w-full bg-surface-container-low border-none rounded-lg px-3 py-2 text-body-sm focus:ring-2 focus:ring-secondary-container" required />
                 </div>
                 <div class="grid grid-cols-2 gap-4">
                     <div class="flex flex-col gap-1">
@@ -390,7 +392,9 @@
                     </div>
                     <div class="flex flex-col gap-1">
                         <label class="font-label-md text-[12px] uppercase text-on-surface-variant font-bold" for="expVehicle">Vehicle</label>
-                        <input type="text" id="expVehicle" class="w-full bg-surface-container-low border-none rounded-lg px-3 py-2 text-body-sm focus:ring-2 focus:ring-secondary-container" placeholder="e.g. VAN-05" required />
+                        <select id="expVehicle" class="w-full bg-surface-container-low border-none rounded-lg px-3 py-2 text-body-sm focus:ring-2 focus:ring-secondary-container" required>
+                            <option value="" disabled selected>Select a vehicle</option>
+                        </select>
                     </div>
                 </div>
                 <div class="grid grid-cols-3 gap-3">
@@ -423,22 +427,85 @@
     </div>
 
     <script>
-        // Mock data matching the design spec image
-        let fuelLogs = [
-            { id: 1, vehicle: 'VAN-05', date: '05 Jul 2024', liters: 42, cost: 3150 },
-            { id: 2, vehicle: 'TRUCK-11', date: '06 Jul 2024', liters: 110, cost: 8400 },
-            { id: 3, vehicle: 'MINI-08', date: '06 Jul 2024', liters: 28, cost: 2050 }
-        ];
+        const API_BASE = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1' 
+            ? window.location.origin 
+            : 'http://localhost:3000';
 
-        let otherExpenses = [
-            { id: 1, trip: 'TR001', vehicle: 'VAN-05', toll: 120, other: 0, maint: 0, status: 'Available' },
-            { id: 2, trip: 'TR004', vehicle: 'TRK-12', toll: 340, other: 150, maint: 18000, status: 'Completed' }
-        ];
-
+        let fuelLogs = [];
+        let otherExpenses = [];
         let searchQuery = '';
 
+        function formatDate(dateString) {
+            if (!dateString) return '';
+            const date = new Date(dateString);
+            if (isNaN(date.getTime())) {
+                return dateString;
+            }
+            const day = date.getDate().toString().padStart(2, '0');
+            const months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+            const month = months[date.getMonth()];
+            const year = date.getFullYear();
+            return `${day} ${month} ${year}`;
+        }
+
+        async function loadVehicles() {
+            try {
+                const response = await fetch(`${API_BASE}/api/vehicles`);
+                const data = await response.json();
+                if (data.success && data.vehicles) {
+                    const fuelSelect = document.getElementById('fuelVehicle');
+                    const expSelect = document.getElementById('expVehicle');
+
+                    const selectedFuel = fuelSelect.value;
+                    const selectedExp = expSelect.value;
+
+                    fuelSelect.innerHTML = '<option value="" disabled selected>Select a vehicle</option>';
+                    expSelect.innerHTML = '<option value="" disabled selected>Select a vehicle</option>';
+
+                    data.vehicles.forEach(v => {
+                        const optFuel = document.createElement('option');
+                        optFuel.value = v.vehicle_id;
+                        optFuel.textContent = `${v.vehicle_id} - ${v.name}`;
+                        fuelSelect.appendChild(optFuel);
+
+                        const optExp = document.createElement('option');
+                        optExp.value = v.vehicle_id;
+                        optExp.textContent = `${v.vehicle_id} - ${v.name}`;
+                        expSelect.appendChild(optExp);
+                    });
+
+                    if (selectedFuel) fuelSelect.value = selectedFuel;
+                    if (selectedExp) expSelect.value = selectedExp;
+                }
+            } catch (err) {
+                console.error('Error loading vehicles:', err);
+            }
+        }
+
+        async function loadData() {
+            try {
+                await loadVehicles();
+
+                const fuelRes = await fetch(`${API_BASE}/api/fuel_logs`);
+                const fuelData = await fuelRes.json();
+                if (fuelData.success) {
+                    fuelLogs = fuelData.logs;
+                }
+
+                const expRes = await fetch(`${API_BASE}/api/expenses`);
+                const expData = await expRes.json();
+                if (expData.success) {
+                    otherExpenses = expData.expenses;
+                }
+
+                renderData();
+            } catch (err) {
+                console.error("Error loading fuel/expense database logs:", err);
+            }
+        }
+
         document.addEventListener('DOMContentLoaded', () => {
-            renderData();
+            loadData();
 
             // Set up search filter
             document.getElementById('searchInput').addEventListener('input', (e) => {
@@ -447,21 +514,34 @@
             });
 
             // Fuel form submit
-            document.getElementById('fuelForm').addEventListener('submit', (e) => {
+            document.getElementById('fuelForm').addEventListener('submit', async (e) => {
                 e.preventDefault();
                 const vehicle = document.getElementById('fuelVehicle').value;
                 const date = document.getElementById('fuelDate').value;
                 const liters = parseFloat(document.getElementById('fuelLiters').value);
                 const cost = parseFloat(document.getElementById('fuelCost').value);
 
-                fuelLogs.unshift({ id: fuelLogs.length + 1, vehicle, date, liters, cost });
-                closeModal('fuel');
-                document.getElementById('fuelForm').reset();
-                renderData();
+                try {
+                    const response = await fetch(`${API_BASE}/api/fuel_logs`, {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({ vehicle, date, liters, cost })
+                    });
+                    const result = await response.json();
+                    if (result.success) {
+                        closeModal('fuel');
+                        document.getElementById('fuelForm').reset();
+                        loadData();
+                    } else {
+                        alert('Failed to add fuel record: ' + (result.message || 'Unknown error'));
+                    }
+                } catch (err) {
+                    console.error('Error saving fuel record:', err);
+                }
             });
 
             // Expense form submit
-            document.getElementById('expenseForm').addEventListener('submit', (e) => {
+            document.getElementById('expenseForm').addEventListener('submit', async (e) => {
                 e.preventDefault();
                 const trip = document.getElementById('expTrip').value;
                 const vehicle = document.getElementById('expVehicle').value;
@@ -470,10 +550,23 @@
                 const maint = parseFloat(document.getElementById('expMaint').value) || 0;
                 const status = document.getElementById('expStatus').value;
 
-                otherExpenses.unshift({ id: otherExpenses.length + 1, trip, vehicle, toll, other, maint, status });
-                closeModal('expense');
-                document.getElementById('expenseForm').reset();
-                renderData();
+                try {
+                    const response = await fetch(`${API_BASE}/api/expenses`, {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({ trip, vehicle, toll, other, maint, status })
+                    });
+                    const result = await response.json();
+                    if (result.success) {
+                        closeModal('expense');
+                        document.getElementById('expenseForm').reset();
+                        loadData();
+                    } else {
+                        alert('Failed to add expense: ' + (result.message || 'Unknown error'));
+                    }
+                } catch (err) {
+                    console.error('Error saving expense:', err);
+                }
             });
         });
 
@@ -485,14 +578,38 @@
             document.getElementById(`${type}Modal`).classList.add('hidden');
         }
 
-        function deleteFuel(id) {
-            fuelLogs = fuelLogs.filter(item => item.id !== id);
-            renderData();
+        async function deleteFuel(id) {
+            if (!confirm('Are you sure you want to delete this fuel record?')) return;
+            try {
+                const response = await fetch(`${API_BASE}/api/fuel_logs/${id}`, {
+                    method: 'DELETE'
+                });
+                const result = await response.json();
+                if (result.success) {
+                    loadData();
+                } else {
+                    alert('Failed to delete fuel record: ' + (result.message || 'Unknown error'));
+                }
+            } catch (err) {
+                console.error('Error deleting fuel record:', err);
+            }
         }
 
-        function deleteExpense(id) {
-            otherExpenses = otherExpenses.filter(item => item.id !== id);
-            renderData();
+        async function deleteExpense(id) {
+            if (!confirm('Are you sure you want to delete this expense record?')) return;
+            try {
+                const response = await fetch(`${API_BASE}/api/expenses/${id}`, {
+                    method: 'DELETE'
+                });
+                const result = await response.json();
+                if (result.success) {
+                    loadData();
+                } else {
+                    alert('Failed to delete expense record: ' + (result.message || 'Unknown error'));
+                }
+            } catch (err) {
+                console.error('Error deleting expense record:', err);
+            }
         }
 
         function renderData() {
@@ -507,14 +624,14 @@
             let totalFuelCost = 0;
 
             filteredFuel.forEach(log => {
-                totalFuelCost += log.cost;
+                totalFuelCost += Number(log.cost);
                 const tr = document.createElement('tr');
                 tr.className = "hover:bg-slate-50/50 transition-colors";
                 tr.innerHTML = `
                     <td class="px-6 py-4 whitespace-nowrap font-bold text-on-surface text-[14px]">${log.vehicle}</td>
-                    <td class="px-6 py-4 whitespace-nowrap text-on-surface-variant text-[14px]">${log.date}</td>
-                    <td class="px-6 py-4 whitespace-nowrap text-on-surface-variant text-[14px]">${log.liters} L</td>
-                    <td class="px-6 py-4 whitespace-nowrap text-on-surface font-bold text-[14px]">₹${log.cost.toLocaleString()}</td>
+                    <td class="px-6 py-4 whitespace-nowrap text-on-surface-variant text-[14px]">${formatDate(log.date)}</td>
+                    <td class="px-6 py-4 whitespace-nowrap text-on-surface-variant text-[14px]">${Number(log.liters)} L</td>
+                    <td class="px-6 py-4 whitespace-nowrap text-on-surface font-bold text-[14px]">₹${Number(log.cost).toLocaleString()}</td>
                     <td class="px-6 py-4 whitespace-nowrap text-center">
                         <button onclick="deleteFuel(${log.id})" class="text-error hover:text-red-700 transition-colors">
                             <span class="material-symbols-outlined text-[18px]">delete</span>
@@ -535,7 +652,7 @@
             let totalMaintCost = 0;
 
             filteredExp.forEach(exp => {
-                totalMaintCost += exp.maint;
+                totalMaintCost += Number(exp.maint);
                 const statusClass = exp.status === 'Available' ? 'bg-green-100 text-green-800' : 'bg-yellow-100 text-yellow-800';
                 
                 const tr = document.createElement('tr');
@@ -543,9 +660,9 @@
                 tr.innerHTML = `
                     <td class="px-6 py-4 whitespace-nowrap font-bold text-on-surface text-[14px]">${exp.trip}</td>
                     <td class="px-6 py-4 whitespace-nowrap text-on-surface-variant text-[14px]">${exp.vehicle}</td>
-                    <td class="px-6 py-4 whitespace-nowrap text-on-surface-variant text-[14px]">₹${exp.toll > 0 ? exp.toll : '0'}</td>
-                    <td class="px-6 py-4 whitespace-nowrap text-on-surface-variant text-[14px]">₹${exp.other > 0 ? exp.other : '0'}</td>
-                    <td class="px-6 py-4 whitespace-nowrap text-on-surface-variant text-[14px]">₹${exp.maint > 0 ? exp.maint.toLocaleString() : '0'}</td>
+                    <td class="px-6 py-4 whitespace-nowrap text-on-surface-variant text-[14px]">₹${Number(exp.toll) > 0 ? Number(exp.toll) : '0'}</td>
+                    <td class="px-6 py-4 whitespace-nowrap text-on-surface-variant text-[14px]">₹${Number(exp.other) > 0 ? Number(exp.other) : '0'}</td>
+                    <td class="px-6 py-4 whitespace-nowrap text-on-surface-variant text-[14px]">₹${Number(exp.maint) > 0 ? Number(exp.maint).toLocaleString() : '0'}</td>
                     <td class="px-6 py-4 whitespace-nowrap">
                         <span class="px-2.5 py-1 rounded-full text-[12px] font-bold ${statusClass}">
                             ${exp.status.toUpperCase()}

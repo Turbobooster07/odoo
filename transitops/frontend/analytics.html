@@ -489,18 +489,55 @@
   </main>
 
   <script>
-    // Let's load dynamic metrics or configurations if needed
+    const API_BASE = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1' 
+        ? window.location.origin 
+        : 'http://localhost:3000';
+
     async function loadAnalyticsSummary() {
       try {
-        const response = await fetch('http://localhost:4000/api/maintenance');
-        const data = await response.json();
-        if (data.success && data.logs) {
-          const totalMaintenanceCost = data.logs.reduce((sum, log) => sum + Number(log.cost), 0);
-          // Update the ops cost card dynamically based on actual database costs plus base fuel estimate
-          const baseFuelCostEstimate = 12500;
-          const currentTotal = totalMaintenanceCost + baseFuelCostEstimate;
-          document.getElementById('kpi-ops-cost').textContent = currentTotal.toLocaleString();
+        // 1. Fetch Maintenance logs
+        let totalMaintenanceCost = 0;
+        try {
+          const res = await fetch(`${API_BASE}/api/maintenance`);
+          const data = await res.json();
+          if (data.success && data.logs) {
+            totalMaintenanceCost = data.logs.reduce((sum, log) => sum + Number(log.cost), 0);
+          }
+        } catch (e) {
+          console.error("Failed to fetch maintenance cost:", e);
         }
+
+        // 2. Fetch Fuel logs
+        let totalFuelCost = 0;
+        try {
+          const res = await fetch(`${API_BASE}/api/fuel_logs`);
+          const data = await res.json();
+          if (data.success && data.logs) {
+            totalFuelCost = data.logs.reduce((sum, log) => sum + Number(log.cost), 0);
+          }
+        } catch (e) {
+          console.error("Failed to fetch fuel cost:", e);
+        }
+
+        // 3. Fetch Expenses
+        let totalExpenseCost = 0;
+        try {
+          const res = await fetch(`${API_BASE}/api/expenses`);
+          const data = await res.json();
+          if (data.success && data.expenses) {
+            totalExpenseCost = data.expenses.reduce((sum, exp) => 
+              sum + Number(exp.toll) + Number(exp.other) + Number(exp.maint), 0);
+          }
+        } catch (e) {
+          console.error("Failed to fetch other expenses cost:", e);
+        }
+
+        // 4. Calculate total operational cost
+        const computedTotal = totalMaintenanceCost + totalFuelCost + totalExpenseCost;
+        const currentTotal = computedTotal > 0 ? computedTotal : 59000; // fallback to default design spec if database is empty
+
+        document.getElementById('kpi-ops-cost').textContent = currentTotal.toLocaleString();
+
       } catch (err) {
         console.error('Error loading dynamic metrics:', err);
       }
