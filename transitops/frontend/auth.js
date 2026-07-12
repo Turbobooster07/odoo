@@ -230,48 +230,6 @@
                 clearSession();
             });
         });
-
-        renderUserProfile();
-    }
-
-    function renderUserProfile() {
-        const user = getStoredUser();
-        if (!user) return;
-        
-        let roleName = user.role || 'User';
-        let emailName = user.email || 'Admin';
-        if (emailName.includes('@')) {
-            emailName = emailName.split('@')[0];
-            emailName = emailName.charAt(0).toUpperCase() + emailName.slice(1);
-        }
-        let initials = emailName.substring(0, 2).toUpperCase();
-
-        // 1. Sidebar profile
-        const sidebarDiv = document.querySelector('aside .mt-auto');
-        if (sidebarDiv && sidebarDiv.children.length >= 2) {
-            const avatarDiv = sidebarDiv.children[0];
-            const textDiv = sidebarDiv.children[1];
-            
-            if (avatarDiv) {
-                avatarDiv.innerHTML = `<div class="w-full h-full flex items-center justify-center font-bold text-white bg-primary">${initials}</div>`;
-            }
-            if (textDiv) {
-                // Ensure we don't accidentally overwrite if structure differs, but it should be standard
-                textDiv.innerHTML = `
-                    <span class="font-label-md text-label-md text-on-primary-container font-bold">${emailName}</span>
-                    <span class="font-label-md text-[10px] text-on-primary-container opacity-60">${roleName}</span>
-                `;
-            }
-        }
-
-        // 2. Topbar profile
-        const topbarDiv = document.querySelector('header .gap-3.cursor-pointer');
-        if (topbarDiv) {
-            topbarDiv.innerHTML = `
-                <span class="font-label-md text-label-md font-bold text-primary">${emailName}</span>
-                <div class="w-8 h-8 rounded-full bg-secondary-fixed flex items-center justify-center text-on-secondary-fixed font-bold text-xs">${initials}</div>
-            `;
-        }
     }
 
     window.TransitOpsAuth = {

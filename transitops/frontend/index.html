@@ -98,7 +98,6 @@
         },
       }
     </script>
-<script src="auth.js"></script>
 <style>
         .material-symbols-outlined {
             font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
@@ -107,6 +106,7 @@
             box-shadow: 0 0 0 2px rgba(0, 142, 191, 0.2);
         }
     </style>
+    <script src="auth.js"></script>
 </head>
 <body class="bg-background text-on-surface font-body-md text-body-md antialiased overflow-hidden">
 <main class="flex min-h-screen w-full">
@@ -199,9 +199,6 @@
 <script>
         // Micro-interactions for input focus states and button animations
         document.addEventListener('DOMContentLoaded', () => {
-            // Clear any existing session to ensure a clean login state
-            localStorage.removeItem('userRole');
-
             const inputs = document.querySelectorAll('input, select');
             inputs.forEach(input => {
                 input.addEventListener('focus', () => {
@@ -228,26 +225,12 @@
                 
                 const email = document.getElementById('email').value;
                 const password = document.getElementById('password').value;
-                const role = document.getElementById('role').value;
+                const role = document.getElementById('role').options[document.getElementById('role').selectedIndex].text;
 
                 try {
                     const response = await fetch('http://localhost:3000/api/login', {
                         method: 'POST',
                         headers: { 'Content-Type': 'application/json' },
-                        body: JSON.stringify({ email: email, password, role })
-                    });
-                    
-                    const data = await response.json();
-                    
-                    if (data.success) {
-                        const storedUser = window.TransitOpsAuth.storeSession(data.user);
-                        window.location.href = window.TransitOpsAuth.homeForRole(storedUser.role);
-                    } else {
-                        alert(data.message || 'Login failed. Please check your credentials.');
-                        submitBtn.innerHTML = `Sign In <span class="material-symbols-outlined text-[18px]">arrow_forward</span>`;
-                        submitBtn.disabled = false;
-                    }
-                } catch (err) {
                     console.error('Error logging in:', err);
                     alert('Server error. Please try again later.');
                     submitBtn.innerHTML = `Sign In <span class="material-symbols-outlined text-[18px]">arrow_forward</span>`;

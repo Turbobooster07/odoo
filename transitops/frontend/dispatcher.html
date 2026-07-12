@@ -103,7 +103,6 @@
         },
       }
     </script>
-<script src="auth.js"></script>
 <style>
         .material-symbols-outlined {
             font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
@@ -127,8 +126,7 @@
             backdrop-filter: blur(8px);
             border: 1px solid rgba(226, 232, 240, 0.8);
         }
-    </style>    <script src="rbac.js"></script>
-</head>
+    </style>    </head>
 <body class="font-body-md text-body-md overflow-hidden">
 <!-- SideNavBar -->
 <aside class="fixed left-0 top-0 h-screen w-[280px] bg-primary-container flex flex-col py-stack-lg border-r border-outline-variant z-50">
@@ -437,10 +435,9 @@ async function fetchFormData() {
 
         const vSelect = document.getElementById('vehicle');
         vSelect.innerHTML = '<option value="">Select a vehicle</option>';
-        vData.vehicles.filter(v => v.status === 'Available' || v.status === 'Active').forEach(v => {
+        vData.vehicles.filter(v => v.status === 'Available').forEach(v => {
             const capacity = v.weight_capacity || 5000;
-            const statusLabel = v.status === 'Active' ? ' [Active]' : '';
-            vSelect.innerHTML += `<option value="${v.id}" data-capacity="${capacity}">${v.vehicle_id} - ${v.name} (${v.type}) - ${capacity}kg cap.${statusLabel}</option>`;
+            vSelect.innerHTML += `<option value="${v.id}" data-capacity="${capacity}">${v.name} (${v.type}) - ${capacity}kg cap.</option>`;
         });
 
         const dSelect = document.getElementById('driver');
@@ -471,15 +468,12 @@ async function fetchLiveBoard() {
             if (trip.status === 'Completed') statusColor = 'bg-tertiary-fixed text-on-tertiary-fixed-variant';
             if (trip.status === 'Cancelled') statusColor = 'bg-error-container text-on-error-container';
 
-            let actionBtns = '';
-            if (trip.status === 'Draft') {
-                actionBtns = `<div class="flex gap-2">
+            const actionBtns = trip.status === 'Draft' 
+                ? `<div class="flex gap-2">
                      <button onclick="editDraft(${trip.id})" class="text-xs font-semibold text-on-surface bg-surface-container-lowest border border-outline-variant px-3 py-1 rounded hover:bg-surface">Edit</button>
                      <button onclick="dispatchTrip(${trip.id})" class="text-xs font-semibold text-on-primary bg-primary px-3 py-1 rounded hover:bg-primary opacity-90">Dispatch</button>
-                   </div>`;
-            } else if (trip.status === 'Dispatched') {
-                actionBtns = `<button onclick="openCompleteModal(${trip.id})" class="text-xs font-semibold text-on-primary bg-green-600 px-3 py-1 rounded hover:bg-green-700 opacity-90">Complete</button>`;
-            }
+                   </div>`
+                : '';
 
             container.innerHTML += `
                 <div class="bg-surface-container-lowest rounded-lg shadow-sm border border-outline-variant p-5 flex flex-col justify-between">
@@ -513,69 +507,5 @@ async function dispatchTrip(id) {
         console.error('Error dispatching trip', err);
     }
 }
-
-// Trip Completion Logic
-function openCompleteModal(id) {
-    document.getElementById('completeTripId').value = id;
-    document.getElementById('completeTripModal').classList.remove('hidden');
-}
-
-function closeCompleteModal() {
-    document.getElementById('completeTripModal').classList.add('hidden');
-    document.getElementById('completeTripForm').reset();
-}
-
-document.getElementById('completeTripForm').addEventListener('submit', async (e) => {
-    e.preventDefault();
-    const id = document.getElementById('completeTripId').value;
-    const kilometers = document.getElementById('kilometers').value;
-    const fuel_used = document.getElementById('fuel_used').value;
-
-    try {
-        const res = await fetch(`http://localhost:3000/api/trips/${id}/complete`, {
-            method: 'PUT',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ kilometers, fuel_used })
-        });
-        
-        if (res.ok) {
-            closeCompleteModal();
-            fetchLiveBoard();
-            fetchFormData(); // Refresh available drivers/vehicles
-        }
-    } catch (err) {
-        console.error('Error completing trip', err);
-    }
-});
 </script>
-
-<!-- Complete Trip Modal Overlay -->
-<div id="completeTripModal" class="fixed inset-0 bg-black/50 backdrop-blur-sm z-50 flex items-center justify-center hidden">
-    <div class="bg-white rounded-xl shadow-xl w-full max-w-sm p-6 overflow-hidden flex flex-col gap-5 border border-outline-variant">
-        <div class="flex justify-between items-center border-b border-outline-variant pb-3">
-            <h3 class="font-headline-lg text-lg font-bold">Complete Trip</h3>
-            <button onclick="closeCompleteModal()" class="text-on-surface-variant hover:text-primary transition-colors">
-                <span class="material-symbols-outlined">close</span>
-            </button>
-        </div>
-        <form id="completeTripForm" class="space-y-4">
-            <input type="hidden" id="completeTripId" />
-            
-            <div class="flex flex-col gap-1">
-                <label class="font-label-md text-[12px] uppercase text-on-surface-variant font-bold">Kilometers Driven</label>
-                <input type="number" id="kilometers" step="0.1" class="w-full bg-surface-container-low border-none rounded-lg px-3 py-2 text-body-sm focus:ring-2 focus:ring-secondary-container" placeholder="e.g. 150" required />
-            </div>
-            
-            <div class="flex flex-col gap-1">
-                <label class="font-label-md text-[12px] uppercase text-on-surface-variant font-bold">Fuel Used (Liters)</label>
-                <input type="number" id="fuel_used" step="0.1" class="w-full bg-surface-container-low border-none rounded-lg px-3 py-2 text-body-sm focus:ring-2 focus:ring-secondary-container" placeholder="e.g. 20" required />
-            </div>
-            
-            <div class="pt-2 flex justify-end gap-3 border-t border-outline-variant mt-2">
-                <button type="button" onclick="closeCompleteModal()" class="px-4 py-2 border border-outline-variant rounded-lg font-bold text-on-surface-variant hover:bg-surface-container-low transition-colors">Cancel</button>
-                <button type="submit" class="px-5 py-2 bg-green-600 text-white font-bold rounded-lg hover:bg-green-700 active:scale-95 transition-all">Complete Trip</button>
-            </div>
-        </form>
-    </div>
-</div>
 </body></html>

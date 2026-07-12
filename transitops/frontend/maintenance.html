@@ -141,8 +141,7 @@
       background-color: #ffdbca;
       color: #9d4300;
     }
-  </style>    <script src="rbac.js"></script>
-</head>
+  </style></head>
 
 <body class="bg-background text-on-background overflow-hidden flex h-screen">
   <!-- SideNavBar Anchor -->
@@ -467,7 +466,6 @@
     </div>
   </main>
   <script>
-<script src="auth.js"></script>
     // Elements
     const vehicleSelect = document.getElementById('vehicle-select');
     const logsTbody = document.getElementById('service-logs-tbody');
@@ -478,12 +476,18 @@
     const monthlyCostSum = document.getElementById('monthly-cost-sum');
     const uptimeRateValue = document.getElementById('uptime-rate-value');
 
-    const API_BASE = 'http://localhost:3000';
+    const API_BASE = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1' 
+        ? window.location.origin 
+        : 'http://localhost:3000';
 
     // Fetch and Populate Vehicles
     async function loadVehicles() {
       try {
+<<<<<<< Updated upstream
         const response = await fetch(`${API_BASE}/api/vehicles`);
+=======
+        const response = await fetch('http://localhost:3000/api/vehicles');
+>>>>>>> Stashed changes
         const data = await response.json();
         if (data.success && data.vehicles) {
           // Clear current options keeping placeholder
@@ -503,7 +507,11 @@
     // Fetch and Render Maintenance Logs
     async function loadLogs() {
       try {
+<<<<<<< Updated upstream
         const response = await fetch(`${API_BASE}/api/maintenance`);
+=======
+        const response = await fetch('http://localhost:3000/api/maintenance');
+>>>>>>> Stashed changes
         const data = await response.json();
         if (data.success && data.logs) {
           renderLogs(data.logs);
@@ -594,7 +602,11 @@
       submitBtn.classList.add('scale-95', 'opacity-80');
 
       try {
+<<<<<<< Updated upstream
         const response = await fetch(`${API_BASE}/api/maintenance`, {
+=======
+        const response = await fetch('http://localhost:3000/api/maintenance', {
+>>>>>>> Stashed changes
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify(payload)

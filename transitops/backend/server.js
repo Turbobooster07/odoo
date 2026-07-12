@@ -16,8 +16,10 @@ const pool = mysql.createPool({
     password: '7GnfJGUm2P',
     database: 'sql12832833',
     waitForConnections: true,
-    connectionLimit: 10,
-    queueLimit: 0
+    connectionLimit: 4,
+    queueLimit: 0,
+    enableKeepAlive: true,
+    keepAliveInitialDelay: 0
 });
 
 // API: Login Endpoint
@@ -32,14 +34,6 @@ app.post('/api/login', async (req, res) => {
         console.log("Query returned:", rows.length, "rows");
 
         if (rows.length > 0) {
-            const normalizeRole = value => (value || '').toString().trim().toLowerCase().replace(/\s+/g, '_');
-            const selectedRole = normalizeRole(role);
-            const userRole = normalizeRole(rows[0].role);
-
-            if (selectedRole && selectedRole !== userRole) {
-                return res.status(403).json({ success: false, message: 'Selected role does not match this account.' });
-            }
-
             res.json({ success: true, message: 'Authentication successful', user: rows[0] });
         } else {
             res.status(401).json({ success: false, message: 'Invalid credentials' });
@@ -205,56 +199,17 @@ app.put('/api/trips/:id/dispatch', async (req, res) => {
         // Update Trip Status
         await pool.query("UPDATE trips SET status = 'Dispatched' WHERE id = ?", [id]);
         
-        // Update Driver and Vehicle status
+        // Update Driver and Vehicle status to 'On Trip' (or Scheduled based on user preference)
         if (trip.driver_id) {
             await pool.query("UPDATE drivers SET status = 'On Trip' WHERE id = ?", [trip.driver_id]);
         }
         if (trip.vehicle_id) {
-            await pool.query("UPDATE vehicles SET status = 'Active', assigned_driver = ? WHERE id = ?", [trip.driver_name, trip.vehicle_id]);
+            await pool.query("UPDATE vehicles SET status = 'On Trip' WHERE id = ?", [trip.vehicle_id]);
         }
         
         res.json({ success: true, message: 'Trip dispatched successfully' });
     } catch (err) {
         console.error('Error dispatching trip:', err);
-        res.status(500).json({ success: false, message: 'Server error' });
-    }
-});
-
-// API: Complete Trip
-app.put('/api/trips/:id/complete', async (req, res) => {
-    const { id } = req.params;
-    const { kilometers, fuel_used } = req.body;
-    try {
-        const [trips] = await pool.query('SELECT * FROM trips WHERE id = ?', [id]);
-        if (trips.length === 0) return res.status(404).json({ success: false, message: 'Trip not found' });
-        
-        const trip = trips[0];
-        
-        // Update Trip Status
-        await pool.query("UPDATE trips SET status = 'Completed' WHERE id = ?", [id]);
-        
-        // Update Driver status and increment trip_compl
-        if (trip.driver_id) {
-            await pool.query("UPDATE drivers SET status = 'Available', trip_compl = trip_compl + 1 WHERE id = ?", [trip.driver_id]);
-        }
-        
-        // Update Vehicle status
-        if (trip.vehicle_id) {
-            await pool.query("UPDATE vehicles SET status = 'Available', assigned_driver = NULL WHERE id = ?", [trip.vehicle_id]);
-            
-            // Log fuel expense if provided
-            if (fuel_used && !isNaN(fuel_used) && Number(fuel_used) > 0) {
-                const vehicle_name = trip.vehicle_name || trip.vehicle_id;
-                await pool.query(
-                    'INSERT INTO fuel_logs (vehicle, date, liters, cost) VALUES (?, CURDATE(), ?, 0)',
-                    [vehicle_name, fuel_used]
-                );
-            }
-        }
-        
-        res.json({ success: true, message: 'Trip completed successfully' });
-    } catch (err) {
-        console.error('Error completing trip:', err);
         res.status(500).json({ success: false, message: 'Server error' });
     }
 });

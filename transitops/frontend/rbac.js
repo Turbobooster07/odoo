@@ -1,124 +1,97 @@
-/**
- * TransitOps RBAC
- * Pure CSS-injection based access control. No mutation observers, no loops.
- *
- * Role → Allowed Pages (+ access level)
- * ────────────────────────────────────────────────────────────────────
- * Administrator    → ALL pages (full R/W)
- * Fleet Manager    → Dashboard, Fleet (R/W), Drivers (R/W), Analytics (R/W)
- * Dispatcher       → Dashboard, Fleet (view-only), Trips (R/W)
- * Safety Officer   → Dashboard, Drivers (R/W), Trips (view-only)
- * Financial Analyst→ Dashboard, Fleet (view-only), Fuel Expenses (R/W), Analytics (R/W)
- *
- * Settings → Administrator only
- * Dashboard → ALL roles (read)
- */
-(function () {
+(function() {
     const role = localStorage.getItem('userRole');
-    if (!role) return;
-
-    const path = window.location.pathname.toLowerCase();
-    const css = [];
-
-    // ── Sidebar links hidden per role ────────────────────────────────────────
-    const HIDE_LINKS = {
-        'Fleet Manager': [
-            'dispatcher.html',
-            'fuel_expenses.html',
-            'maintenance.html',
-            'settings.html'
-        ],
-        'Dispatcher': [
-            'drivers_safety.html',
-            'analytics.html',
-            'fuel_expenses.html',
-            'maintenance.html',
-            'settings.html'
-        ],
-        'Safety Officer': [
-            'fleet_management.html',
-            'analytics.html',
-            'fuel_expenses.html',
-            'maintenance.html',
-            'settings.html'
-        ],
-        'Financial Analyst': [
-            'dispatcher.html',
-            'drivers_safety.html',
-            'maintenance.html',
-            'settings.html'
-        ]
-    };
-
-    // Settings always hidden for non-admins (catch-all)
-    const hiddenLinks = role === 'Administrator' ? [] : (HIDE_LINKS[role] || []);
-    hiddenLinks.forEach(page => {
-        css.push(`a[href*="${page}"] { display:none !important; }`);
-    });
-
-    // ── View-only: hide write controls on specific pages ─────────────────────
-
-    // Dispatcher on Fleet
-    if (role === 'Dispatcher' && path.includes('fleet_management.html')) {
-        css.push(
-            '#addVehicleBtn                        { display:none !important; }',
-            'button[onclick="openVehicleModal()"]  { display:none !important; }',
-            '#addVehicleModal                      { display:none !important; }',
-            'table thead th:last-child             { display:none !important; }',
-            '#vehicleTableBody td:last-child       { display:none !important; }'
-        );
-    }
-
-    // Safety Officer on Trips (view-only: hide Create Trip form + Edit/Dispatch buttons)
-    if (role === 'Safety Officer' && path.includes('dispatcher.html')) {
-        css.push(
-            '#createTripForm                       { display:none !important; }',
-            'button[onclick^="editDraft"]          { display:none !important; }',
-            'button[onclick^="dispatchTrip"]       { display:none !important; }',
-            '#saveDraftBtn                         { display:none !important; }'
-        );
-    }
-
-    // Financial Analyst on Fleet (view-only: same as Dispatcher)
-    if (role === 'Financial Analyst' && path.includes('fleet_management.html')) {
-        css.push(
-            '#addVehicleBtn                        { display:none !important; }',
-            'button[onclick="openVehicleModal()"]  { display:none !important; }',
-            '#addVehicleModal                      { display:none !important; }',
-            'table thead th:last-child             { display:none !important; }',
-            '#vehicleTableBody td:last-child       { display:none !important; }'
-        );
-    }
-
-    // Non-admin safety: block settings.html via CSS too (belt + suspenders)
-    if (role !== 'Administrator') {
-        css.push('a[href*="settings.html"] { display:none !important; }');
-    }
-
-    // Apply all CSS rules at once
-    if (css.length) {
-        const style = document.createElement('style');
-        style.textContent = css.join('\n');
-        document.head.appendChild(style);
-    }
-
-    // ── Page-level URL guard (redirect if user navigates directly) ────────────
-    const BLOCKED_PAGES = {
-        'Administrator':     [],   // no restrictions
-        'Fleet Manager':     ['dispatcher.html', 'fuel_expenses.html', 'maintenance.html', 'settings.html'],
-        'Dispatcher':        ['drivers_safety.html', 'analytics.html', 'fuel_expenses.html', 'maintenance.html', 'settings.html'],
-        'Safety Officer':    ['fleet_management.html', 'analytics.html', 'fuel_expenses.html', 'maintenance.html', 'settings.html'],
-        'Financial Analyst': ['dispatcher.html', 'drivers_safety.html', 'maintenance.html', 'settings.html']
-    };
-
-    // Catch-all: non-admin cannot access settings regardless
-    if (role !== 'Administrator' && path.includes('settings.html')) {
-        window.location.href = 'dashboard.html';
+    if (!role) {
+        window.location.href = 'index.html';
         return;
     }
 
-    const blocked = BLOCKED_PAGES[role] || [];
-    if (blocked.some(p => path.includes(p))) {
-        window.location.href = 'dashboard.html';
+    const currentPath = window.location.pathname.toLowerCase();
+
+    // Enforce access control based on explicit whitelists/blacklists
+    if (role === 'Dispatcher') {
+        const allowed = ['dispatcher.html', 'fleet_management.html', 'index.html'];
+        const isAllowed = allowed.some(p => currentPath.includes(p)) || currentPath === '/' || currentPath === '';
+        if (!isAllowed) {
+            window.location.href = 'dispatcher.html';
+            return;
+        }
+    } else if (role === 'Fleet Manager') {
+        if (currentPath.includes('dispatcher.html')) {
+            window.location.href = 'dashboard.html';
+            return;
+        }
+    }
+
+    const enforceUI = () => {
+        // Hide unauthorized sidebar links
+        const navLinks = document.querySelectorAll('a');
+        navLinks.forEach(link => {
+            const href = link.getAttribute('href');
+            if (!href) return;
+            if (role === 'Dispatcher') {
+                if (!href.includes('dispatcher.html') && !href.includes('fleet_management.html') && !href.includes('index.html') && href !== '#') {
+                    link.style.display = 'none';
+                    link.remove();
+                }
+            } else if (role === 'Fleet Manager') {
+                if (href.includes('dispatcher.html')) {
+                    link.style.display = 'none';
+                    link.remove();
+                }
+            }
+        });
+
+        // Specific view-only UI rules for Fleet Management
+        if (role === 'Dispatcher' && currentPath.includes('fleet_management.html')) {
+            const hideActions = () => {
+                const allButtons = document.querySelectorAll('button');
+                allButtons.forEach(btn => {
+                    const text = (btn.textContent || '').toLowerCase();
+                    // Hide Add Vehicle / Add Asset button
+                    if ((text.includes('asset') || text.includes('vehicle')) && btn.innerHTML.includes('add')) {
+                        btn.style.display = 'none';
+                        btn.remove();
+                    }
+                    
+                    // Hide table action menus (more_vert)
+                    if (btn.innerHTML.includes('more_vert') || btn.innerHTML.includes('edit') || btn.innerHTML.includes('delete')) {
+                        btn.style.display = 'none';
+                        btn.remove();
+                        const parentTd = btn.closest('td');
+                        if (parentTd) {
+                            parentTd.style.visibility = 'hidden';
+                        }
+                    }
+                });
+                
+                // Hide specific "Add Asset" button
+                const addAssetBtn = document.querySelector('#addVehicleBtn');
+                if (addAssetBtn) { addAssetBtn.style.display = 'none'; addAssetBtn.remove(); }
+                const addVehicleBtnAttr = document.querySelector('button[onclick="openVehicleModal()"]');
+                if (addVehicleBtnAttr) { addVehicleBtnAttr.style.display = 'none'; addVehicleBtnAttr.remove(); }
+            };
+            
+            // Run immediately
+            hideActions();
+            
+            // And run on DOM mutations (since the table is populated by JS!)
+            if (!window._rbacObserver) {
+                window._rbacObserver = new MutationObserver(() => {
+                    hideActions();
+                });
+                const tbody = document.getElementById('vehiclesTableBody');
+                if(tbody) {
+                    window._rbacObserver.observe(tbody, { childList: true, subtree: true });
+                } else if(document.body) {
+                    window._rbacObserver.observe(document.body, { childList: true, subtree: true });
+                }
+            }
+        }
+    };
+
+    if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', enforceUI);
+    } else {
+        enforceUI();
     }
 })();
