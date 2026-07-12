@@ -122,8 +122,7 @@
             backdrop-filter: blur(8px);
             border: 1px solid rgba(226, 232, 240, 0.8);
         }
-    </style>
-</head>
+    </style></head>
 <body class="font-body-md text-body-md overflow-hidden">
 <!-- SideNavBar -->
 <aside class="fixed left-0 top-0 h-screen w-[280px] bg-primary-container flex flex-col py-stack-lg border-r border-outline-variant z-50">
@@ -213,34 +212,30 @@
 <div class="glass-card p-6 rounded-xl flex flex-col gap-2">
 <div class="flex justify-between items-start">
 <span class="material-symbols-outlined text-primary bg-primary-fixed p-2 rounded-lg">local_shipping</span>
-<span class="font-label-md text-green-600 flex items-center gap-1">+4% <span class="material-symbols-outlined text-sm">trending_up</span></span>
 </div>
 <span class="font-label-md text-on-surface-variant uppercase tracking-wider">Active Vehicles</span>
 <span class="font-headline-lg text-headline-lg font-bold" id="kpiActiveVehicles">--<span class="text-on-surface-variant font-normal text-body-sm">/--</span></span>
 </div>
 <div class="glass-card p-6 rounded-xl flex flex-col gap-2">
 <div class="flex justify-between items-start">
-<span class="material-symbols-outlined text-secondary bg-secondary-fixed p-2 rounded-lg">speed</span>
-<span class="font-label-md text-red-600 flex items-center gap-1">-2% <span class="material-symbols-outlined text-sm">trending_down</span></span>
+<span class="material-symbols-outlined text-secondary bg-secondary-fixed p-2 rounded-lg">person</span>
 </div>
-<span class="font-label-md text-on-surface-variant uppercase tracking-wider">Fuel Efficiency</span>
-<span class="font-headline-lg text-headline-lg font-bold">8.4<span class="text-on-surface-variant font-normal text-body-sm"> mpg</span></span>
-</div>
-<div class="glass-card p-6 rounded-xl flex flex-col gap-2">
-<div class="flex justify-between items-start">
-<span class="material-symbols-outlined text-blue-600 bg-blue-100 p-2 rounded-lg">schedule</span>
-<span class="font-label-md text-green-600 flex items-center gap-1">+1.2% <span class="material-symbols-outlined text-sm">trending_up</span></span>
-</div>
-<span class="font-label-md text-on-surface-variant uppercase tracking-wider">On-Time Rate</span>
-<span class="font-headline-lg text-headline-lg font-bold">96.8%</span>
+<span class="font-label-md text-on-surface-variant uppercase tracking-wider">Available Drivers</span>
+<span class="font-headline-lg text-headline-lg font-bold" id="kpiActiveDrivers">--</span>
 </div>
 <div class="glass-card p-6 rounded-xl flex flex-col gap-2">
 <div class="flex justify-between items-start">
-<span class="material-symbols-outlined text-on-tertiary-container bg-tertiary-fixed p-2 rounded-lg">payments</span>
-<span class="font-label-md text-green-600 flex items-center gap-1">+8% <span class="material-symbols-outlined text-sm">trending_up</span></span>
+<span class="material-symbols-outlined text-blue-600 bg-blue-100 p-2 rounded-lg">build</span>
 </div>
-<span class="font-label-md text-on-surface-variant uppercase tracking-wider">Total Revenue</span>
-<span class="font-headline-lg text-headline-lg font-bold">₹12.4k<span class="text-on-surface-variant font-normal text-body-sm"> today</span></span>
+<span class="font-label-md text-on-surface-variant uppercase tracking-wider">Pending Maintenance</span>
+<span class="font-headline-lg text-headline-lg font-bold" id="kpiPendingMaintenance">--</span>
+</div>
+<div class="glass-card p-6 rounded-xl flex flex-col gap-2">
+<div class="flex justify-between items-start">
+<span class="material-symbols-outlined text-on-tertiary-container bg-tertiary-fixed p-2 rounded-lg">route</span>
+</div>
+<span class="font-label-md text-on-surface-variant uppercase tracking-wider">Total Trips</span>
+<span class="font-headline-lg text-headline-lg font-bold" id="kpiTotalTrips">--</span>
 </div>
 </section>
 <!-- Main Grid: Map & Alerts -->
@@ -422,17 +417,37 @@ document.addEventListener('DOMContentLoaded', () => {
 
 async function fetchDashboardData() {
     try {
-        const [vehiclesRes, tripsRes] = await Promise.all([
+        const [vehiclesRes, tripsRes, driversRes, maintRes] = await Promise.all([
             fetch('http://localhost:3000/api/vehicles'),
-            fetch('http://localhost:3000/api/trips')
+            fetch('http://localhost:3000/api/trips'),
+            fetch('http://localhost:3000/api/drivers'),
+            fetch('http://localhost:3000/api/maintenance')
         ]);
         const vData = await vehiclesRes.json();
         const tData = await tripsRes.json();
+        const dData = await driversRes.json();
+        const mData = await maintRes.json();
 
         // Update KPI
-        const totalVehicles = vData.vehicles.length;
-        const activeVehicles = vData.vehicles.filter(v => v.status === 'On Trip' || v.status === 'Available').length;
-        document.getElementById('kpiActiveVehicles').innerHTML = `${activeVehicles}<span class="text-on-surface-variant font-normal text-body-sm">/${totalVehicles}</span>`;
+        if (vData.vehicles) {
+            const totalVehicles = vData.vehicles.length;
+            const activeVehicles = vData.vehicles.filter(v => v.status === 'On Trip' || v.status === 'Available').length;
+            document.getElementById('kpiActiveVehicles').innerHTML = `${activeVehicles}<span class="text-on-surface-variant font-normal text-body-sm">/${totalVehicles}</span>`;
+        }
+        
+        if (dData.drivers) {
+            const availableDrivers = dData.drivers.filter(d => d.status === 'Available').length;
+            document.getElementById('kpiActiveDrivers').innerHTML = `${availableDrivers}<span class="text-on-surface-variant font-normal text-body-sm">/${dData.drivers.length}</span>`;
+        }
+        
+        if (mData.logs) {
+            const pendingMaint = mData.logs.filter(m => m.status === 'Pending').length;
+            document.getElementById('kpiPendingMaintenance').innerText = pendingMaint;
+        }
+        
+        if (tData.trips) {
+            document.getElementById('kpiTotalTrips').innerText = tData.trips.length;
+        }
 
         // Update Trips List
         const tripsContainer = document.getElementById('dashboardTripsList');

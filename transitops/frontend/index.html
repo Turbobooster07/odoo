@@ -199,6 +199,9 @@
 <script>
         // Micro-interactions for input focus states and button animations
         document.addEventListener('DOMContentLoaded', () => {
+            // Clear any existing session to ensure a clean login state
+            localStorage.removeItem('userRole');
+
             const inputs = document.querySelectorAll('input, select');
             inputs.forEach(input => {
                 input.addEventListener('focus', () => {
