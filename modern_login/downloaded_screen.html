@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>SaaS App - Login</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@300;400;500;600;700;800&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#46ec13",
+                        "background-light": "#f6f8f6",
+                        "background-dark": "#142210",
+                    },
+                    fontFamily: {
+                        "display": ["Manrope"]
+                    },
+                    borderRadius: {"DEFAULT": "1rem", "lg": "2rem", "xl": "3rem", "full": "9999px"},
+                },
+            },
+        }
+    </script>
+<style>body {
+    font-family: "Manrope", sans-serif
+    }
+.bg-geometric {
+    background-image: linear-gradient(rgba(20, 34, 16, 0.8), rgba(20, 34, 16, 0.95)), url(https://lh3.googleusercontent.com/aida-public/AB6AXuAsi6H_p3VDVIh10C8MVjX46Khrt6gV1eLxZTttfy4-_T7CeF6HjQ4THsDKS6RxqTzZ8lEF2vZfoyxVphD1G9i8J4o6_MnxkASb90mUF_dAl6vqXxrJ2EAAdLAyVDDEfzBKZ4YxaoiagtEDk6RRvmcCZYCENlURzFhniBoKU7LcuWw26PdF_S00odPK4628Zq_Dw2JVffg-mWwV6vCwQOvBvsa8PAWKHCX3vW7QKIFZI_z_6NKbrGHp0y1WSdiYPbsPW7ww7S9elMM);
+    background-size: cover;
+    background-position: center
+    }</style>
+</head>
+<body class="bg-background-light dark:bg-background-dark min-h-screen flex items-center justify-center font-display overflow-x-hidden">
+<div class="flex w-full min-h-screen">
+<!-- Left Side: Abstract Visuals (Hidden on mobile) -->
+<div class="hidden lg:flex lg:w-1/2 bg-geometric relative flex-col justify-between p-12 overflow-hidden border-r border-[#2c3928]" data-alt="Abstract geometric tech grid with green glow">
+<div class="z-10 flex items-center gap-3 text-white">
+<div class="size-8 text-primary">
+<svg fill="none" viewbox="0 0 48 48" xmlns="http://www.w3.org/2000/svg">
+<g clip-path="url(#clip0_6_535)">
+<path clip-rule="evenodd" d="M47.2426 24L24 47.2426L0.757355 24L24 0.757355L47.2426 24ZM12.2426 21H35.7574L24 9.24264L12.2426 21Z" fill="currentColor" fill-rule="evenodd"></path>
+</g>
+<defs><clippath id="clip0_6_535"><rect fill="white" height="48" width="48"></rect></clippath></defs>
+</svg>
+</div>
+<h2 class="text-2xl font-bold tracking-tight">SaaS App</h2>
+</div>
+<div class="z-10">
+<h1 class="text-5xl font-extrabold text-white leading-tight mb-6">Master your data <br/><span class="text-primary">at the edge.</span></h1>
+<p class="text-gray-300 text-lg max-w-md">Our high-performance PostgreSQL backend ensures your applications run faster, safer, and everywhere.</p>
+</div>
+<div class="z-10 flex gap-6 text-sm text-gray-400">
+<span>© 2024 SaaS Platform Inc.</span>
+<a class="hover:text-primary transition-colors" href="#">Privacy Policy</a>
+<a class="hover:text-primary transition-colors" href="#">Terms of Service</a>
+</div>
+<!-- Subtle lighting effect -->
+<div class="absolute -bottom-20 -left-20 w-80 h-80 bg-primary/20 blur-[120px] rounded-full"></div>
+<div class="absolute top-1/4 -right-20 w-60 h-60 bg-primary/10 blur-[100px] rounded-full"></div>
+</div>
+<!-- Right Side: Login Form -->
+<div class="w-full lg:w-1/2 flex flex-col justify-center items-center px-6 py-12 bg-white dark:bg-[#121c0e]">
+<div class="w-full max-w-[460px] flex flex-col">
+<!-- Header Mobile Logo -->
+<div class="lg:hidden flex items-center gap-2 mb-8 text-white self-start">
+<div class="size-6 text-primary">
+<svg fill="none" viewbox="0 0 48 48" xmlns="http://www.w3.org/2000/svg">
+<g clip-path="url(#clip0_6_535)">
+<path clip-rule="evenodd" d="M47.2426 24L24 47.2426L0.757355 24L24 0.757355L47.2426 24ZM12.2426 21H35.7574L24 9.24264L12.2426 21Z" fill="currentColor" fill-rule="evenodd"></path>
+</g>
+</svg>
+</div>
+<span class="font-bold">SaaS App</span>
+</div>
+<div class="mb-8">
+<h2 class="text-white text-[32px] font-bold leading-tight mb-2">Welcome back</h2>
+<p class="text-[#a3b99d] text-base font-normal">Access your dashboard and manage your PostgreSQL databases.</p>
+</div>
+<form class="space-y-5">
+<!-- Email Field -->
+<div class="flex flex-col gap-2">
+<label class="text-white text-sm font-medium">Email Address</label>
+<div class="relative">
+<span class="material-symbols-outlined absolute left-4 top-1/2 -translate-y-1/2 text-[#a3b99d] text-xl">alternate_email</span>
+<input class="w-full rounded-full border border-[#2c3928] bg-[#1e271c] px-12 py-4 text-white placeholder:text-[#a3b99d] focus:border-primary focus:ring-1 focus:ring-primary outline-none transition-all" placeholder="name@company.com" type="email"/>
+</div>
+</div>
+<!-- Password Field -->
+<div class="flex flex-col gap-2">
+<div class="flex justify-between items-center">
+<label class="text-white text-sm font-medium">Password</label>
+<a class="text-primary text-sm font-semibold hover:underline" href="#">Forgot password?</a>
+</div>
+<div class="relative">
+<span class="material-symbols-outlined absolute left-4 top-1/2 -translate-y-1/2 text-[#a3b99d] text-xl">lock</span>
+<input class="w-full rounded-full border border-[#2c3928] bg-[#1e271c] px-12 py-4 text-white placeholder:text-[#a3b99d] focus:border-primary focus:ring-1 focus:ring-primary outline-none transition-all" placeholder="••••••••" type="password"/>
+<span class="material-symbols-outlined absolute right-4 top-1/2 -translate-y-1/2 text-[#a3b99d] text-xl cursor-pointer hover:text-white transition-colors">visibility</span>
+</div>
+</div>
+<!-- Remember Me -->
+<div class="flex items-center gap-2 px-1">
+<input class="w-5 h-5 rounded border-[#2c3928] bg-[#1e271c] text-primary focus:ring-primary focus:ring-offset-[#121c0e] ring-offset-2" id="remember" type="checkbox"/>
+<label class="text-[#a3b99d] text-sm cursor-pointer select-none" for="remember">Remember this device for 30 days</label>
+</div>
+<!-- Sign In Button -->
+<button class="w-full bg-primary text-[#131811] font-bold py-4 rounded-full text-lg hover:shadow-[0_0_20px_rgba(70,236,19,0.3)] transition-all active:scale-[0.98]" type="submit">
+                        Sign In
+                    </button>
+</form>
+<div class="relative my-8">
+<div class="absolute inset-0 flex items-center">
+<div class="w-full border-t border-[#2c3928]"></div>
+</div>
+<div class="relative flex justify-center text-sm">
+<span class="bg-[#121c0e] px-4 text-[#a3b99d]">Or continue with</span>
+</div>
+</div>
+<!-- Social Logins -->
+<div class="flex flex-col gap-3">
+<button class="flex items-center justify-center gap-3 w-full bg-transparent border border-[#2c3928] text-white py-3 rounded-full hover:bg-white/5 transition-all">
+<img alt="Google Logo" class="size-5" data-alt="Google logo icon" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAGa0mxnPAG-73F8QN-OMdfTk6n2jOaedBMLY0DHkU5xCNQbYXZdb9gTxjCRugGag_PKRnTVg_dUK_HvYJ637w4-eKGrgO4mt2RvaswCyGpd7bRRz4ifxfONIMlznCL7jwCgiv0-AYhSweX6prnedkjfWalkHtG1NrYCrUnGqnSmk6N-DZC4hZTi3RF0zTklwnJ2PtPfwzqylakamMg5yVDAUZKX_BhMO9YvsFZnOfRhReV1v0ls74TgyNxrBZ_Qe16TAfMVz1Bh70"/>
+<span class="font-medium">Sign in with Google</span>
+</button>
+<button class="flex items-center justify-center gap-3 w-full bg-transparent border border-[#2c3928] text-white py-3 rounded-full hover:bg-white/5 transition-all">
+<svg class="size-5 fill-white" viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0024 12c0-6.63-5.37-12-12-12z"></path></svg>
+<span class="font-medium">Sign in with GitHub</span>
+</button>
+</div>
+<p class="mt-8 text-center text-[#a3b99d] text-sm">
+                    Don't have an account? 
+                    <a class="text-primary font-bold hover:underline" href="#">Sign up for free</a>
+</p>
+</div>
+</div>
+</div>
+</body></html>

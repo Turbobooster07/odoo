@@ -1,0 +1,234 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Login | Transit Logistics</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;600;700;800;900&amp;family=Inter:wght@400;500;600&amp;family=Geist:wght@400;500&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            "colors": {
+                    "on-tertiary-fixed": "#001e2c",
+                    "background": "#f8f9ff",
+                    "tertiary-container": "#001e2c",
+                    "on-secondary-container": "#5c2400",
+                    "inverse-primary": "#bec6e0",
+                    "on-primary-fixed": "#131b2e",
+                    "primary-fixed": "#dae2fd",
+                    "error-container": "#ffdad6",
+                    "on-tertiary-fixed-variant": "#004c69",
+                    "surface-bright": "#f8f9ff",
+                    "secondary": "#9d4300",
+                    "surface-container-low": "#eff4ff",
+                    "on-primary-fixed-variant": "#3f465c",
+                    "on-tertiary-container": "#008ebf",
+                    "inverse-surface": "#213145",
+                    "surface": "#f8f9ff",
+                    "secondary-fixed-dim": "#ffb690",
+                    "on-surface": "#0b1c30",
+                    "surface-container-high": "#dce9ff",
+                    "error": "#ba1a1a",
+                    "surface-container-lowest": "#ffffff",
+                    "on-primary": "#ffffff",
+                    "primary-container": "#131b2e",
+                    "primary-fixed-dim": "#bec6e0",
+                    "secondary-fixed": "#ffdbca",
+                    "on-tertiary": "#ffffff",
+                    "inverse-on-surface": "#eaf1ff",
+                    "primary": "#000000",
+                    "outline-variant": "#c6c6cd",
+                    "on-background": "#0b1c30",
+                    "outline": "#76777d",
+                    "surface-variant": "#d3e4fe",
+                    "on-error": "#ffffff",
+                    "on-error-container": "#93000a",
+                    "tertiary-fixed": "#c4e7ff",
+                    "on-primary-container": "#7c839b",
+                    "surface-container-highest": "#d3e4fe",
+                    "surface-dim": "#cbdbf5",
+                    "secondary-container": "#fd761a",
+                    "surface-tint": "#565e74",
+                    "on-secondary": "#ffffff",
+                    "on-secondary-fixed-variant": "#783200",
+                    "on-surface-variant": "#45464d",
+                    "surface-container": "#e5eeff",
+                    "tertiary": "#000000",
+                    "on-secondary-fixed": "#341100",
+                    "tertiary-fixed-dim": "#7bd0ff"
+            },
+            "borderRadius": {
+                    "DEFAULT": "0.125rem",
+                    "lg": "0.25rem",
+                    "xl": "0.5rem",
+                    "full": "0.75rem"
+            },
+            "spacing": {
+                    "margin-mobile": "16px",
+                    "base": "4px",
+                    "margin-desktop": "40px",
+                    "stack-lg": "32px",
+                    "stack-md": "16px",
+                    "gutter": "24px",
+                    "stack-sm": "8px"
+            },
+            "fontFamily": {
+                    "label-md": ["Geist"],
+                    "data-mono": ["Geist"],
+                    "headline-lg": ["Orbitron"],
+                    "headline-xl": ["Orbitron"],
+                    "body-md": ["Inter"],
+                    "headline-lg-mobile": ["Orbitron"],
+                    "body-sm": ["Inter"]
+            },
+            "fontSize": {
+                    "label-md": ["12px", {"lineHeight": "16px", "letterSpacing": "0.05em", "fontWeight": "500"}],
+                    "data-mono": ["14px", {"lineHeight": "20px", "fontWeight": "400"}],
+                    "headline-lg": ["32px", {"lineHeight": "40px", "letterSpacing": "-0.01em", "fontWeight": "600"}],
+                    "headline-xl": ["48px", {"lineHeight": "56px", "letterSpacing": "-0.02em", "fontWeight": "700"}],
+                    "body-md": ["16px", {"lineHeight": "24px", "fontWeight": "400"}],
+                    "headline-lg-mobile": ["24px", {"lineHeight": "32px", "fontWeight": "600"}],
+                    "body-sm": ["14px", {"lineHeight": "20px", "fontWeight": "400"}]
+            }
+          },
+        },
+      }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .form-glow:focus-within {
+            box-shadow: 0 0 0 2px rgba(0, 142, 191, 0.2);
+        }
+    </style>
+</head>
+<body class="bg-background text-on-surface font-body-md text-body-md antialiased overflow-hidden">
+<main class="flex min-h-screen w-full">
+<!-- Left Section: Visual Imagery -->
+<section class="hidden lg:flex lg:w-7/12 relative overflow-hidden bg-primary-container">
+<div class="absolute inset-0 bg-cover bg-center transition-transform duration-10000 hover:scale-105" data-alt="A high-angle professional photograph of a modern logistics hub at dusk. Sleek transport trucks are neatly lined up in a pattern of silver and navy, illuminated by sharp LED warehouse lighting. The atmosphere is industrial and high-tech, featuring a cool blue color palette with hints of safety orange from signal lights. The composition is clean and minimalist, emphasizing precision, motion, and controlled efficiency in a corporate shipping environment." style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuB0kl9bvIkzX8_9XR0YvcoPUpYGK7WZdnJaumXwvzoHb-0qZzMV3FxJxRBtQCXmMttatWeVk7khbIN0oq5ZTjQGScDtI77L0Wylbhql7iYi7BTr0Tzct3vfnKkzOiGeLL5JgCORQK0fRvQl5xgf6YNnyv8CzR-vFn3FHCmeuzfouWNPnJoXkeo3khNidjJSdaaxc4w5jCrVrpt61wck_i7eygM_X0gh5cODYJlskmnJp-VvRrm4oWT9FjkQjGDHD-BlFIxBptTeX9Y')"></div>
+<!-- Overlay for text readability -->
+<div class="absolute inset-0 bg-gradient-to-t from-on-tertiary-fixed/80 via-transparent to-transparent"></div>
+<div class="relative z-10 p-margin-desktop mt-auto mb-12 max-w-xl">
+<h2 class="font-headline-xl text-headline-xl text-on-primary mb-stack-sm">Precision in Motion.</h2>
+<p class="text-primary-fixed-dim font-body-md text-body-md opacity-90 leading-relaxed">
+                    Streamlining fleet operations with high-performance digital environments. Welcome to the future of logistics management.
+                </p>
+</div>
+</section>
+<!-- Right Section: Login Form -->
+<section class="w-full lg:w-5/12 flex flex-col justify-center items-center bg-surface-container-lowest p-margin-mobile md:p-margin-desktop overflow-y-auto">
+<div class="w-full max-w-[440px] flex flex-col">
+<!-- Brand Anchor -->
+<div class="mb-stack-lg flex items-center gap-2">
+<span class="material-symbols-outlined text-primary text-[32px]" style="font-variation-settings: 'FILL' 1;">local_shipping</span>
+<span class="text-headline-lg font-headline-lg font-bold text-primary">Transit</span>
+</div>
+<!-- Header -->
+<div class="mb-stack-lg">
+<h1 class="font-headline-lg text-headline-lg text-on-surface mb-2">Log in to Transit</h1>
+<p class="text-on-surface-variant font-body-sm text-body-sm">Enter your credentials to access your fleet dashboard.</p>
+</div>
+<!-- Form -->
+<form class="space-y-stack-md" id="loginForm" onsubmit="return false;">
+<!-- Email -->
+<div class="space-y-stack-sm">
+<label class="font-label-md text-label-md text-on-surface-variant block uppercase tracking-wider" for="email">Email Address</label>
+<div class="relative flex items-center">
+<input class="w-full h-12 bg-surface-container-lowest border border-outline-variant rounded-lg px-4 text-body-md placeholder:text-outline focus:ring-2 focus:ring-tertiary-container focus:border-tertiary-container outline-none transition-all" id="email" name="email" placeholder="name@company.com" required="" type="email"/>
+</div>
+</div>
+<!-- Password -->
+<div class="space-y-stack-sm">
+<div class="flex justify-between items-end">
+<label class="font-label-md text-label-md text-on-surface-variant block uppercase tracking-wider" for="password">Password</label>
+<a class="text-tertiary font-label-md text-label-md hover:underline decoration-2 underline-offset-4 transition-all" href="#">Forgot password?</a>
+</div>
+<div class="relative">
+<input class="w-full h-12 bg-surface-container-lowest border border-outline-variant rounded-lg px-4 text-body-md placeholder:text-outline focus:ring-2 focus:ring-tertiary-container focus:border-tertiary-container outline-none transition-all" id="password" name="password" placeholder="••••••••" required="" type="password"/>
+<button class="absolute right-4 top-1/2 -translate-y-1/2 text-on-surface-variant hover:text-primary transition-colors" type="button">
+<span class="material-symbols-outlined text-[20px]">visibility</span>
+</button>
+</div>
+</div>
+<!-- Role Selection -->
+<div class="space-y-stack-sm">
+<label class="font-label-md text-label-md text-on-surface-variant block uppercase tracking-wider" for="role">Access Role</label>
+<div class="relative group">
+<select class="w-full h-12 bg-surface-container-lowest bg-none border border-outline-variant rounded-lg px-4 text-body-md appearance-none focus:ring-2 focus:ring-tertiary-container focus:border-tertiary-container outline-none transition-all cursor-pointer" id="role" name="role">
+<option value="fleet_manager">Fleet Manager</option>
+<option value="dispatcher">Dispatcher</option>
+<option value="driver">Driver</option>
+<option value="administrator">Administrator</option>
+</select>
+<span class="material-symbols-outlined absolute right-4 top-1/2 -translate-y-1/2 pointer-events-none text-on-surface-variant group-hover:text-primary transition-colors">expand_more</span>
+</div>
+</div>
+<!-- Remember & CTA -->
+<div class="flex items-center gap-stack-sm pt-base">
+<input class="w-5 h-5 rounded border-outline-variant text-primary-container focus:ring-primary-container cursor-pointer" id="remember" name="remember" type="checkbox"/>
+<label class="font-body-sm text-body-sm text-on-surface-variant cursor-pointer select-none" for="remember">Remember me on this device</label>
+</div>
+<!-- Primary Action -->
+<button class="w-full h-12 bg-primary text-on-primary font-label-md text-label-md font-semibold uppercase tracking-widest rounded-lg hover:bg-primary/90 active:scale-[0.98] transition-all flex items-center justify-center gap-2 shadow-lg shadow-on-tertiary-fixed/10" type="submit">
+                        Sign In
+                        <span class="material-symbols-outlined text-[18px]">arrow_forward</span>
+</button>
+</form>
+<!-- Footer -->
+<div class="mt-stack-lg text-center pt-stack-md border-t border-outline-variant">
+<p class="text-on-surface-variant font-body-sm text-body-sm">
+                        Don't have an account? 
+                        <a class="text-secondary font-semibold hover:underline decoration-2 underline-offset-4 ml-1" href="#">Sign up</a>
+</p>
+</div>
+<div class="mt-stack-lg flex flex-wrap justify-center gap-gutter text-outline font-label-md text-label-md uppercase tracking-wider">
+<a class="hover:text-primary transition-colors" href="#">Privacy Policy</a>
+<a class="hover:text-primary transition-colors" href="#">Terms of Service</a>
+</div>
+</div>
+</section>
+</main>
+<script>
+        // Micro-interactions for input focus states and button animations
+        document.addEventListener('DOMContentLoaded', () => {
+            const inputs = document.querySelectorAll('input, select');
+            inputs.forEach(input => {
+                input.addEventListener('focus', () => {
+                    input.parentElement.closest('div').classList.add('focused');
+                });
+                input.addEventListener('blur', () => {
+                    input.parentElement.closest('div').classList.remove('focused');
+                });
+            });
+
+            const form = document.getElementById('loginForm');
+            const submitBtn = form.querySelector('button[type="submit"]');
+
+            form.addEventListener('submit', (e) => {
+                e.preventDefault();
+                submitBtn.innerHTML = `
+                    <svg class="animate-spin h-5 w-5 text-on-primary" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                        <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                        <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                    </svg>
+                    Authenticating...
+                `;
+                submitBtn.disabled = true;
+                
+                // Simulate network latency
+                setTimeout(() => {
+                    submitBtn.innerHTML = `Sign In <span class="material-symbols-outlined text-[18px]">arrow_forward</span>`;
+                    submitBtn.disabled = false;
+                    alert('Logistics dashboard authentication initialized.');
+                }, 1500);
+            });
+        });
+    </script>
+</body></html>
