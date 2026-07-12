@@ -53,6 +53,17 @@ app.get('/api/vehicles', async (req, res) => {
     }
 });
 
+// API: Fetch Drivers
+app.get('/api/drivers', async (req, res) => {
+    try {
+        const [rows] = await pool.query('SELECT * FROM drivers ORDER BY id DESC');
+        res.json({ success: true, drivers: rows });
+    } catch (err) {
+        console.error('Error fetching drivers:', err);
+        res.status(500).json({ success: false, message: 'Server error' });
+    }
+});
+
 // Serve static files from the frontend directory
 app.use(express.static(path.join(__dirname, '../frontend')));
 
