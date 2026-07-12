@@ -588,38 +588,35 @@
 
             // Form submission
             const form = document.getElementById('driverForm');
-            form.addEventListener('submit', (e) => {
+            form.addEventListener('submit', async (e) => {
                 e.preventDefault();
-                const name = document.getElementById('driverName').value;
-                const initials = name.split(' ').map(n => n[0]).join('').toUpperCase().substring(0, 2);
-                const license = document.getElementById('licenseNo').value;
-                const category = document.getElementById('category').value;
-                const expiry = document.getElementById('expiry').value;
-                const contact = document.getElementById('contact').value;
-                const tripCompl = document.getElementById('tripCompl').value;
-                const safety = document.getElementById('safety').value;
-                const status = document.getElementById('status').value;
-
-                const isExpired = expiry.toLowerCase().includes('expire');
-
-                const newDriver = {
-                    id: drivers.length + 1,
-                    initials,
-                    name,
-                    license,
-                    category,
-                    expiry,
-                    contact,
-                    tripCompl,
-                    safety,
-                    status,
-                    expired: isExpired
+                const payload = {
+                    name: document.getElementById('driverName').value,
+                    license_number: document.getElementById('licenseNo').value,
+                    license_category: document.getElementById('category').value,
+                    license_expiry_date: document.getElementById('expiry').value,
+                    contact_no: document.getElementById('contact').value,
+                    safety_score: document.getElementById('safety').value,
+                    status: document.getElementById('status').value
                 };
 
-                drivers.unshift(newDriver); // add to top
-                closeModal();
-                form.reset();
-                renderTable();
+                try {
+                    const res = await fetch('http://localhost:3000/api/drivers', {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify(payload)
+                    });
+                    
+                    if (res.ok) {
+                        closeModal();
+                        form.reset();
+                        fetchDrivers(); // Reload from database
+                    } else {
+                        console.error('Failed to save driver');
+                    }
+                } catch (err) {
+                    console.error('Error saving driver:', err);
+                }
             });
         }
 

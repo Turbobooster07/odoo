@@ -72,6 +72,21 @@ app.get('/api/drivers', async (req, res) => {
     }
 });
 
+// API: Add Driver
+app.post('/api/drivers', async (req, res) => {
+    const { name, license_number, license_category, license_expiry_date, contact_no, safety_score, status } = req.body;
+    try {
+        const [result] = await pool.query(
+            'INSERT INTO drivers (name, license_number, license_category, license_expiry_date, contact_no, trip_compl, safety_score, status) VALUES (?, ?, ?, ?, ?, ?, ?, ?)',
+            [name, license_number, license_category, license_expiry_date, contact_no, 0, safety_score || 100, status || 'Available']
+        );
+        res.json({ success: true, message: 'Driver added successfully', insertId: result.insertId });
+    } catch (err) {
+        console.error('Error adding driver:', err);
+        res.status(500).json({ success: false, message: 'Server error' });
+    }
+});
+
 // API: Add Vehicle
 app.post('/api/vehicles', async (req, res) => {
     const { vehicle_id, name, type, status, assigned_driver, next_maintenance, weight_capacity } = req.body;
@@ -95,6 +110,61 @@ app.delete('/api/vehicles/:id', async (req, res) => {
         res.json({ success: true, message: 'Vehicle deleted successfully' });
     } catch (err) {
         console.error('Error deleting vehicle:', err);
+        res.status(500).json({ success: false, message: 'Server error' });
+    }
+});
+
+// API: Fetch Trips
+app.get('/api/trips', async (req, res) => {
+    try {
+        const [rows] = await pool.query('SELECT * FROM trips ORDER BY id DESC');
+        res.json({ success: true, trips: rows });
+    } catch (err) {
+        console.error('Error fetching trips:', err);
+        res.status(500).json({ success: false, message: 'Server error' });
+    }
+});
+
+// API: Create Trip (Draft)
+app.post('/api/trips', async (req, res) => {
+    const { source, destination, vehicle_id, vehicle_name, driver_id, driver_name, cargo_weight, planned_distance } = req.body;
+    try {
+        const trip_number = `TR${Math.floor(Math.random() * 1000).toString().padStart(3, '0')}`;
+        const [result] = await pool.query(
+            'INSERT INTO trips (trip_number, source, destination, vehicle_id, vehicle_name, driver_id, driver_name, cargo_weight, planned_distance, status) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)',
+            [trip_number, source, destination, vehicle_id, vehicle_name, driver_id, driver_name, cargo_weight, planned_distance, 'Draft']
+        );
+        res.json({ success: true, message: 'Trip created successfully', trip: { id: result.insertId, trip_number } });
+    } catch (err) {
+        console.error('Error creating trip:', err);
+        res.status(500).json({ success: false, message: 'Server error' });
+    }
+});
+
+// API: Dispatch Trip
+app.put('/api/trips/:id/dispatch', async (req, res) => {
+    const { id } = req.params;
+    try {
+        // Get the trip to find vehicle and driver
+        const [trips] = await pool.query('SELECT * FROM trips WHERE id = ?', [id]);
+        if (trips.length === 0) return res.status(404).json({ success: false, message: 'Trip not found' });
+        
+        const trip = trips[0];
+        
+        // Update Trip Status
+        await pool.query("UPDATE trips SET status = 'Dispatched' WHERE id = ?", [id]);
+        
+        // Update Driver and Vehicle status to 'On Trip' (or Scheduled based on user preference)
+        if (trip.driver_id) {
+            await pool.query("UPDATE drivers SET status = 'On Trip' WHERE id = ?", [trip.driver_id]);
+        }
+        if (trip.vehicle_id) {
+            await pool.query("UPDATE vehicles SET status = 'On Trip' WHERE id = ?", [trip.vehicle_id]);
+        }
+        
+        res.json({ success: true, message: 'Trip dispatched successfully' });
+    } catch (err) {
+        console.error('Error dispatching trip:', err);
         res.status(500).json({ success: false, message: 'Server error' });
     }
 });
