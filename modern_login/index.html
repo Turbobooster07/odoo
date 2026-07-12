@@ -5,9 +5,8 @@
 <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
 <title>Login | Transit Logistics</title>
 <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
-<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;600;700;800;900&amp;family=Inter:wght@400;500;600&amp;family=Geist:wght@400;500&amp;display=swap" rel="stylesheet"/>
-<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
-<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;600;700;800;900&family=Titillium+Web:wght@300;400;600;700&display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
 <script id="tailwind-config">
       tailwind.config = {
         darkMode: "class",
@@ -78,21 +77,21 @@
                     "stack-sm": "8px"
             },
             "fontFamily": {
-                    "label-md": ["Geist"],
-                    "data-mono": ["Geist"],
+                    "label-md": ["Titillium Web"],
+                    "data-mono": ["Titillium Web"],
                     "headline-lg": ["Orbitron"],
                     "headline-xl": ["Orbitron"],
-                    "body-md": ["Inter"],
+                    "body-md": ["Titillium Web"],
                     "headline-lg-mobile": ["Orbitron"],
-                    "body-sm": ["Inter"]
+                    "body-sm": ["Titillium Web"]
             },
             "fontSize": {
-                    "label-md": ["12px", {"lineHeight": "16px", "letterSpacing": "0.05em", "fontWeight": "500"}],
+                    "label-md": ["12px", {"lineHeight": "16px", "letterSpacing": "0.05em", "fontWeight": "400"}],
                     "data-mono": ["14px", {"lineHeight": "20px", "fontWeight": "400"}],
-                    "headline-lg": ["32px", {"lineHeight": "40px", "letterSpacing": "-0.01em", "fontWeight": "600"}],
-                    "headline-xl": ["48px", {"lineHeight": "56px", "letterSpacing": "-0.02em", "fontWeight": "700"}],
+                    "headline-lg": ["32px", {"lineHeight": "40px", "letterSpacing": "-0.01em", "fontWeight": "500"}],
+                    "headline-xl": ["48px", {"lineHeight": "56px", "letterSpacing": "-0.02em", "fontWeight": "600"}],
                     "body-md": ["16px", {"lineHeight": "24px", "fontWeight": "400"}],
-                    "headline-lg-mobile": ["24px", {"lineHeight": "32px", "fontWeight": "600"}],
+                    "headline-lg-mobile": ["24px", {"lineHeight": "32px", "fontWeight": "500"}],
                     "body-sm": ["14px", {"lineHeight": "20px", "fontWeight": "400"}]
             }
           },
@@ -211,7 +210,7 @@
             const form = document.getElementById('loginForm');
             const submitBtn = form.querySelector('button[type="submit"]');
 
-            form.addEventListener('submit', (e) => {
+            form.addEventListener('submit', async (e) => {
                 e.preventDefault();
                 submitBtn.innerHTML = `
                     <svg class="animate-spin h-5 w-5 text-on-primary" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
@@ -222,12 +221,32 @@
                 `;
                 submitBtn.disabled = true;
                 
-                // Simulate network latency
-                setTimeout(() => {
+                const email = document.getElementById('email').value;
+                const password = document.getElementById('password').value;
+                const role = document.getElementById('role').options[document.getElementById('role').selectedIndex].text;
+
+                try {
+                    const response = await fetch('http://localhost:3000/api/login', {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({ username: email, password, role })
+                    });
+                    
+                    const data = await response.json();
+                    
+                    if (data.success) {
+                        window.location.href = 'dashboard.html';
+                    } else {
+                        alert(data.message || 'Login failed. Please check your credentials.');
+                        submitBtn.innerHTML = `Sign In <span class="material-symbols-outlined text-[18px]">arrow_forward</span>`;
+                        submitBtn.disabled = false;
+                    }
+                } catch (err) {
+                    console.error('Error logging in:', err);
+                    alert('Server error. Please try again later.');
                     submitBtn.innerHTML = `Sign In <span class="material-symbols-outlined text-[18px]">arrow_forward</span>`;
                     submitBtn.disabled = false;
-                    alert('Logistics dashboard authentication initialized.');
-                }, 1500);
+                }
             });
         });
     </script>
