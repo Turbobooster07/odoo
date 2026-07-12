@@ -303,14 +303,13 @@
                 </div>
             </div>
 
-            <!-- Calculated Summary Card -->
             <div class="glass-card p-6 rounded-xl shadow-sm bg-white flex justify-between items-center">
                 <div>
                     <h4 class="font-bold text-[14px] text-on-surface-variant uppercase tracking-wider">Total Operational Cost (Auto) = Fuel + Maint</h4>
                     <p class="text-[12px] text-slate-500 mt-1">Calculated in real-time based on log entries.</p>
                 </div>
                 <div class="text-right">
-                    <span class="font-headline-xl text-3xl font-black text-primary tracking-tight" id="totalCostDisplay">0</span>
+                    <span class="font-headline-xl text-3xl font-black text-primary tracking-tight" id="totalCostDisplay">₹0</span>
                 </div>
             </div>
 
@@ -357,7 +356,7 @@
                         <input type="number" id="fuelLiters" class="w-full bg-surface-container-low border-none rounded-lg px-3 py-2 text-body-sm focus:ring-2 focus:ring-secondary-container" placeholder="e.g. 42" required />
                     </div>
                     <div class="flex flex-col gap-1">
-                        <label class="font-label-md text-[12px] uppercase text-on-surface-variant font-bold" for="fuelCost">Cost ($)</label>
+                        <label class="font-label-md text-[12px] uppercase text-on-surface-variant font-bold" for="fuelCost">Cost (₹)</label>
                         <input type="number" id="fuelCost" class="w-full bg-surface-container-low border-none rounded-lg px-3 py-2 text-body-sm focus:ring-2 focus:ring-secondary-container" placeholder="e.g. 3150" required />
                     </div>
                 </div>
@@ -391,15 +390,15 @@
                 </div>
                 <div class="grid grid-cols-3 gap-3">
                     <div class="flex flex-col gap-1">
-                        <label class="font-label-md text-[12px] uppercase text-on-surface-variant font-bold" for="expToll">Toll ($)</label>
+                        <label class="font-label-md text-[12px] uppercase text-on-surface-variant font-bold" for="expToll">Toll (₹)</label>
                         <input type="number" id="expToll" class="w-full bg-surface-container-low border-none rounded-lg px-3 py-2 text-body-sm focus:ring-2 focus:ring-secondary-container" placeholder="0" required />
                     </div>
                     <div class="flex flex-col gap-1">
-                        <label class="font-label-md text-[12px] uppercase text-on-surface-variant font-bold" for="expOther">Other ($)</label>
+                        <label class="font-label-md text-[12px] uppercase text-on-surface-variant font-bold" for="expOther">Other (₹)</label>
                         <input type="number" id="expOther" class="w-full bg-surface-container-low border-none rounded-lg px-3 py-2 text-body-sm focus:ring-2 focus:ring-secondary-container" placeholder="0" required />
                     </div>
                     <div class="flex flex-col gap-1">
-                        <label class="font-label-md text-[12px] uppercase text-on-surface-variant font-bold" for="expMaint">Maint ($)</label>
+                        <label class="font-label-md text-[12px] uppercase text-on-surface-variant font-bold" for="expMaint">Maint (₹)</label>
                         <input type="number" id="expMaint" class="w-full bg-surface-container-low border-none rounded-lg px-3 py-2 text-body-sm focus:ring-2 focus:ring-secondary-container" placeholder="0" required />
                     </div>
                 </div>
@@ -510,7 +509,7 @@
                     <td class="px-6 py-4 whitespace-nowrap font-bold text-on-surface text-[14px]">${log.vehicle}</td>
                     <td class="px-6 py-4 whitespace-nowrap text-on-surface-variant text-[14px]">${log.date}</td>
                     <td class="px-6 py-4 whitespace-nowrap text-on-surface-variant text-[14px]">${log.liters} L</td>
-                    <td class="px-6 py-4 whitespace-nowrap text-on-surface font-bold text-[14px]">${log.cost.toLocaleString()}</td>
+                    <td class="px-6 py-4 whitespace-nowrap text-on-surface font-bold text-[14px]">₹${log.cost.toLocaleString()}</td>
                     <td class="px-6 py-4 whitespace-nowrap text-center">
                         <button onclick="deleteFuel(${log.id})" class="text-error hover:text-red-700 transition-colors">
                             <span class="material-symbols-outlined text-[18px]">delete</span>
@@ -539,9 +538,9 @@
                 tr.innerHTML = `
                     <td class="px-6 py-4 whitespace-nowrap font-bold text-on-surface text-[14px]">${exp.trip}</td>
                     <td class="px-6 py-4 whitespace-nowrap text-on-surface-variant text-[14px]">${exp.vehicle}</td>
-                    <td class="px-6 py-4 whitespace-nowrap text-on-surface-variant text-[14px]">${exp.toll > 0 ? exp.toll : '0'}</td>
-                    <td class="px-6 py-4 whitespace-nowrap text-on-surface-variant text-[14px]">${exp.other > 0 ? exp.other : '0'}</td>
-                    <td class="px-6 py-4 whitespace-nowrap text-on-surface-variant text-[14px]">${exp.maint > 0 ? exp.maint.toLocaleString() : '0'}</td>
+                    <td class="px-6 py-4 whitespace-nowrap text-on-surface-variant text-[14px]">₹${exp.toll > 0 ? exp.toll : '0'}</td>
+                    <td class="px-6 py-4 whitespace-nowrap text-on-surface-variant text-[14px]">₹${exp.other > 0 ? exp.other : '0'}</td>
+                    <td class="px-6 py-4 whitespace-nowrap text-on-surface-variant text-[14px]">₹${exp.maint > 0 ? exp.maint.toLocaleString() : '0'}</td>
                     <td class="px-6 py-4 whitespace-nowrap">
                         <span class="px-2.5 py-1 rounded-full text-[12px] font-bold ${statusClass}">
                             ${exp.status.toUpperCase()}
@@ -558,7 +557,7 @@
 
             // Total Cost display: Fuel + Maintenance
             const overallTotal = totalFuelCost + totalMaintCost;
-            document.getElementById('totalCostDisplay').textContent = overallTotal.toLocaleString();
+            document.getElementById('totalCostDisplay').textContent = '₹' + overallTotal.toLocaleString();
         }
     </script>
 </body>

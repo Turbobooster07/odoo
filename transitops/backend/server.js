@@ -168,6 +168,40 @@ app.put('/api/trips/:id/dispatch', async (req, res) => {
         res.status(500).json({ success: false, message: 'Server error' });
     }
 });
+// API: Fetch Maintenance Logs
+app.get('/api/maintenance', async (req, res) => {
+    try {
+        const [rows] = await pool.query('SELECT * FROM maintenance_logs ORDER BY date DESC, id DESC');
+        res.json({ success: true, logs: rows });
+    } catch (err) {
+        console.error('Error fetching maintenance logs:', err);
+        res.status(500).json({ success: false, message: 'Server error' });
+    }
+});
+
+// API: Add Maintenance Log
+app.post('/api/maintenance', async (req, res) => {
+    const { vehicle_id, service_type, cost, date, status } = req.body;
+    try {
+        const [result] = await pool.query(
+            'INSERT INTO maintenance_logs (vehicle_id, service_type, cost, date, status) VALUES (?, ?, ?, ?, ?)',
+            [vehicle_id, service_type, cost || 0, date, status || 'Pending']
+        );
+        
+        // If status is 'In Shop', update corresponding vehicle's status
+        if (status === 'In Shop') {
+            await pool.query(
+                "UPDATE vehicles SET status = 'In Shop' WHERE vehicle_id = ?",
+                [vehicle_id]
+            );
+        }
+        
+        res.json({ success: true, message: 'Maintenance record added successfully', insertId: result.insertId });
+    } catch (err) {
+        console.error('Error adding maintenance record:', err);
+        res.status(500).json({ success: false, message: 'Server error' });
+    }
+});
 
 // Serve static files from the frontend directory
 app.use(express.static(path.join(__dirname, '../frontend')));
