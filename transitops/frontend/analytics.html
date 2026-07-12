@@ -1,0 +1,515 @@
+<!DOCTYPE html>
+<html class="light" lang="en">
+
+<head>
+  <meta charset="utf-8" />
+  <meta content="width=device-width, initial-scale=1.0" name="viewport" />
+  <title>Analytics | TransitOps</title>
+  <!-- Material Symbols for Icons -->
+  <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet" />
+  <!-- Fonts: Hanken Grotesk, Inter, Geist -->
+  <link href="https://fonts.googleapis.com/css2?family=Hanken+Grotesk:wght@400;600;700;900&amp;family=Inter:wght@400;500&amp;family=Geist:wght@400;500&amp;display=swap" rel="stylesheet" />
+  <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+  <script id="tailwind-config">
+    tailwind.config = {
+      darkMode: "class",
+      theme: {
+        extend: {
+          "colors": {
+            "on-secondary-container": "#5c2400",
+            "inverse-on-surface": "#eaf1ff",
+            "surface-bright": "#f8f9ff",
+            "surface-container": "#e5eeff",
+            "on-tertiary-fixed": "#001e2c",
+            "secondary": "#9d4300",
+            "surface-tint": "#565e74",
+            "surface-container-highest": "#d3e4fe",
+            "on-surface-variant": "#45464d",
+            "secondary-container": "#fd761a",
+            "outline": "#76777d",
+            "surface-container-lowest": "#ffffff",
+            "secondary-fixed": "#ffdbca",
+            "inverse-primary": "#bec6e0",
+            "surface-container-low": "#eff4ff",
+            "on-error": "#ffffff",
+            "tertiary": "#000000",
+            "primary-fixed-dim": "#bec6e0",
+            "on-tertiary": "#ffffff",
+            "primary-container": "#131b2e",
+            "on-error-container": "#93000a",
+            "on-primary-container": "#7c839b",
+            "on-background": "#0b1c30",
+            "surface-container-high": "#dce9ff",
+            "primary-fixed": "#dae2fd",
+            "tertiary-container": "#001e2c",
+            "secondary-fixed-dim": "#ffb690",
+            "background": "#f8f9ff",
+            "on-secondary": "#ffffff",
+            "primary": "#002d69",
+            "error": "#ba1a1a",
+            "on-surface": "#191b20",
+            "on-secondary-fixed-variant": "#783100"
+          },
+          "borderRadius": {
+            "DEFAULT": "0.125rem",
+            "lg": "0.25rem",
+            "xl": "0.5rem",
+            "full": "0.75rem"
+          },
+          "spacing": {
+            "gutter": "24px",
+            "margin-desktop": "40px",
+            "stack-lg": "32px",
+            "stack-sm": "8px",
+            "base": "4px",
+            "stack-md": "16px",
+            "margin-mobile": "16px"
+          },
+          "fontFamily": {
+            "headline-lg-mobile": ["Hanken Grotesk"],
+            "label-md": ["Geist"],
+            "headline-xl": ["Hanken Grotesk"],
+            "headline-lg": ["Hanken Grotesk"],
+            "body-sm": ["Inter"],
+            "data-mono": ["Geist"],
+            "body-md": ["Inter"]
+          },
+          "fontSize": {
+            "headline-lg-mobile": ["24px", { "lineHeight": "32px", "fontWeight": "600" }],
+            "label-md": ["12px", { "lineHeight": "16px", "letterSpacing": "0.05em", "fontWeight": "500" }],
+            "headline-xl": ["48px", { "lineHeight": "56px", "letterSpacing": "-0.02em", "fontWeight": "700" }],
+            "headline-lg": ["32px", { "lineHeight": "40px", "letterSpacing": "-0.01em", "fontWeight": "600" }],
+            "body-sm": ["14px", { "lineHeight": "20px", "fontWeight": "400" }],
+            "data-mono": ["14px", { "lineHeight": "20px", "fontWeight": "400" }],
+            "body-md": ["16px", { "lineHeight": "24px", "fontWeight": "400" }]
+          }
+        },
+      },
+    }
+  </script>
+  <style>
+    body {
+      font-family: 'Inter', sans-serif;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    .material-symbols-outlined {
+      font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+    }
+
+    .custom-scrollbar::-webkit-scrollbar {
+      width: 4px;
+    }
+
+    .custom-scrollbar::-webkit-scrollbar-track {
+      background: transparent;
+    }
+
+    .custom-scrollbar::-webkit-scrollbar-thumb {
+      background: #c6c6cd;
+      border-radius: 10px;
+    }
+
+    .glass-card {
+      background: rgba(255, 255, 255, 0.7);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+    }
+  </style>
+</head>
+
+<body class="bg-background text-on-background overflow-hidden flex h-screen">
+  <!-- SideNavBar Anchor -->
+  <aside
+    class="fixed left-0 top-0 h-screen w-[280px] bg-primary-container flex flex-col py-stack-lg border-r border-outline-variant z-50">
+    <div class="px-6 mb-10">
+      <h1 class="font-headline-lg text-headline-lg font-bold text-on-primary-container">TransitOps</h1>
+      <p class="font-label-md text-label-md text-on-primary-container opacity-60">Fleet Intelligence</p>
+    </div>
+    <nav class="flex-1 space-y-1 px-4 overflow-y-auto custom-scrollbar">
+      <a class="flex items-center gap-3 px-4 py-3 rounded-lg text-on-primary-container hover:text-white hover:bg-white/10 transition-colors duration-200"
+        href="dashboard.html">
+        <span class="material-symbols-outlined">dashboard</span>
+        <span class="font-label-md text-label-md">Dashboard</span>
+      </a>
+      <a class="flex items-center gap-3 px-4 py-3 rounded-lg text-on-primary-container hover:text-white hover:bg-white/10 transition-colors duration-200"
+        href="fleet_management.html">
+        <span class="material-symbols-outlined">local_shipping</span>
+        <span class="font-label-md text-label-md">Fleet Status</span>
+      </a>
+      <a class="flex items-center gap-3 px-4 py-3 rounded-lg text-on-primary-container hover:text-white hover:bg-white/10 transition-colors duration-200"
+        href="drivers_safety.html">
+        <span class="material-symbols-outlined">person</span>
+        <span class="font-label-md text-label-md">Driver Logs</span>
+      </a>
+      <a class="flex items-center gap-3 px-4 py-3 rounded-lg text-on-primary-container hover:text-white hover:bg-white/10 transition-colors duration-200"
+        href="dispatcher.html">
+        <span class="material-symbols-outlined">route</span>
+        <span class="font-label-md text-label-md">Route Optimizer</span>
+      </a>
+      <a class="flex items-center gap-3 px-4 py-3 rounded-lg text-on-primary-container hover:text-white hover:bg-white/10 transition-colors duration-200"
+        href="maintenance.html">
+        <span class="material-symbols-outlined">build</span>
+        <span class="font-label-md text-label-md">Maintenance</span>
+      </a>
+      <a class="flex items-center gap-3 px-4 py-3 rounded-lg text-on-primary-container hover:text-white hover:bg-white/10 transition-colors duration-200"
+        href="fuel_expenses.html">
+        <span class="material-symbols-outlined">payments</span>
+        <span class="font-label-md text-label-md">Fuel & Expenses</span>
+      </a>
+      <a class="flex items-center gap-3 px-4 py-3 rounded-lg text-on-secondary-fixed-variant font-bold border-l-4 border-secondary-container bg-secondary-fixed/10 transition-colors duration-200"
+        href="analytics.html">
+        <span class="material-symbols-outlined">trending_up</span>
+        <span class="font-label-md text-label-md">Analytics</span>
+      </a>
+      <a class="flex items-center gap-3 px-4 py-3 rounded-lg text-on-primary-container hover:text-white hover:bg-white/10 transition-colors duration-200 mt-auto"
+        href="settings.html">
+        <span class="material-symbols-outlined">settings</span>
+        <span class="font-label-md text-label-md">Settings</span>
+      </a>
+    </nav>
+    <div class="mt-auto px-6 py-4 flex items-center gap-3 border-t border-on-primary-container/10">
+      <div
+        class="w-10 h-10 rounded-full overflow-hidden bg-surface-variant flex items-center justify-center font-bold text-white bg-orange-600">
+        AR
+      </div>
+      <div class="flex flex-col">
+        <span class="font-label-md text-label-md text-white font-bold">Alex Rivera</span>
+        <span class="font-label-md text-[10px] text-on-primary-container opacity-60">Fleet Manager</span>
+      </div>
+      <a href="index.html" class="ml-auto text-on-primary-container hover:text-white transition-colors" title="Log Out">
+        <span class="material-symbols-outlined">logout</span>
+      </a>
+    </div>
+  </aside>
+
+  <!-- Main Content Canvas -->
+  <main class="ml-[280px] flex-1 flex flex-col h-full bg-surface">
+    <!-- TopNavBar -->
+    <header
+      class="h-16 flex items-center justify-between px-margin-desktop bg-surface-container-lowest border-b border-outline-variant/30">
+      <div class="flex items-center gap-6">
+        <div class="relative group">
+          <span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-outline">search</span>
+          <input
+            class="pl-10 pr-4 py-2 bg-surface-container-low border-none rounded-lg text-sm w-[320px] focus:ring-2 focus:ring-primary-fixed-dim transition-all outline-none"
+            placeholder="Search analytics, vehicles, or costs..." type="text" />
+        </div>
+      </div>
+      <div class="flex items-center gap-4">
+        <button class="w-10 h-10 rounded-full flex items-center justify-center hover:bg-surface-container-low transition-colors relative">
+          <span class="material-symbols-outlined text-on-surface-variant">notifications</span>
+          <span class="absolute top-2.5 right-2.5 w-2 h-2 bg-secondary rounded-full"></span>
+        </button>
+        <button class="w-10 h-10 rounded-full flex items-center justify-center hover:bg-surface-container-low transition-colors">
+          <span class="material-symbols-outlined text-on-surface-variant">help</span>
+        </button>
+        <button onclick="window.print()"
+          class="flex items-center gap-2 px-4 py-2 bg-[#001e2c] text-white font-bold rounded-lg hover:opacity-90 active:scale-95 transition-all text-xs">
+          <span class="material-symbols-outlined text-sm">download</span>
+          Export Report
+        </button>
+      </div>
+    </header>
+
+    <!-- Scrollable content -->
+    <div class="flex-1 overflow-y-auto p-margin-desktop custom-scrollbar space-y-6">
+      <!-- Title & Headline -->
+      <div>
+        <h2 class="font-headline-xl text-3xl font-black text-primary tracking-tight">Reports & Analytics</h2>
+        <p class="text-on-surface-variant font-body-sm mt-1">Real-time performance metrics and ROI tracking for your entire fleet.</p>
+      </div>
+
+      <!-- KPI Summary Row -->
+      <div class="grid grid-cols-1 md:grid-cols-4 gap-stack-md">
+        <!-- Fuel Efficiency -->
+        <div class="bg-surface-container-lowest p-5 rounded-xl border border-outline-variant shadow-sm flex flex-col gap-2 relative">
+          <div class="flex justify-between items-start">
+            <span class="text-xs text-on-surface-variant font-bold uppercase tracking-wider flex items-center gap-1">
+              <span class="w-2 h-2 rounded-full bg-orange-600"></span> Fuel Efficiency
+            </span>
+            <span class="material-symbols-outlined text-orange-600 opacity-60">local_gas_station</span>
+          </div>
+          <div class="mt-2 flex items-baseline gap-1">
+            <span class="text-3xl font-black text-primary tracking-tight">8.4</span>
+            <span class="text-xs text-on-surface-variant font-medium">km/l</span>
+          </div>
+          <div class="mt-2 text-xs font-semibold text-green-600 flex items-center gap-0.5">
+            <span class="material-symbols-outlined text-sm">trending_up</span> +1.2% from last month
+          </div>
+        </div>
+
+        <!-- Fleet Utilization -->
+        <div class="bg-surface-container-lowest p-5 rounded-xl border border-outline-variant shadow-sm flex flex-col gap-2 relative">
+          <div class="flex justify-between items-start">
+            <span class="text-xs text-on-surface-variant font-bold uppercase tracking-wider flex items-center gap-1">
+              <span class="w-2 h-2 rounded-full bg-primary"></span> Fleet Utilization
+            </span>
+            <span class="material-symbols-outlined text-primary opacity-60">hub</span>
+          </div>
+          <div class="mt-2 flex items-baseline gap-1">
+            <span class="text-3xl font-black text-primary tracking-tight">81</span>
+            <span class="text-xs text-on-surface-variant font-medium">%</span>
+          </div>
+          <div class="mt-2 text-xs font-semibold text-red-600 flex items-center gap-0.5">
+            <span class="material-symbols-outlined text-sm">trending_down</span> -0.4% from last month
+          </div>
+        </div>
+
+        <!-- Operational Cost -->
+        <div class="bg-surface-container-lowest p-5 rounded-xl border border-outline-variant shadow-sm flex flex-col gap-2 relative">
+          <div class="flex justify-between items-start">
+            <span class="text-xs text-on-surface-variant font-bold uppercase tracking-wider flex items-center gap-1">
+              <span class="w-2 h-2 rounded-full bg-secondary"></span> Operational Cost
+            </span>
+            <span class="material-symbols-outlined text-secondary opacity-60">payments</span>
+          </div>
+          <div class="mt-2 flex items-baseline gap-1">
+            <span class="text-xs text-on-surface-variant font-bold mr-0.5">₹</span>
+            <span id="kpi-ops-cost" class="text-3xl font-black text-primary tracking-tight">34,070</span>
+          </div>
+          <div class="mt-2 text-xs font-semibold text-green-600 flex items-center gap-0.5">
+            <span class="material-symbols-outlined text-sm">trending_down</span> Cost optimized by 5%
+          </div>
+        </div>
+
+        <!-- Vehicle ROI -->
+        <div class="bg-surface-container-lowest p-5 rounded-xl border border-outline-variant shadow-sm flex flex-col gap-2 relative">
+          <div class="flex justify-between items-start">
+            <span class="text-xs text-on-surface-variant font-bold uppercase tracking-wider flex items-center gap-1">
+              <span class="w-2 h-2 rounded-full bg-emerald-600"></span> Vehicle ROI
+            </span>
+            <span class="material-symbols-outlined text-emerald-600 opacity-60">insights</span>
+          </div>
+          <div class="mt-2 flex items-baseline gap-1">
+            <span class="text-3xl font-black text-primary tracking-tight">14.2</span>
+            <span class="text-xs text-on-surface-variant font-medium">%</span>
+          </div>
+          <div class="mt-2 text-xs font-semibold text-green-600 flex items-center gap-0.5">
+            <span class="material-symbols-outlined text-sm">trending_up</span> Above industry average
+          </div>
+        </div>
+      </div>
+
+      <!-- ROI Formula Note -->
+      <div class="text-xs text-on-surface-variant italic font-medium pl-2 border-l-2 border-outline-variant">
+        ROI = (Revenue - (Maintenance + Fuel)) / Acquisition Cost
+      </div>
+
+      <!-- Chart and Breakdown Section -->
+      <div class="grid grid-cols-1 lg:grid-cols-3 gap-gutter">
+        <!-- Monthly Revenue CSS Chart -->
+        <div class="lg:col-span-2 bg-surface-container-lowest p-6 rounded-xl border border-outline-variant shadow-sm flex flex-col justify-between min-h-[380px]">
+          <div class="flex justify-between items-center pb-4 border-b border-outline-variant/30">
+            <div>
+              <h3 class="font-headline-lg text-lg font-bold text-primary">Monthly Revenue</h3>
+              <p class="text-xs text-on-surface-variant mt-0.5">Trailing 6-month earnings overview</p>
+            </div>
+            <div>
+              <select class="bg-surface-container-low border border-outline-variant rounded-lg px-3 py-1.5 text-xs font-bold text-on-surface-variant outline-none">
+                <option>Last 6 Months</option>
+                <option>Year to Date</option>
+              </select>
+            </div>
+          </div>
+          
+          <!-- Modern CSS Bar Chart Layout -->
+          <div class="flex-1 flex items-end justify-between px-6 pt-10 pb-4 h-[220px] relative">
+            <!-- Grid Background Lines -->
+            <div class="absolute inset-x-0 bottom-4 top-10 flex flex-col justify-between pointer-events-none">
+              <div class="border-b border-outline-variant/20 w-full h-0"></div>
+              <div class="border-b border-outline-variant/20 w-full h-0"></div>
+              <div class="border-b border-outline-variant/20 w-full h-0"></div>
+              <div class="border-b border-outline-variant/20 w-full h-0"></div>
+            </div>
+
+            <!-- JAN -->
+            <div class="flex flex-col items-center gap-3 w-12 z-10 group cursor-pointer">
+              <span class="text-[10px] font-bold text-primary opacity-0 group-hover:opacity-100 transition-opacity bg-primary-container text-white px-1.5 py-0.5 rounded shadow">₹45k</span>
+              <div class="w-8 bg-surface-container-high hover:bg-primary transition-all duration-300 rounded-t-lg" style="height: 100px;"></div>
+              <span class="text-xs font-bold text-on-surface-variant">JAN</span>
+            </div>
+            <!-- FEB -->
+            <div class="flex flex-col items-center gap-3 w-12 z-10 group cursor-pointer">
+              <span class="text-[10px] font-bold text-primary opacity-0 group-hover:opacity-100 transition-opacity bg-primary-container text-white px-1.5 py-0.5 rounded shadow">₹52k</span>
+              <div class="w-8 bg-surface-container-high hover:bg-primary transition-all duration-300 rounded-t-lg" style="height: 120px;"></div>
+              <span class="text-xs font-bold text-on-surface-variant">FEB</span>
+            </div>
+            <!-- MAR -->
+            <div class="flex flex-col items-center gap-3 w-12 z-10 group cursor-pointer">
+              <span class="text-[10px] font-bold text-primary opacity-0 group-hover:opacity-100 transition-opacity bg-primary-container text-white px-1.5 py-0.5 rounded shadow">₹49k</span>
+              <div class="w-8 bg-surface-container-high hover:bg-primary transition-all duration-300 rounded-t-lg" style="height: 112px;"></div>
+              <span class="text-xs font-bold text-on-surface-variant">MAR</span>
+            </div>
+            <!-- APR -->
+            <div class="flex flex-col items-center gap-3 w-12 z-10 group cursor-pointer">
+              <span class="text-[10px] font-bold text-primary opacity-0 group-hover:opacity-100 transition-opacity bg-primary-container text-white px-1.5 py-0.5 rounded shadow">₹58k</span>
+              <div class="w-8 bg-surface-container-high hover:bg-primary transition-all duration-300 rounded-t-lg" style="height: 140px;"></div>
+              <span class="text-xs font-bold text-on-surface-variant">APR</span>
+            </div>
+            <!-- MAY -->
+            <div class="flex flex-col items-center gap-3 w-12 z-10 group cursor-pointer">
+              <span class="text-[10px] font-bold text-primary opacity-0 group-hover:opacity-100 transition-opacity bg-primary-container text-white px-1.5 py-0.5 rounded shadow">₹64k</span>
+              <div class="w-8 bg-surface-container-high hover:bg-primary transition-all duration-300 rounded-t-lg" style="height: 155px;"></div>
+              <span class="text-xs font-bold text-on-surface-variant">MAY</span>
+            </div>
+            <!-- JUN -->
+            <div class="flex flex-col items-center gap-3 w-12 z-10 group cursor-pointer">
+              <span class="text-[10px] font-bold text-primary opacity-0 group-hover:opacity-100 transition-opacity bg-primary-container text-white px-1.5 py-0.5 rounded shadow">₹70k</span>
+              <div class="w-8 bg-surface-container-high hover:bg-primary transition-all duration-300 rounded-t-lg" style="height: 175px;"></div>
+              <span class="text-xs font-bold text-on-surface-variant">JUN</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Top Costliest Vehicles -->
+        <div class="bg-surface-container-lowest p-6 rounded-xl border border-outline-variant shadow-sm flex flex-col justify-between min-h-[380px]">
+          <div>
+            <h3 class="font-headline-lg text-lg font-bold text-primary">Top Costliest Vehicles</h3>
+            <p class="text-xs text-on-surface-variant mt-0.5">Maintenance and fuel drain</p>
+          </div>
+
+          <div class="space-y-4 my-4 flex-1 flex flex-col justify-center">
+            <!-- Item 1 -->
+            <div class="space-y-1">
+              <div class="flex justify-between text-xs font-bold">
+                <span class="text-primary">TRUCK-11</span>
+                <span class="text-on-surface-variant">₹12,450 / mo</span>
+              </div>
+              <div class="w-full bg-surface-container-low h-2 rounded-full overflow-hidden">
+                <div class="bg-red-600 h-full rounded-full transition-all duration-500" style="width: 90%;"></div>
+              </div>
+            </div>
+            <!-- Item 2 -->
+            <div class="space-y-1">
+              <div class="flex justify-between text-xs font-bold">
+                <span class="text-primary">MINI-03</span>
+                <span class="text-on-surface-variant">₹8,200 / mo</span>
+              </div>
+              <div class="w-full bg-surface-container-low h-2 rounded-full overflow-hidden">
+                <div class="bg-amber-600 h-full rounded-full transition-all duration-500" style="width: 65%;"></div>
+              </div>
+            </div>
+            <!-- Item 3 -->
+            <div class="space-y-1">
+              <div class="flex justify-between text-xs font-bold">
+                <span class="text-primary">VAN-05</span>
+                <span class="text-on-surface-variant">₹5,920 / mo</span>
+              </div>
+              <div class="w-full bg-surface-container-low h-2 rounded-full overflow-hidden">
+                <div class="bg-blue-600 h-full rounded-full transition-all duration-500" style="width: 45%;"></div>
+              </div>
+            </div>
+            <!-- Item 4 -->
+            <div class="space-y-1">
+              <div class="flex justify-between text-xs font-bold">
+                <span class="text-primary">LORRY-09</span>
+                <span class="text-on-surface-variant">₹4,100 / mo</span>
+              </div>
+              <div class="w-full bg-surface-container-low h-2 rounded-full overflow-hidden">
+                <div class="bg-sky-500 h-full rounded-full transition-all duration-500" style="width: 32%;"></div>
+              </div>
+            </div>
+          </div>
+
+          <button onclick="alert('Viewing breakdown details...')"
+            class="w-full py-2.5 bg-white border border-outline-variant hover:bg-slate-50 text-xs font-bold text-on-surface-variant rounded-lg transition-colors">
+            View Full Breakdown
+          </button>
+        </div>
+      </div>
+
+      <!-- Recent Anomalies Table Section -->
+      <div class="bg-surface-container-lowest rounded-xl border border-outline-variant shadow-sm overflow-hidden">
+        <div class="p-6 border-b border-outline-variant flex items-center justify-between">
+          <h3 class="font-headline-lg text-lg font-bold text-primary">Recent Anomalies</h3>
+          <a href="#" onclick="alert('Viewing all anomalies...')" class="text-xs font-bold text-secondary flex items-center gap-0.5 hover:underline">
+            Review All <span class="material-symbols-outlined text-sm">arrow_right_alt</span>
+          </a>
+        </div>
+        <div class="overflow-x-auto">
+          <table class="min-w-full divide-y divide-outline-variant">
+            <thead class="bg-surface-container-low">
+              <tr>
+                <th class="p-4 text-left font-label-md text-[11px] text-on-surface-variant font-bold tracking-wider">VEHICLE ID</th>
+                <th class="p-4 text-left font-label-md text-[11px] text-on-surface-variant font-bold tracking-wider">ANOMALY TYPE</th>
+                <th class="p-4 text-left font-label-md text-[11px] text-on-surface-variant font-bold tracking-wider">SEVERITY</th>
+                <th class="p-4 text-left font-label-md text-[11px] text-on-surface-variant font-bold tracking-wider">EST. IMPACT</th>
+                <th class="p-4 text-center font-label-md text-[11px] text-on-surface-variant font-bold tracking-wider">ACTION</th>
+              </tr>
+            </thead>
+            <tbody class="divide-y divide-outline-variant/30">
+              <!-- Row 1 -->
+              <tr class="hover:bg-slate-50/50 transition-colors">
+                <td class="p-4 font-data-mono text-data-mono font-bold text-primary">TRUCK-11</td>
+                <td class="p-4 font-body-sm text-body-sm text-on-surface">Abnormal Fuel Consumption</td>
+                <td class="p-4">
+                  <span class="px-2.5 py-1 bg-red-100 text-red-800 text-[10px] font-bold rounded-full uppercase tracking-wider">CRITICAL</span>
+                </td>
+                <td class="p-4 font-bold text-red-600">-₹1,240 /mo</td>
+                <td class="p-4 text-center">
+                  <button onclick="alert('Viewing TRUCK-11 anomaly detail')" class="text-on-surface-variant hover:text-primary">
+                    <span class="material-symbols-outlined">more_horiz</span>
+                  </button>
+                </td>
+              </tr>
+              <!-- Row 2 -->
+              <tr class="hover:bg-slate-50/50 transition-colors">
+                <td class="p-4 font-data-mono text-data-mono font-bold text-primary">VAN-05</td>
+                <td class="p-4 font-body-sm text-body-sm text-on-surface">Idle Time Outlier</td>
+                <td class="p-4">
+                  <span class="px-2.5 py-1 bg-amber-100 text-amber-800 text-[10px] font-bold rounded-full uppercase tracking-wider">WARNING</span>
+                </td>
+                <td class="p-4 font-bold text-amber-600">-₹450 /mo</td>
+                <td class="p-4 text-center">
+                  <button onclick="alert('Viewing VAN-05 anomaly detail')" class="text-on-surface-variant hover:text-primary">
+                    <span class="material-symbols-outlined">more_horiz</span>
+                  </button>
+                </td>
+              </tr>
+              <!-- Row 3 -->
+              <tr class="hover:bg-slate-50/50 transition-colors">
+                <td class="p-4 font-data-mono text-data-mono font-bold text-primary">MINI-03</td>
+                <td class="p-4 font-body-sm text-body-sm text-on-surface">Brake System Wear</td>
+                <td class="p-4">
+                  <span class="px-2.5 py-1 bg-sky-100 text-sky-800 text-[10px] font-bold rounded-full uppercase tracking-wider">MONITOR</span>
+                </td>
+                <td class="p-4 font-bold text-on-surface-variant">Upcoming Maint.</td>
+                <td class="p-4 text-center">
+                  <button onclick="alert('Viewing MINI-03 anomaly detail')" class="text-on-surface-variant hover:text-primary">
+                    <span class="material-symbols-outlined">more_horiz</span>
+                  </button>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <script>
+    // Let's load dynamic metrics or configurations if needed
+    async function loadAnalyticsSummary() {
+      try {
+        const response = await fetch('http://localhost:4000/api/maintenance');
+        const data = await response.json();
+        if (data.success && data.logs) {
+          const totalMaintenanceCost = data.logs.reduce((sum, log) => sum + Number(log.cost), 0);
+          // Update the ops cost card dynamically based on actual database costs plus base fuel estimate
+          const baseFuelCostEstimate = 12500;
+          const currentTotal = totalMaintenanceCost + baseFuelCostEstimate;
+          document.getElementById('kpi-ops-cost').textContent = currentTotal.toLocaleString();
+        }
+      } catch (err) {
+        console.error('Error loading dynamic metrics:', err);
+      }
+    }
+
+    document.addEventListener('DOMContentLoaded', () => {
+      loadAnalyticsSummary();
+    });
+  </script>
+</body>
+
+</html>
