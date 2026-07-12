@@ -116,6 +116,7 @@
       -webkit-backdrop-filter: blur(12px);
     }
   </style>
+    <script src="rbac.js"></script>
 </head>
 
 <body class="bg-background text-on-background overflow-hidden flex h-screen">
@@ -490,9 +491,7 @@
 
   <script src="auth.js"></script>
   <script>
-    const API_BASE = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1' 
-        ? window.location.origin 
-        : 'http://localhost:3000';
+    const API_BASE = 'http://localhost:3000';
 
     async function loadAnalyticsSummary() {
       try {

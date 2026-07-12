@@ -1,137 +1,124 @@
-(function() {
+/**
+ * TransitOps RBAC
+ * Pure CSS-injection based access control. No mutation observers, no loops.
+ *
+ * Role → Allowed Pages (+ access level)
+ * ────────────────────────────────────────────────────────────────────
+ * Administrator    → ALL pages (full R/W)
+ * Fleet Manager    → Dashboard, Fleet (R/W), Drivers (R/W), Analytics (R/W)
+ * Dispatcher       → Dashboard, Fleet (view-only), Trips (R/W)
+ * Safety Officer   → Dashboard, Drivers (R/W), Trips (view-only)
+ * Financial Analyst→ Dashboard, Fleet (view-only), Fuel Expenses (R/W), Analytics (R/W)
+ *
+ * Settings → Administrator only
+ * Dashboard → ALL roles (read)
+ */
+(function () {
     const role = localStorage.getItem('userRole');
-    const currentPath = window.location.pathname.toLowerCase();
-    const isLoginPage = currentPath.includes('index.html') || currentPath === '/' || currentPath === '';
+    if (!role) return;
 
-    // If no role is stored, redirect to login page (unless already on it)
-    if (!role) {
-        if (!isLoginPage) {
-            window.location.href = 'index.html';
-        }
-        return;
-    }
+    const path = window.location.pathname.toLowerCase();
+    const css = [];
 
-    // Sidebar links each role is ALLOWED to see
-    // dashboard.html is always allowed for all roles
-    const SIDEBAR_ACCESS = {
+    // ── Sidebar links hidden per role ────────────────────────────────────────
+    const HIDE_LINKS = {
         'Fleet Manager': [
-            'dashboard.html',
-            'fleet_management.html',
-            'drivers_safety.html',
+            'dispatcher.html',
+            'fuel_expenses.html',
             'maintenance.html',
             'settings.html'
         ],
         'Dispatcher': [
-            'dashboard.html',
-            'dispatcher.html',
-            'fleet_management.html',
+            'drivers_safety.html',
+            'analytics.html',
+            'fuel_expenses.html',
+            'maintenance.html',
             'settings.html'
         ],
         'Safety Officer': [
-            'dashboard.html',
-            'drivers_safety.html',
-            'dispatcher.html',
+            'fleet_management.html',
+            'analytics.html',
+            'fuel_expenses.html',
+            'maintenance.html',
             'settings.html'
         ],
         'Financial Analyst': [
-            'dashboard.html',
-            'fleet_management.html',
-            'fuel_expenses.html',
-            'settings.html'
-        ],
-        'Administrator': [
-            'dashboard.html',
-            'fleet_management.html',
-            'drivers_safety.html',
             'dispatcher.html',
-            'fuel_expenses.html',
+            'drivers_safety.html',
             'maintenance.html',
             'settings.html'
         ]
     };
 
-    // Pages where the role only has "View-Only" access
-    const VIEW_ONLY_PAGES = {
-        'Dispatcher': ['fleet_management.html'],
-        'Safety Officer': ['dispatcher.html'],
-        'Financial Analyst': ['fleet_management.html']
+    // Settings always hidden for non-admins (catch-all)
+    const hiddenLinks = role === 'Administrator' ? [] : (HIDE_LINKS[role] || []);
+    hiddenLinks.forEach(page => {
+        css.push(`a[href*="${page}"] { display:none !important; }`);
+    });
+
+    // ── View-only: hide write controls on specific pages ─────────────────────
+
+    // Dispatcher on Fleet
+    if (role === 'Dispatcher' && path.includes('fleet_management.html')) {
+        css.push(
+            '#addVehicleBtn                        { display:none !important; }',
+            'button[onclick="openVehicleModal()"]  { display:none !important; }',
+            '#addVehicleModal                      { display:none !important; }',
+            'table thead th:last-child             { display:none !important; }',
+            '#vehicleTableBody td:last-child       { display:none !important; }'
+        );
+    }
+
+    // Safety Officer on Trips (view-only: hide Create Trip form + Edit/Dispatch buttons)
+    if (role === 'Safety Officer' && path.includes('dispatcher.html')) {
+        css.push(
+            '#createTripForm                       { display:none !important; }',
+            'button[onclick^="editDraft"]          { display:none !important; }',
+            'button[onclick^="dispatchTrip"]       { display:none !important; }',
+            '#saveDraftBtn                         { display:none !important; }'
+        );
+    }
+
+    // Financial Analyst on Fleet (view-only: same as Dispatcher)
+    if (role === 'Financial Analyst' && path.includes('fleet_management.html')) {
+        css.push(
+            '#addVehicleBtn                        { display:none !important; }',
+            'button[onclick="openVehicleModal()"]  { display:none !important; }',
+            '#addVehicleModal                      { display:none !important; }',
+            'table thead th:last-child             { display:none !important; }',
+            '#vehicleTableBody td:last-child       { display:none !important; }'
+        );
+    }
+
+    // Non-admin safety: block settings.html via CSS too (belt + suspenders)
+    if (role !== 'Administrator') {
+        css.push('a[href*="settings.html"] { display:none !important; }');
+    }
+
+    // Apply all CSS rules at once
+    if (css.length) {
+        const style = document.createElement('style');
+        style.textContent = css.join('\n');
+        document.head.appendChild(style);
+    }
+
+    // ── Page-level URL guard (redirect if user navigates directly) ────────────
+    const BLOCKED_PAGES = {
+        'Administrator':     [],   // no restrictions
+        'Fleet Manager':     ['dispatcher.html', 'fuel_expenses.html', 'maintenance.html', 'settings.html'],
+        'Dispatcher':        ['drivers_safety.html', 'analytics.html', 'fuel_expenses.html', 'maintenance.html', 'settings.html'],
+        'Safety Officer':    ['fleet_management.html', 'analytics.html', 'fuel_expenses.html', 'maintenance.html', 'settings.html'],
+        'Financial Analyst': ['dispatcher.html', 'drivers_safety.html', 'maintenance.html', 'settings.html']
     };
 
-    const userAllowedPages = SIDEBAR_ACCESS[role] || ['dashboard.html'];
-
-    // 1. Enforce page-level redirect — if accessing a page not in whitelist, bounce to dashboard
-    if (!isLoginPage) {
-        const isAllowed = userAllowedPages.some(page => currentPath.includes(page.toLowerCase()));
-        if (!isAllowed) {
-            window.location.href = 'dashboard.html';
-            return;
-        }
+    // Catch-all: non-admin cannot access settings regardless
+    if (role !== 'Administrator' && path.includes('settings.html')) {
+        window.location.href = 'dashboard.html';
+        return;
     }
 
-    // 2. Inject CSS to hide unauthorized sidebar links and enforce view-only restrictions
-    const styleEl = document.createElement('style');
-    let cssRules = '';
-
-    // All known pages we might link to in the sidebar
-    const allKnownPages = [
-        { name: 'dashboard.html', selector: 'a[href*="dashboard.html"]' },
-        { name: 'fleet_management.html', selector: 'a[href*="fleet_management.html"]' },
-        { name: 'drivers_safety.html', selector: 'a[href*="drivers_safety.html"]' },
-        { name: 'dispatcher.html', selector: 'a[href*="dispatcher.html"]' },
-        { name: 'maintenance.html', selector: 'a[href*="maintenance.html"]' },
-        { name: 'fuel_expenses.html', selector: 'a[href*="fuel_expenses.html"]' }
-    ];
-
-    // Hide any sidebar link not in the user's allowed list
-    allKnownPages.forEach(page => {
-        const allowed = userAllowedPages.some(p => page.name === p);
-        if (!allowed) {
-            cssRules += `${page.selector} { display: none !important; }\n`;
-        }
-    });
-
-    // --- View-Only: Fleet Management page ---
-    const userViewOnlyPages = VIEW_ONLY_PAGES[role] || [];
-    const isFleetViewOnly = userViewOnlyPages.includes('fleet_management.html') && currentPath.includes('fleet_management.html');
-    if (isFleetViewOnly) {
-        cssRules += `
-            /* Hide Add Vehicle Button */
-            #addVehicleBtn,
-            button[onclick="openVehicleModal()"] { display: none !important; }
-            /* Hide Action column (last column header + each row's last cell) */
-            table thead th:last-child,
-            table tbody td:last-child { display: none !important; }
-        `;
+    const blocked = BLOCKED_PAGES[role] || [];
+    if (blocked.some(p => path.includes(p))) {
+        window.location.href = 'dashboard.html';
     }
-
-    // --- View-Only: Dispatcher / Trips page ---
-    const isTripsViewOnly = userViewOnlyPages.includes('dispatcher.html') && currentPath.includes('dispatcher.html');
-    if (isTripsViewOnly) {
-        cssRules += `
-            /* Hide the Create Trip Form (left column) */
-            #createTripForm { display: none !important; }
-            /* Hide the parent wrapper of the form */
-            .flex.flex-col.lg\\:flex-row.gap-8 > div:first-child { display: none !important; }
-            /* Make Live Board full width */
-            .flex.flex-col.lg\\:flex-row.gap-8 > div:last-child { width: 100% !important; }
-            /* Hide Edit and Dispatch buttons on trip cards */
-            button[onclick^="editDraft"],
-            button[onclick^="dispatchTrip"] { display: none !important; }
-        `;
-    }
-
-    styleEl.textContent = cssRules;
-    document.head.appendChild(styleEl);
-
-    // 3. DOMContentLoaded cleanup: remove "Add Vehicle" buttons by text content (declarative CSS can't do :contains)
-    document.addEventListener('DOMContentLoaded', () => {
-        if (isFleetViewOnly) {
-            document.querySelectorAll('button').forEach(btn => {
-                const text = (btn.textContent || '').toLowerCase().trim();
-                if (text.includes('add vehicle') || text.includes('add asset')) {
-                    btn.remove();
-                }
-            });
-        }
-    });
 })();

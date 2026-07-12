@@ -144,7 +144,8 @@
             background: rgba(255, 255, 255, 1);
             border: 1px solid rgba(226, 232, 240, 1);
         }
-    </style></head>
+    </style>    <script src="rbac.js"></script>
+</head>
 
 <body class="bg-background text-on-background min-h-screen">
 <!-- SideNavBar Anchor -->
@@ -588,9 +589,7 @@
         let currentPage = 1;
         const itemsPerPage = 5;
 
-        const API_BASE = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1' 
-            ? window.location.origin 
-            : 'http://localhost:3000';
+        const API_BASE = 'http://localhost:3000';
 
         // Fetch drivers and show drivers that can actually be assigned to a new vehicle
         async function loadDriversDropdown() {

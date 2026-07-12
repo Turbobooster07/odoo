@@ -141,7 +141,8 @@
       background-color: #ffdbca;
       color: #9d4300;
     }
-  </style></head>
+  </style>    <script src="rbac.js"></script>
+</head>
 
 <body class="bg-background text-on-background overflow-hidden flex h-screen">
   <!-- SideNavBar Anchor -->
@@ -477,9 +478,7 @@
     const monthlyCostSum = document.getElementById('monthly-cost-sum');
     const uptimeRateValue = document.getElementById('uptime-rate-value');
 
-    const API_BASE = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1' 
-        ? window.location.origin 
-        : 'http://localhost:3000';
+    const API_BASE = 'http://localhost:3000';
 
     // Fetch and Populate Vehicles
     async function loadVehicles() {
