@@ -1,0 +1,566 @@
+<!DOCTYPE html>
+<html class="light" lang="en">
+
+<head>
+    <meta charset="utf-8" />
+    <meta content="width=device-width, initial-scale=1.0" name="viewport" />
+    <title>TransitOps | Fuel & Expenses</title>
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;600;700;800;900&family=Titillium+Web:wght@300;400;600;700&display=swap"
+        rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap"
+        rel="stylesheet" />
+    <script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "inverse-surface": "#213145",
+                        "surface": "#f8f9ff",
+                        "tertiary-fixed": "#c4e7ff",
+                        "secondary": "#9d4300",
+                        "outline-variant": "#c6c6cd",
+                        "on-secondary-container": "#5c2400",
+                        "primary-container": "#131b2e",
+                        "outline": "#76777d",
+                        "on-tertiary": "#ffffff",
+                        "primary-fixed": "#dae2fd",
+                        "on-tertiary-fixed": "#001e2c",
+                        "surface-bright": "#f8f9ff",
+                        "on-tertiary-fixed-variant": "#004c69",
+                        "error": "#ba1a1a",
+                        "on-error": "#ffffff",
+                        "surface-container-lowest": "#ffffff",
+                        "on-primary-container": "#7c839b",
+                        "secondary-fixed": "#ffdbca",
+                        "on-primary": "#ffffff",
+                        "surface-container-high": "#dce9ff",
+                        "on-primary-fixed-variant": "#3f465c",
+                        "tertiary-fixed-dim": "#7bd0ff",
+                        "surface-dim": "#cbdbf5",
+                        "surface-container-low": "#eff4ff",
+                        "surface-container-highest": "#d3e4fe",
+                        "secondary-container": "#fd761a",
+                        "primary-fixed-dim": "#bec6e0",
+                        "on-secondary-fixed-variant": "#783200",
+                        "background": "#f8f9ff",
+                        "on-surface-variant": "#45464d",
+                        "on-background": "#0b1c30",
+                        "on-error-container": "#93000a",
+                        "surface-tint": "#565e74",
+                        "on-surface": "#0b1c30",
+                        "primary": "#000000",
+                        "on-tertiary-container": "#008ebf",
+                        "surface-variant": "#d3e4fe",
+                        "on-primary-fixed": "#131b2e",
+                        "inverse-on-surface": "#eaf1ff",
+                        "surface-container": "#e5eeff",
+                        "tertiary": "#000000",
+                        "secondary-fixed-dim": "#ffb690",
+                        "on-secondary": "#ffffff",
+                        "tertiary-container": "#001e2c",
+                        "inverse-primary": "#bec6e0",
+                        "error-container": "#ffdad6",
+                        "on-secondary-fixed": "#341100"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.125rem",
+                        "lg": "0.25rem",
+                        "xl": "0.5rem",
+                        "full": "0.75rem"
+                    },
+                    "spacing": {
+                        "stack-md": "16px",
+                        "margin-mobile": "16px",
+                        "stack-sm": "8px",
+                        "base": "4px",
+                        "margin-desktop": "40px",
+                        "stack-lg": "32px",
+                        "gutter": "24px"
+                    },
+                    "fontFamily": {
+                        "label-md": ["Titillium Web"],
+                        "body-md": ["Titillium Web"],
+                        "headline-xl": ["Orbitron"],
+                        "data-mono": ["Titillium Web"],
+                        "body-sm": ["Titillium Web"],
+                        "headline-lg-mobile": ["Orbitron"],
+                        "headline-lg": ["Orbitron"]
+                    },
+                    "fontSize": {
+                        "label-md": ["12px", { "lineHeight": "16px", "letterSpacing": "0.05em", "fontWeight": "400" }],
+                        "body-md": ["16px", { "lineHeight": "24px", "fontWeight": "400" }],
+                        "headline-xl": ["48px", { "lineHeight": "56px", "letterSpacing": "-0.02em", "fontWeight": "600" }],
+                        "data-mono": ["14px", { "lineHeight": "20px", "fontWeight": "400" }],
+                        "body-sm": ["14px", { "lineHeight": "20px", "fontWeight": "400" }],
+                        "headline-lg-mobile": ["24px", { "lineHeight": "32px", "fontWeight": "500" }],
+                        "headline-lg": ["32px", { "lineHeight": "40px", "letterSpacing": "-0.01em", "fontWeight": "500" }]
+                    }
+                },
+            },
+        }
+    </script>
+    <style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+
+        body {
+            background-color: #f8f9ff;
+            color: #0b1c30;
+        }
+
+        .custom-scrollbar::-webkit-scrollbar {
+            width: 4px;
+        }
+
+        .custom-scrollbar::-webkit-scrollbar-track {
+            background: transparent;
+        }
+
+        .custom-scrollbar::-webkit-scrollbar-thumb {
+            background: #c6c6cd;
+            border-radius: 10px;
+        }
+
+        .glass-card {
+            background: rgba(255, 255, 255, 1);
+            border: 1px solid rgba(226, 232, 240, 1);
+        }
+
+        .active-sidebar-item {
+            color: #ffffff;
+            font-weight: 700;
+            background-color: #fd761a;
+        }
+    </style>
+</head>
+
+<body class="font-body-md text-body-md overflow-hidden">
+
+    <!-- SideNavBar -->
+    <aside
+        class="fixed left-0 top-0 h-screen w-[280px] bg-primary-container flex flex-col py-stack-lg border-r border-outline-variant z-50">
+        <div class="px-6 mb-10">
+            <h1 class="font-headline-lg text-headline-lg font-bold text-on-primary-container">TransitOps</h1>
+            <p class="font-label-md text-label-md text-on-primary-container opacity-60">Fleet Management</p>
+        </div>
+        <nav class="flex-1 space-y-1 px-4 overflow-y-auto custom-scrollbar">
+            <a class="flex items-center gap-3 px-4 py-3 rounded-lg text-on-primary-container hover:text-white hover:bg-white/10 transition-colors duration-200"
+                href="dashboard.html">
+                <span class="material-symbols-outlined">dashboard</span>
+                <span class="font-label-md text-label-md">Dashboard</span>
+            </a>
+            <a class="flex items-center gap-3 px-4 py-3 rounded-lg text-on-primary-container hover:text-white hover:bg-white/10 transition-colors duration-200"
+                href="fleet_management.html">
+                <span class="material-symbols-outlined">local_shipping</span>
+                <span class="font-label-md text-label-md">Fleet</span>
+            </a>
+            <a class="flex items-center gap-3 px-4 py-3 rounded-lg text-on-primary-container hover:text-white hover:bg-white/10 transition-colors duration-200"
+                href="drivers_safety.html">
+                <span class="material-symbols-outlined">person</span>
+                <span class="font-label-md text-label-md">Drivers</span>
+            </a>
+            <a class="flex items-center gap-3 px-4 py-3 rounded-lg text-on-primary-container hover:text-white hover:bg-white/10 transition-colors duration-200"
+                href="dispatcher.html">
+                <span class="material-symbols-outlined">route</span>
+                <span class="font-label-md text-label-md">Trips</span>
+            </a>
+            <a class="flex items-center gap-3 px-4 py-3 rounded-lg text-on-primary-container hover:text-white hover:bg-white/10 transition-colors duration-200"
+                href="#">
+                <span class="material-symbols-outlined">build</span>
+                <span class="font-label-md text-label-md">Maintenance</span>
+            </a>
+            <a class="flex items-center gap-3 px-4 py-3 rounded-lg text-on-secondary-fixed-variant font-bold border-l-4 border-secondary-container bg-secondary-fixed/10 transition-colors duration-200"
+                href="fuel_expenses.html">
+                <span class="material-symbols-outlined">payments</span>
+                <span class="font-label-md text-label-md">Fuel & Expenses</span>
+            </a>
+            <a class="flex items-center gap-3 px-4 py-3 rounded-lg text-on-primary-container hover:text-white hover:bg-white/10 transition-colors duration-200 mt-auto"
+                href="#">
+                <span class="material-symbols-outlined">settings</span>
+                <span class="font-label-md text-label-md">Settings</span>
+            </a>
+        </nav>
+        <div class="mt-auto px-6 py-4 flex items-center gap-3 border-t border-on-primary-container/10">
+            <div
+                class="w-10 h-10 rounded-full overflow-hidden bg-surface-variant flex items-center justify-center font-bold text-white bg-orange-600">
+                RK
+            </div>
+            <div class="flex flex-col">
+                <span class="font-label-md text-label-md text-white font-bold">Raven K.</span>
+                <span class="font-label-md text-[10px] text-on-primary-container opacity-60">Dispatcher</span>
+            </div>
+            <a href="index.html" class="ml-auto text-on-primary-container hover:text-white transition-colors"
+                title="Log Out">
+                <span class="material-symbols-outlined">logout</span>
+            </a>
+        </div>
+    </aside>
+
+    <!-- Main Content Area -->
+    <main class="ml-[280px] h-screen flex flex-col relative overflow-hidden">
+        <!-- TopNavBar -->
+        <header
+            class="h-16 flex justify-between items-center px-margin-desktop bg-surface-container-lowest shadow-sm border-b border-outline-variant z-40 flex-shrink-0">
+            <div class="flex items-center gap-4 w-1/2">
+                <div class="relative w-full max-w-md group">
+                    <span
+                        class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-on-surface-variant">search</span>
+                    <input id="searchInput"
+                        class="w-full pl-10 pr-4 py-2 bg-surface-container-low border-none rounded-full font-body-sm text-body-sm focus:ring-2 focus:ring-secondary-container transition-all"
+                        placeholder="Search vehicle or trip ID..." type="text" />
+                </div>
+            </div>
+            <div class="flex items-center gap-6">
+                <button class="relative p-2 rounded-full hover:bg-surface-container-low transition-all">
+                    <span class="material-symbols-outlined text-on-surface-variant">notifications</span>
+                    <span class="absolute top-2 right-2 w-2 h-2 bg-secondary rounded-full"></span>
+                </button>
+                <button class="p-2 rounded-full hover:bg-surface-container-low transition-all">
+                    <span class="material-symbols-outlined text-on-surface-variant">help</span>
+                </button>
+                <div class="h-8 w-[1px] bg-outline-variant"></div>
+                <div
+                    class="flex items-center gap-3 cursor-pointer hover:bg-surface-container-low p-2 rounded-lg transition-all">
+                    <span class="font-label-md text-label-md font-bold text-primary">Raven K.</span>
+                    <div
+                        class="w-8 h-8 rounded-full bg-secondary-fixed flex items-center justify-center text-on-secondary-fixed font-bold text-xs">
+                        RK</div>
+                </div>
+            </div>
+        </header>
+
+        <!-- Scrollable Content -->
+        <div class="flex-1 overflow-y-auto p-gutter custom-scrollbar space-y-6">
+            <!-- Title & Log Action Buttons -->
+            <div class="flex justify-between items-center">
+                <div>
+                    <h2 class="font-headline-xl text-3xl font-black text-primary tracking-tight">Fuel & Expenses</h2>
+                    <p class="text-on-surface-variant font-body-md mt-1">Operational cost tracking & log management.</p>
+                </div>
+                <div class="flex gap-3">
+                    <button onclick="openModal('fuel')"
+                        class="flex items-center gap-2 px-5 py-3 bg-secondary-container text-white font-bold rounded-lg shadow-md hover:bg-secondary-container/90 active:scale-95 transition-all">
+                        <span class="material-symbols-outlined text-[20px]">add</span>
+                        <span class="font-label-md text-[14px]">Log Fuel</span>
+                    </button>
+                    <button onclick="openModal('expense')"
+                        class="flex items-center gap-2 px-5 py-3 border border-secondary-container text-secondary-container font-bold rounded-lg shadow-sm hover:bg-orange-50 active:scale-95 transition-all">
+                        <span class="material-symbols-outlined text-[20px]">add_box</span>
+                        <span class="font-label-md text-[14px]">Add Expense</span>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Card 1: Fuel Logs -->
+            <div class="glass-card rounded-xl overflow-hidden shadow-sm bg-white">
+                <div class="px-6 py-4 border-b border-outline-variant">
+                    <h3 class="font-headline-lg text-lg font-bold text-primary">Fuel Logs</h3>
+                </div>
+                <div class="overflow-x-auto">
+                    <table class="min-w-full divide-y divide-outline-variant">
+                        <thead class="bg-surface-container-low">
+                            <tr>
+                                <th class="px-6 py-4 text-left font-label-md text-[11px] text-on-surface-variant uppercase tracking-wider">Vehicle</th>
+                                <th class="px-6 py-4 text-left font-label-md text-[11px] text-on-surface-variant uppercase tracking-wider">Date</th>
+                                <th class="px-6 py-4 text-left font-label-md text-[11px] text-on-surface-variant uppercase tracking-wider">Liters</th>
+                                <th class="px-6 py-4 text-left font-label-md text-[11px] text-on-surface-variant uppercase tracking-wider">Fuel Cost</th>
+                                <th class="px-6 py-4 text-center font-label-md text-[11px] text-on-surface-variant uppercase tracking-wider">Action</th>
+                            </tr>
+                        </thead>
+                        <tbody id="fuelTableBody" class="bg-white divide-y divide-outline-variant">
+                            <!-- Injected dynamically -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- Card 2: Other Expenses -->
+            <div class="glass-card rounded-xl overflow-hidden shadow-sm bg-white">
+                <div class="px-6 py-4 border-b border-outline-variant">
+                    <h3 class="font-headline-lg text-lg font-bold text-primary">Other Expenses (Toll / Misc)</h3>
+                </div>
+                <div class="overflow-x-auto">
+                    <table class="min-w-full divide-y divide-outline-variant">
+                        <thead class="bg-surface-container-low">
+                            <tr>
+                                <th class="px-6 py-4 text-left font-label-md text-[11px] text-on-surface-variant uppercase tracking-wider">Trip</th>
+                                <th class="px-6 py-4 text-left font-label-md text-[11px] text-on-surface-variant uppercase tracking-wider">Vehicle</th>
+                                <th class="px-6 py-4 text-left font-label-md text-[11px] text-on-surface-variant uppercase tracking-wider">Toll</th>
+                                <th class="px-6 py-4 text-left font-label-md text-[11px] text-on-surface-variant uppercase tracking-wider">Other</th>
+                                <th class="px-6 py-4 text-left font-label-md text-[11px] text-on-surface-variant uppercase tracking-wider">Maint. (Linked)</th>
+                                <th class="px-6 py-4 text-left font-label-md text-[11px] text-on-surface-variant uppercase tracking-wider">Status</th>
+                                <th class="px-6 py-4 text-center font-label-md text-[11px] text-on-surface-variant uppercase tracking-wider">Action</th>
+                            </tr>
+                        </thead>
+                        <tbody id="expenseTableBody" class="bg-white divide-y divide-outline-variant">
+                            <!-- Injected dynamically -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- Calculated Summary Card -->
+            <div class="glass-card p-6 rounded-xl shadow-sm bg-white flex justify-between items-center">
+                <div>
+                    <h4 class="font-bold text-[14px] text-on-surface-variant uppercase tracking-wider">Total Operational Cost (Auto) = Fuel + Maint</h4>
+                    <p class="text-[12px] text-slate-500 mt-1">Calculated in real-time based on log entries.</p>
+                </div>
+                <div class="text-right">
+                    <span class="font-headline-xl text-3xl font-black text-primary tracking-tight" id="totalCostDisplay">0</span>
+                </div>
+            </div>
+
+            <!-- Footer Toolbar -->
+            <div class="flex justify-between items-center pt-4 text-on-surface-variant text-[13px] border-t border-outline-variant">
+                <div class="flex gap-4">
+                    <button onclick="window.print()" class="flex items-center gap-1.5 hover:text-primary transition-colors">
+                        <span class="material-symbols-outlined text-[18px]">print</span>
+                        Print Summary
+                    </button>
+                    <button onclick="alert('Exporting to Excel...')" class="flex items-center gap-1.5 hover:text-primary transition-colors">
+                        <span class="material-symbols-outlined text-[18px]">download</span>
+                        Export Report
+                    </button>
+                </div>
+                <div class="text-slate-400">
+                    System Version: v2.4.12-Stable
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Fuel Log Modal -->
+    <div id="fuelModal" class="fixed inset-0 bg-black/50 backdrop-blur-sm z-50 flex items-center justify-center hidden">
+        <div class="bg-white rounded-xl shadow-xl w-full max-w-md p-6 border border-outline-variant flex flex-col gap-4">
+            <div class="flex justify-between items-center border-b border-outline-variant pb-3">
+                <h3 class="font-headline-lg text-lg font-bold text-primary">Log Fuel Refill</h3>
+                <button onclick="closeModal('fuel')" class="text-on-surface-variant hover:text-primary">
+                    <span class="material-symbols-outlined">close</span>
+                </button>
+            </div>
+            <form id="fuelForm" class="space-y-4">
+                <div class="flex flex-col gap-1">
+                    <label class="font-label-md text-[12px] uppercase text-on-surface-variant font-bold" for="fuelVehicle">Vehicle ID</label>
+                    <input type="text" id="fuelVehicle" class="w-full bg-surface-container-low border-none rounded-lg px-3 py-2 text-body-sm focus:ring-2 focus:ring-secondary-container" placeholder="e.g. VAN-05" required />
+                </div>
+                <div class="flex flex-col gap-1">
+                    <label class="font-label-md text-[12px] uppercase text-on-surface-variant font-bold" for="fuelDate">Date</label>
+                    <input type="text" id="fuelDate" class="w-full bg-surface-container-low border-none rounded-lg px-3 py-2 text-body-sm focus:ring-2 focus:ring-secondary-container" placeholder="e.g. 05 Jul 2024" required />
+                </div>
+                <div class="grid grid-cols-2 gap-4">
+                    <div class="flex flex-col gap-1">
+                        <label class="font-label-md text-[12px] uppercase text-on-surface-variant font-bold" for="fuelLiters">Liters</label>
+                        <input type="number" id="fuelLiters" class="w-full bg-surface-container-low border-none rounded-lg px-3 py-2 text-body-sm focus:ring-2 focus:ring-secondary-container" placeholder="e.g. 42" required />
+                    </div>
+                    <div class="flex flex-col gap-1">
+                        <label class="font-label-md text-[12px] uppercase text-on-surface-variant font-bold" for="fuelCost">Cost ($)</label>
+                        <input type="number" id="fuelCost" class="w-full bg-surface-container-low border-none rounded-lg px-3 py-2 text-body-sm focus:ring-2 focus:ring-secondary-container" placeholder="e.g. 3150" required />
+                    </div>
+                </div>
+                <div class="flex justify-end gap-3 pt-3 border-t border-outline-variant">
+                    <button type="button" onclick="closeModal('fuel')" class="px-4 py-2 border border-outline-variant rounded-lg font-bold text-on-surface-variant hover:bg-slate-50 transition-colors">Cancel</button>
+                    <button type="submit" class="px-5 py-2 bg-secondary-container text-white font-bold rounded-lg hover:bg-secondary-container/90 active:scale-95 transition-colors">Save Log</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Expense Modal -->
+    <div id="expenseModal" class="fixed inset-0 bg-black/50 backdrop-blur-sm z-50 flex items-center justify-center hidden">
+        <div class="bg-white rounded-xl shadow-xl w-full max-w-md p-6 border border-outline-variant flex flex-col gap-4">
+            <div class="flex justify-between items-center border-b border-outline-variant pb-3">
+                <h3 class="font-headline-lg text-lg font-bold text-primary">Add Operational Expense</h3>
+                <button onclick="closeModal('expense')" class="text-on-surface-variant hover:text-primary">
+                    <span class="material-symbols-outlined">close</span>
+                </button>
+            </div>
+            <form id="expenseForm" class="space-y-4">
+                <div class="grid grid-cols-2 gap-4">
+                    <div class="flex flex-col gap-1">
+                        <label class="font-label-md text-[12px] uppercase text-on-surface-variant font-bold" for="expTrip">Trip ID</label>
+                        <input type="text" id="expTrip" class="w-full bg-surface-container-low border-none rounded-lg px-3 py-2 text-body-sm focus:ring-2 focus:ring-secondary-container" placeholder="e.g. TR001" required />
+                    </div>
+                    <div class="flex flex-col gap-1">
+                        <label class="font-label-md text-[12px] uppercase text-on-surface-variant font-bold" for="expVehicle">Vehicle</label>
+                        <input type="text" id="expVehicle" class="w-full bg-surface-container-low border-none rounded-lg px-3 py-2 text-body-sm focus:ring-2 focus:ring-secondary-container" placeholder="e.g. VAN-05" required />
+                    </div>
+                </div>
+                <div class="grid grid-cols-3 gap-3">
+                    <div class="flex flex-col gap-1">
+                        <label class="font-label-md text-[12px] uppercase text-on-surface-variant font-bold" for="expToll">Toll ($)</label>
+                        <input type="number" id="expToll" class="w-full bg-surface-container-low border-none rounded-lg px-3 py-2 text-body-sm focus:ring-2 focus:ring-secondary-container" placeholder="0" required />
+                    </div>
+                    <div class="flex flex-col gap-1">
+                        <label class="font-label-md text-[12px] uppercase text-on-surface-variant font-bold" for="expOther">Other ($)</label>
+                        <input type="number" id="expOther" class="w-full bg-surface-container-low border-none rounded-lg px-3 py-2 text-body-sm focus:ring-2 focus:ring-secondary-container" placeholder="0" required />
+                    </div>
+                    <div class="flex flex-col gap-1">
+                        <label class="font-label-md text-[12px] uppercase text-on-surface-variant font-bold" for="expMaint">Maint ($)</label>
+                        <input type="number" id="expMaint" class="w-full bg-surface-container-low border-none rounded-lg px-3 py-2 text-body-sm focus:ring-2 focus:ring-secondary-container" placeholder="0" required />
+                    </div>
+                </div>
+                <div class="flex flex-col gap-1">
+                    <label class="font-label-md text-[12px] uppercase text-on-surface-variant font-bold" for="expStatus">Status</label>
+                    <select id="expStatus" class="w-full bg-surface-container-low border-none rounded-lg px-3 py-2 text-body-sm focus:ring-2 focus:ring-secondary-container">
+                        <option value="Available">Available</option>
+                        <option value="Completed">Completed</option>
+                    </select>
+                </div>
+                <div class="flex justify-end gap-3 pt-3 border-t border-outline-variant">
+                    <button type="button" onclick="closeModal('expense')" class="px-4 py-2 border border-outline-variant rounded-lg font-bold text-on-surface-variant hover:bg-slate-50 transition-colors">Cancel</button>
+                    <button type="submit" class="px-5 py-2 bg-secondary-container text-white font-bold rounded-lg hover:bg-secondary-container/90 active:scale-95 transition-colors">Save Expense</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        // Mock data matching the design spec image
+        let fuelLogs = [
+            { id: 1, vehicle: 'VAN-05', date: '05 Jul 2024', liters: 42, cost: 3150 },
+            { id: 2, vehicle: 'TRUCK-11', date: '06 Jul 2024', liters: 110, cost: 8400 },
+            { id: 3, vehicle: 'MINI-08', date: '06 Jul 2024', liters: 28, cost: 2050 }
+        ];
+
+        let otherExpenses = [
+            { id: 1, trip: 'TR001', vehicle: 'VAN-05', toll: 120, other: 0, maint: 0, status: 'Available' },
+            { id: 2, trip: 'TR004', vehicle: 'TRK-12', toll: 340, other: 150, maint: 18000, status: 'Completed' }
+        ];
+
+        let searchQuery = '';
+
+        document.addEventListener('DOMContentLoaded', () => {
+            renderData();
+
+            // Set up search filter
+            document.getElementById('searchInput').addEventListener('input', (e) => {
+                searchQuery = e.target.value.toLowerCase();
+                renderData();
+            });
+
+            // Fuel form submit
+            document.getElementById('fuelForm').addEventListener('submit', (e) => {
+                e.preventDefault();
+                const vehicle = document.getElementById('fuelVehicle').value;
+                const date = document.getElementById('fuelDate').value;
+                const liters = parseFloat(document.getElementById('fuelLiters').value);
+                const cost = parseFloat(document.getElementById('fuelCost').value);
+
+                fuelLogs.unshift({ id: fuelLogs.length + 1, vehicle, date, liters, cost });
+                closeModal('fuel');
+                document.getElementById('fuelForm').reset();
+                renderData();
+            });
+
+            // Expense form submit
+            document.getElementById('expenseForm').addEventListener('submit', (e) => {
+                e.preventDefault();
+                const trip = document.getElementById('expTrip').value;
+                const vehicle = document.getElementById('expVehicle').value;
+                const toll = parseFloat(document.getElementById('expToll').value) || 0;
+                const other = parseFloat(document.getElementById('expOther').value) || 0;
+                const maint = parseFloat(document.getElementById('expMaint').value) || 0;
+                const status = document.getElementById('expStatus').value;
+
+                otherExpenses.unshift({ id: otherExpenses.length + 1, trip, vehicle, toll, other, maint, status });
+                closeModal('expense');
+                document.getElementById('expenseForm').reset();
+                renderData();
+            });
+        });
+
+        function openModal(type) {
+            document.getElementById(`${type}Modal`).classList.remove('hidden');
+        }
+
+        function closeModal(type) {
+            document.getElementById(`${type}Modal`).classList.add('hidden');
+        }
+
+        function deleteFuel(id) {
+            fuelLogs = fuelLogs.filter(item => item.id !== id);
+            renderData();
+        }
+
+        function deleteExpense(id) {
+            otherExpenses = otherExpenses.filter(item => item.id !== id);
+            renderData();
+        }
+
+        function renderData() {
+            // Render Fuel
+            const fuelBody = document.getElementById('fuelTableBody');
+            fuelBody.innerHTML = '';
+
+            const filteredFuel = fuelLogs.filter(log => 
+                log.vehicle.toLowerCase().includes(searchQuery)
+            );
+
+            let totalFuelCost = 0;
+
+            filteredFuel.forEach(log => {
+                totalFuelCost += log.cost;
+                const tr = document.createElement('tr');
+                tr.className = "hover:bg-slate-50/50 transition-colors";
+                tr.innerHTML = `
+                    <td class="px-6 py-4 whitespace-nowrap font-bold text-on-surface text-[14px]">${log.vehicle}</td>
+                    <td class="px-6 py-4 whitespace-nowrap text-on-surface-variant text-[14px]">${log.date}</td>
+                    <td class="px-6 py-4 whitespace-nowrap text-on-surface-variant text-[14px]">${log.liters} L</td>
+                    <td class="px-6 py-4 whitespace-nowrap text-on-surface font-bold text-[14px]">${log.cost.toLocaleString()}</td>
+                    <td class="px-6 py-4 whitespace-nowrap text-center">
+                        <button onclick="deleteFuel(${log.id})" class="text-error hover:text-red-700 transition-colors">
+                            <span class="material-symbols-outlined text-[18px]">delete</span>
+                        </button>
+                    </td>
+                `;
+                fuelBody.appendChild(tr);
+            });
+
+            // Render Expenses
+            const expBody = document.getElementById('expenseTableBody');
+            expBody.innerHTML = '';
+
+            const filteredExp = otherExpenses.filter(exp => 
+                exp.trip.toLowerCase().includes(searchQuery) || exp.vehicle.toLowerCase().includes(searchQuery)
+            );
+
+            let totalMaintCost = 0;
+
+            filteredExp.forEach(exp => {
+                totalMaintCost += exp.maint;
+                const statusClass = exp.status === 'Available' ? 'bg-green-100 text-green-800' : 'bg-yellow-100 text-yellow-800';
+                
+                const tr = document.createElement('tr');
+                tr.className = "hover:bg-slate-50/50 transition-colors";
+                tr.innerHTML = `
+                    <td class="px-6 py-4 whitespace-nowrap font-bold text-on-surface text-[14px]">${exp.trip}</td>
+                    <td class="px-6 py-4 whitespace-nowrap text-on-surface-variant text-[14px]">${exp.vehicle}</td>
+                    <td class="px-6 py-4 whitespace-nowrap text-on-surface-variant text-[14px]">${exp.toll > 0 ? exp.toll : '0'}</td>
+                    <td class="px-6 py-4 whitespace-nowrap text-on-surface-variant text-[14px]">${exp.other > 0 ? exp.other : '0'}</td>
+                    <td class="px-6 py-4 whitespace-nowrap text-on-surface-variant text-[14px]">${exp.maint > 0 ? exp.maint.toLocaleString() : '0'}</td>
+                    <td class="px-6 py-4 whitespace-nowrap">
+                        <span class="px-2.5 py-1 rounded-full text-[12px] font-bold ${statusClass}">
+                            ${exp.status.toUpperCase()}
+                        </span>
+                    </td>
+                    <td class="px-6 py-4 whitespace-nowrap text-center">
+                        <button onclick="deleteExpense(${exp.id})" class="text-error hover:text-red-700 transition-colors">
+                            <span class="material-symbols-outlined text-[18px]">delete</span>
+                        </button>
+                    </td>
+                `;
+                expBody.appendChild(tr);
+            });
+
+            // Total Cost display: Fuel + Maintenance
+            const overallTotal = totalFuelCost + totalMaintCost;
+            document.getElementById('totalCostDisplay').textContent = overallTotal.toLocaleString();
+        }
+    </script>
+</body>
+
+</html>
