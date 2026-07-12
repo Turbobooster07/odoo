@@ -27,8 +27,8 @@ app.post('/api/login', async (req, res) => {
     const { username, password, role } = req.body;
     try {
         const [rows] = await pool.query(
-            'SELECT * FROM users WHERE username = ? AND password_hash = ? AND role = ?',
-            [username, password, role]
+            'SELECT * FROM users WHERE username = ? AND password_hash = ?',
+            [username, password]
         );
         
         if (rows.length > 0) {
